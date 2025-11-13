@@ -313,7 +313,7 @@
             height: 80px;
             animation: glide-initial linear;
             z-index: 10;
-            cursor: pointer; 
+            cursor: pointer;
         }
 
         .boat {
@@ -325,7 +325,7 @@
             bottom: 0;
             left: 0;
             cursor: pointer;
-            
+
             background-image: url('data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cG9seWdvbiBwb2ludHM9IjEwLDgwIDUwLDIwIDkwLDgwIDUwLDgwIiBmaWxsPSJ3aGl0ZSIvPjxwb2x5Z29uIHBvaW50cz0iMTAsODAgOTAsODAgNzUsOTUgMjUsOTUiIGZpbGw9IiNmMGYwZjAiLz48L3N2Zz4=');
             background-size: contain;
             background-repeat: no-repeat;
@@ -613,7 +613,7 @@
             let availableMessages = [...ALL_MESSAGES];
 
             const scene = document.querySelector('.scene');
-            let activeMessageEl = null; 
+            let activeMessageEl = null;
 
             function initAudio() {
                 if (audioStarted) return;
@@ -669,11 +669,12 @@
                     initAudio();
                     playRippleSound();
 
-                    
+                    // --- FIX FOR MOBILE RELIABILITY: Forcefully remove any old message instantly ---
                     if (activeMessageEl) {
-                        activeMessageEl.classList.add('hide');
-                        activeMessageEl.onanimationend = () => activeMessageEl.remove();
+                        activeMessageEl.remove(); 
+                        activeMessageEl = null; // Clear the state immediately
                     }
+                    // ---------------------------------------------------------------------------------
 
                     
                     const ripple = document.createElement('div');
@@ -698,7 +699,7 @@
                     const messageEl = document.createElement('div');
                     messageEl.className = 'message';
                     messageEl.textContent = messageText;
-                    activeMessageEl = messageEl;
+                    activeMessageEl = messageEl; // Set the new message as active
 
                     const boatRect = rect;
                     let messageLeft = boatRect.left + (boatRect.width / 2);
@@ -723,13 +724,15 @@
 
                     
                     setTimeout(() => {
+                        messageEl.classList.add('hide');
+
+                        // Clear the active state ONLY if this message is still the current one
                         if (messageEl === activeMessageEl) {
                              activeMessageEl = null;
                         }
-                        messageEl.classList.add('hide');
+                        
+                        // Resume boat movement
                         boatEl.classList.remove('tapped');
-                        
-                        
                         boatEl.style.animationPlayState = 'running';
                         boatContainer.style.animationPlayState = 'running';
 
@@ -769,4 +772,5 @@
     </script>
 
 </body>
+
 </html>
