@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+    <style>
+        
+        .nav-panel, #mainContent, #navToggleIcon, #navToggleX {
+            transition: all 0.3s ease-in-out;
+        }
+        
+        #mainContent, .nav-panel {
+            -ms-overflow-style: none;  
+            scrollbar-width: none;  
+        }
+        #mainContent::-webkit-scrollbar,
+        .nav-panel::-webkit-scrollbar {
+            display: none; 
+        }
+        
+        .festive-text {
+            font-family: 'VT323', monospace; 
+            font-size: 1.25rem;
+        }
+        
+        #navToggle {
+            transition: all 0.3s ease-in-out;
+        }
+        
+        h1, h2, h3 {
+             font-family: 'VT323', monospace;
+             font-weight: normal; 
+        }
+
+        
+        :root {
+            --cake-body: #C0C0C0; 
+            --frosting: #000080; 
+            --photo-frame-border: #808080; 
+            --eye: #333;
+            --flame: #f9a825; 
+            --sprinkle1: #FF0000; 
+            --sprinkle2: #fece5a; 
+            --sprinkle3: #96e05d; 
+            --sprinkle4: #54c1e0; 
+            
+            --brick-pink-light: #fec5d9;
+            --brick-pink-dark: #fca7c6;
+            --mortar: #fdfdfd;
+        }
+
+        
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'VT323', monospace;
+        }
+
+        body {
+            background-color: #008080; 
+            background-image: linear-gradient(rgba(0,0,0,0.2) 1px, transparent 1px);
+            background-size: 100% 3px; 
+            display: block; 
+        }
+
+        
+        #mainContent {
+            display: grid;
+            place-items: center;
+            width: 100%;
+            height: 100%;
+            
+            
+            position: absolute;
+            inset: 0;
+            overflow: hidden; 
+            padding: 20px; 
+            transition: all 0.3s ease-in-out;
+        }
+        
+        @keyframes gradient-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .letter-container {
+            position: relative;
+            width: 220px;
+            height: 150px;
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease;
+            transform: scale(0.9);
+            opacity: 0;
+            z-index: 15;
+            display: none; 
+        }
+        
+        .letter-container.active-letter {
+            display: block;
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        @media (min-width: 400px) {
+            .letter-container.active-letter {
+                transform: scale(1.1);
+            }
+        }
+        
+        .envelope {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+        .envelope-body {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--cake-body); 
+            border: 2px outset #FFFFFF; 
+            z-index: 16;
+        }
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 75px; 
+            background: var(--cake-body);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            z-index: 17;
+            transform-origin: top;
+            transition: transform 0.5s ease-in-out;
+            border-bottom: 1px solid #808080;
+        }
+        .heart-seal {
+            display: none;
+        }
+        
+        .letter-container.open .envelope-flap {
+            transform: rotateX(180deg);
+        }
+
+        .page {
+            display: none; 
+            width: 100%;
+            max-width: 380px;
+            padding: 25px;
+            background: var(--cake-body); 
+            border: 2px outset #FFFFFF; 
+            text-align: left;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            z-index: 15;
+        }
+
+        .page.active-page {
+            display: block; 
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .page-content {
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem; 
+            line-height: 1.7;
+            color: #000000; 
+        }
+        .page-content p {
+            margin-bottom: 1.5rem;
+        }
+        .page-content span {
+            display: block;
+            font-size: 1.25rem;
+            font-weight: normal;
+            color: var(--frosting); 
+            font-style: normal;
+        }
+        .page h2 {
+            font-family: 'VT323', monospace;
+            color: var(--frosting); 
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 2.25rem;
+        }
+        .page-signature {
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            text-align: right;
+            margin-top: 1.5rem;
+            color: #000000;
+        }
+        
+        .photo-frame {
+            display: block;
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover;
+            border: 4px outset var(--photo-frame-border);
+            padding: 2px;
+            background-color: #FFFFFF;
+        }
+        
+        #image-wrapper {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            
+            width: 200px; 
+            height: 130px; 
+            
+            position: absolute;
+            z-index: 20; 
+            
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); 
+            cursor: pointer; /* Indicate clickability */
+        }
+
+        
+        /* UPDATED POSITIONING: Moved to below the centered letter/image */
+        #button-container {
+            position: absolute;
+            top: 50%; /* Start vertical positioning from the center */
+            left: 50%;
+            transform: translateX(-50%) translateY(120px); /* Move horizontally centered, and 120px down from center (below the 150px tall letter) */
+            display: flex;
+            flex-direction: column; 
+            gap: 15px;
+            z-index: 16; 
+        }
+        
+        #start-button-container {
+             position: relative;
+             z-index: 16;
+        }
+        
+        .action-button {
+            padding: 12px 28px;
+            background: var(--cake-body); 
+            color: #000000; 
+            font-size: 1.25rem; 
+            font-weight: normal; 
+            border: 2px outset #FFFFFF; 
+            cursor: pointer;
+            
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            white-space: nowrap;
+            font-family: 'VT323', monospace;
+        }
+        .action-button:active {
+            border-style: inset;
+        }
+        
+        #start-button {
+            background: var(--cake-body);
+            color: #000000;
+            font-family: 'VT323', monospace;
+            font-size: 1.3rem;
+        }
+
+        .page-nav-button {
+            display: inline-block;
+            background: var(--cake-body);
+            color: #000000;
+            font-family: 'VT323', monospace;
+            font-size: 1.25rem;
+            font-weight: normal;
+            padding: 10px 24px;
+            border: 2px outset #FFFFFF;
+            cursor: pointer;
+            text-align: center;
+            margin-top: 1rem;
+            transition: background-color 0.2s;
+        }
+        .page-nav-button:hover {
+            background-color: #808080; 
+            color: #FFFFFF;
+        }
+        .page-nav-button:active {
+            border-style: inset;
+        }
+
+        
+        .action-button.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+        
+        .action-button:hover, .action-button.clicked {
+            animation: none;
+        }
+
+    </style>
+</head>
+<body class="font-sans overflow-hidden">
+
+    
+    
+    <button id="navToggle" class="fixed top-6 left-6 z-[110] p-2 shadow-lg hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2"
+        style="border-radius: 0; background: #C0C0C0; border: 2px outset #FFFFFF; color: #000;">
+        <svg id="navToggleIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-8 6h8"></path></svg>
+        <svg id="navToggleX" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
+
+
+        <nav id="topNav" class="nav-panel fixed top-0 left-0 right-0 z-[60] h-16 text-yellow-100 flex items-center justify-center space-x-6 -translate-y-full"
+            style="background-color: #C0C0C0; color: #000000; box-shadow: none;">
+            <a href="index.html" class="nav-link px-3 py-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Home</a>
+            <a href="Special.html" class="nav-link px-3 py-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Special</a>
+            <a href="letter.html" class="nav-link px-3 py-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Letter</a>
+        </nav>
+
+        <nav id="bottomNav" class="nav-panel fixed bottom-0 left-0 right-0 z-[60] h-16 text-yellow-100 flex items-center justify-center space-x-6 translate-y-full"
+            style="background-color: #C0C0C0; color: #000000; box-shadow: none;">
+            <a href="anatomy.html" class="nav-link px-3 py-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Anatomy</a>
+            <a href="chat.html" class="nav-link px-3 py-2 text-sm font-font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Heaven</a>
+            <a href="you.html" class="nav-link px-3 py-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">You</a>
+        </nav>
+
+        <nav id="leftNav" class="nav-panel fixed left-0 top-0 bottom-0 z-[60] w-20 text-yellow-100 flex flex-col items-center space-y-6 -translate-x-full overflow-y-auto py-20"
+            style="background-color: #C0C0C0; color: #000000; box-shadow: none;">
+            <a href="Diary.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Diary</a>
+            <a href="Universe.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Universe</a>
+            <a href="Box.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Box</a>
+            <a href="color.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Color</a>
+            <a href="Teacher.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Teacher</a>
+            <a href="The_River.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">River</a>
+            <a href="Mountain.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Mountain</a>
+            <a href="Paper_Star.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Paper Star</a>
+            <a href="Carttoon.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Cartoon</a>
+            <a href="Santa.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Santa</a>
+            <a href="Cloud.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Cloud</a>
+            <a href="Ink.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Paint</a>
+            <a href="Butterfly.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Butterfly</a>
+            <a href="Weather.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Weather</a>
+        </nav>
+
+        <nav id="rightNav" class="nav-panel fixed right-0 top-0 bottom-0 z-[60] w-20 text-yellow-100 flex flex-col items-center space-y-6 translate-x-full overflow-y-auto py-20"
+            style="background-color: #C0C0C0; color: #000000; box-shadow: none;">
+            <a href="Skill.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Skill</a>
+            <a href="Msg.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Massege</a>
+            <a href="21_Wish.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">21_Door</a>
+            <a href="Cake.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Cake</a>
+            <a href="Periodik_table.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-2Two-Time festive-text">Periodik_table</a>
+            <a href="Presence.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Presence</a>
+            <a href="Concept.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Concept</a>
+            <a href="Calender.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Calender</a>
+            <a href="Perspective.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Perspective</a>
+            <a href="Spotlight.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Spotlight</a>
+            <a href="Room.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Room</a>
+            <a href="Radio.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Radio</a>
+            <a href="Food.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Food</a>
+            <a href="Music.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Music</a>
+        </nav>
+
+    
+    <main id="mainContent">
+        
+        <div id="start-button-container">
+            <button id="start-button" class="action-button visible">A message from the heart...</button>
+        </div>
+        
+        <div id="letter-container" class="letter-container">
+            <div class="envelope">
+                <div class="envelope-flap"></div>
+                <div class="envelope-body"></div>
+            </div>
+        </div>
+
+        
+        <div id="image-wrapper">
+            <img id="birthday-photo" class="photo-frame" 
+                 src="Letter.png" 
+                 alt="A place for the birthday recipient's photo."
+                 onerror="this.src='https://placehold.co/150x150/C0C0C0/000080?text=Error';">
+        </div>
+
+        <div id="button-container">
+            <button id="open-letter-button" class="action-button">Open the letter</button>
+        </div>
+
+
+        <div id="page-1" class="page">
+            <h2 class="text-3xl">Happy Birthday, June!</h2>
+            
+            
+            <div class="page-content">
+                <p>
+                    <span>Part 1: The Wish</span>
+                    First off, just a huge, happy, happy birthday! I hope your day is filled with tons of fun, amazing surprises, and everything that makes you smile.
+                </p>
+            </div>
+            <div class="text-center">
+                <button class="page-nav-button next-button" data-target="2">Next</button>
+            </div>
+        </div>
+
+        <div id="page-2" class="page">
+            <h2 class="text-3xl">Part 2</h2>
+            
+            <div class="page-content">
+                <p>
+                    <span>Who you are</span>
+                    You're that person who walks into a room and just... changes it. You're a mix of incredible kindness, a super-sharp mind, and a laugh that's genuinely contagious.
+                </p>
+            </div>
+            <div class="text-center">
+                <button class="page-nav-button next-button" data-target="3">Next</button>
+            </div>
+        </div>
+
+        <div id="page-3" class="page">
+            <h2 class="text-3xl">Part 3</h2>
+            <div class="page-content">
+                <p>
+                    <span>Who you are for others</span>
+                    For everyone else, you're a rock. You're the reliable friend, the smart answer, the person they count on. You're a helper and a leader, and you probably don't even realize it.
+                </p>
+            </div>
+            <div class="text-center">
+                <button class="page-nav-button next-button" data-target="4">Next</button>
+            </div>
+        </div>
+
+        <div id="page-4" class="page">
+            <h2 class="text-3xl">Part 4</h2>
+            <div class="page-content">
+                <p>
+                    <span>Who you are for you</span>
+                    I see how hard you are on yourself. But I hope you also see the person who's strong, who's creative, and who is growing every single day.
+                </p>
+            </div>
+            <div class="text-center">
+                <button class="page-nav-button next-button" data-target="5">Next</button>
+            </div>
+        </div>
+
+        <div id="page-5" class="page">
+            <h2 class="text-3xl">Part 5</h2>
+            <div class="page-content">
+                <p>
+                    <span>Who you are for me</span>
+                    For me? You're an inspiration. You're a bright light. You're a reminder that there's so much good in the world. You're... well, you're pretty amazing.
+                </p>
+            </div>
+            <p class="page-signature" style="text-align: center;">
+                Your Subhchintak
+            </p>
+            <div class="text-center">
+                <button id="restart-button" class="page-nav-button">Restart</button>
+            </div>
+        </div>
+
+    </main> 
+
+    <script>
+        
+        window.onload = function() {
+            
+            const body = document.body;
+            
+            const startButtonContainer = document.getElementById('start-button-container');
+            const startButton = document.getElementById('start-button');
+            const letterContainer = document.getElementById('letter-container');
+            const openLetterButton = document.getElementById('open-letter-button');
+            const buttonContainer = document.getElementById('button-container'); 
+            const imageWrapper = document.getElementById('image-wrapper');
+            
+            const pageElements = document.querySelectorAll('.page');
+            const nextButtons = document.querySelectorAll('.next-button');
+            const restartButton = document.getElementById('restart-button');
+
+            
+            function showPage(pageNumber) {
+                pageElements.forEach(page => {
+                    page.classList.remove('active-page');
+                    page.style.display = 'none'; 
+                });
+
+                if (pageNumber > 0) {
+                    const targetPage = document.getElementById(`page-${pageNumber}`);
+                    if (targetPage) {
+                        targetPage.style.display = 'block'; 
+                        
+                        setTimeout(() => targetPage.classList.add('active-page'), 50);
+                    }
+                }
+            }
+            
+            // --- NEW: Reusable function to execute the letter opening sequence ---
+            function openLetterSequence() {
+                // Ensure button is hidden regardless of where the click came from
+                openLetterButton.classList.remove('visible'); 
+                
+                // Start opening animations
+                letterContainer.classList.add('open');
+                imageWrapper.style.opacity = '0'; 
+
+                setTimeout(() => {
+                    // Hide envelope and image visual components
+                    letterContainer.classList.remove('active-letter');
+                    letterContainer.style.opacity = '0'; 
+                    imageWrapper.style.display = 'none';
+                    
+                    setTimeout(() => {
+                        // Transition to the first page
+                        letterContainer.style.display = 'none';
+                        showPage(1); 
+                    }, 500); 
+
+                }, 800); 
+            }
+            
+            function resetToStart() {
+                showPage(0); 
+                
+                letterContainer.style.display = 'none';
+                letterContainer.classList.remove('open', 'active-letter');
+                letterContainer.style.opacity = '0'; 
+
+                imageWrapper.style.display = 'none';
+                imageWrapper.style.opacity = '0';
+
+                openLetterButton.classList.remove('visible');
+                
+                startButtonContainer.style.display = 'block';
+                startButton.classList.add('visible');
+                startButton.classList.remove('clicked');
+            }
+
+            
+            startButton.addEventListener('click', () => {
+                
+                startButton.classList.remove('visible');
+                startButtonContainer.style.display = 'none'; 
+                
+                
+                letterContainer.style.display = 'block';
+                
+                setTimeout(() => letterContainer.classList.add('active-letter'), 50);
+
+                
+                imageWrapper.style.display = 'block';
+                setTimeout(() => imageWrapper.style.opacity = '1', 100);
+
+                
+                setTimeout(() => openLetterButton.classList.add('visible'), 550);
+            });
+
+            // Update button listener to call the sequence function
+            openLetterButton.addEventListener('click', openLetterSequence);
+
+            // --- NEW: Add event listener to the image wrapper ---
+            imageWrapper.addEventListener('click', openLetterSequence);
+
+            nextButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetPageNumber = button.getAttribute('data-target');
+                    showPage(targetPageNumber);
+                });
+            });
+
+            restartButton.addEventListener('click', () => {
+                resetToStart();
+            });
+
+        };
+
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            
+            
+            
+            const navLinks = document.querySelectorAll('.nav-panel .nav-link');
+            const mainContent = document.getElementById('mainContent');
+            const topNav = document.getElementById('topNav');
+            const bottomNav = document.getElementById('bottomNav');
+            const leftNav = document.getElementById('leftNav');
+            const rightNav = document.getElementById('rightNav');
+            const navToggle = document.getElementById('navToggle');
+            const navToggleIcon = document.getElementById('navToggleIcon');
+            const navToggleX = document.getElementById('navToggleX');
+
+            let areNavsOpen = false;
+
+            function openAllNavs() {
+                topNav.classList.remove('-translate-y-full');
+                bottomNav.classList.remove('translate-y-full');
+                leftNav.classList.remove('-translate-x-full');
+                rightNav.classList.remove('translate-x-full');
+                mainContent.classList.add('pt-16', 'pb-16', 'pl-24', 'pr-24');
+                mainContent.style.padding = ''; 
+                navToggleIcon.classList.add('hidden');
+                navToggleX.classList.remove('hidden');
+                areNavsOpen = true;
+            }
+
+            function closeAllNavs() {
+                topNav.classList.add('-translate-y-full');
+                bottomNav.classList.add('translate-y-full');
+                leftNav.classList.add('-translate-x-full');
+                rightNav.classList.add('translate-x-full');
+                mainContent.classList.remove('pt-16', 'pb-16', 'pl-24', 'pr-24');
+                mainContent.style.padding = '0'; 
+                navToggleIcon.classList.remove('hidden');
+                navToggleX.classList.add('hidden');
+                areNavsOpen = false;
+            }
+
+            function toggleAllNavs() {
+                if (areNavsOpen) {
+                    closeAllNavs();
+                } else {
+                    openAllNavs();
+                }
+            }
+
+            navToggle.addEventListener('click', (e) => {
+                e.stopPropagation(); 
+                toggleAllNavs();
+            });
+            
+            
+            mainContent.addEventListener('click', (e) => {
+                
+                if (e.target.closest('button')) {
+                    return;
+                }
+                
+                if (areNavsOpen) {
+                    closeAllNavs();
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const targetHash = e.currentTarget.getAttribute('href');
+                    if (targetHash.startsWith('#')) {
+                        e.preventDefault(); 
+                        if (areNavsOpen) {
+                            closeAllNavs();
+                        }
+                    }
+                    
+                    if (areNavsOpen) {
+                        closeAllNavs();
+                    }
+                });
+            });
+            closeAllNavs();
+        });
+    </script>
+
+</body>
+</html>
