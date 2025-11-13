@@ -1,543 +1,523 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Periodic Table of You</title>
+    <title>The River of Unwritten Destinies</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Inter:wght@400;500;700&family=Pacifico&display=swap" rel="stylesheet">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
 
     <style>
-        .nav-panel, #mainContent, #navToggleIcon, #navToggleX {
-            transition: all 0.3s ease-in-out;
-        }
-        #mainContent, .nav-panel {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        #mainContent::-webkit-scrollbar,
-        .nav-panel::-webkit-scrollbar {
-            display: none;
-        }
-        .festive-text {
-            font-family: 'Gochi Hand', cursive;
+        :root {
+            --dawn-purple: #2c213d;
+            --dawn-pink: #8b5f8a;
+            --dawn-orange: #f8b195;
+            --golden-glow: #FFD700;
+            --dawn-reflection: rgba(255, 200, 150, 0.15);
+            --fog-color: rgba(255, 220, 200, 0.1);
+            --sun-color: #ff8c6b;
+            --sun-glow-color: rgba(255, 140, 107, 0.6);
         }
 
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
-        
-        :root {
-            --color-pink: #fbcfe8;
-            --color-purple: #c084fc;
-            --color-gold: #fde047;
-            --color-bg-dark: #0a0a0a;
-            --color-text-light: #f3f4f6;
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background-color: var(--dawn-purple);
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--color-bg-dark);
-            color: var(--color-text-light);
-            transition: background-color 0.5s;
-        }
-        
-        /* New Dark Navigation Style */
-        .dark-nav-style {
-            background-color: rgba(10, 10, 10, 0.95); /* Semi-transparent dark background */
-            border: 1px solid rgba(192, 132, 252, 0.3); /* Soft purple border */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5), 0 0 8px rgba(192, 132, 252, 0.2);
-            color: var(--color-text-light);
-            backdrop-filter: blur(5px);
-        }
-        .dark-nav-style a.nav-link {
-            color: var(--color-text-light);
-            transition: color 0.2s, background-color 0.2s;
-        }
-        .dark-nav-style a.nav-link:hover {
-            background-color: rgba(192, 132, 252, 0.15); /* Light purple hover effect */
-            color: var(--color-gold); /* Gold text on hover */
-        }
-        
-        .periodic-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr); 
-            gap: 0.25rem; 
-            width: 100%;
         }
 
-        .element-card {
-            background: rgba(255, 255, 255, 0.08); 
-            border-radius: 6px; 
-            padding: 0.5rem 0.25rem;
-            height: 5.5rem; 
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            cursor: pointer;
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            overflow: hidden;
-            text-align: center;
-            touch-action: manipulation;
-            user-select: none;
-            -webkit-user-select: none;
+        .nav-panel,
+        #navToggleIcon,
+        #navToggleX {
+            transition: all 0.3s ease-in-out;
         }
 
-        .element-card:hover {
-            transform: scale(1.05); 
-            box-shadow: 0 5px 10px rgba(192, 132, 252, 0.5); 
-            z-index: 10; 
+        #mainContent,
+        .nav-panel {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
 
-        .element-active {
-            box-shadow: 0 0 10px var(--color-gold), 0 0 20px var(--color-gold);
-            transform: scale(1.08);
-            border-color: var(--color-gold);
-            z-index: 20;
-        }
-        
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 5px rgba(253, 224, 71, 0.3); }
-            50% { box-shadow: 0 0 15px rgba(253, 224, 71, 0.6); }
-        }
-
-        .gold-element {
-            animation: pulse-glow 2s infinite alternate;
-        }
-
-        .color-group-1 { color: #fbcfe8; } 
-        .color-group-2 { color: #c084fc; } 
-        .color-group-3 { color: #34d399; } 
-        .color-group-4 { color: #38bdf8; } 
-        .color-group-5 { color: #fb7185; } 
-        .color-group-6 { color: #fde047; } 
-        .color-group-7 { color: #a78bfa; } 
-
-
-        .atomic-number {
-            font-size: 0.6rem; 
-            text-align: left;
-            opacity: 0.8;
-            color: var(--color-purple);
-            width: 100%;
-            padding-left: 0.1rem;
-        }
-
-        .symbol {
-            font-size: 1.1rem; 
-            font-weight: 900;
-            line-height: 1;
-            text-shadow: 0 0 3px rgba(253, 224, 71, 0.5);
-        }
-
-        .atomic-weight {
-            font-size: 0.4rem; 
-            opacity: 0.6;
-            margin-bottom: 0.1rem;
-        }
-
-        .name {
-            font-size: 0.5rem; 
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            width: 100%;
-        }
-
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
+        #mainContent::-webkit-scrollbar,
+        .nav-panel::-webkit-scrollbar {
             display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
         }
 
-        .modal-content {
-            background-color: var(--color-bg-dark);
-            border-radius: 12px;
-            padding: 1.5rem;
-            max-width: 90%;
-            width: 350px;
-            box-shadow: 0 10px 25px rgba(192, 132, 252, 0.8);
-            border: 2px solid var(--color-purple);
-            transform: scale(0.9);
-            opacity: 0;
-            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        .festive-text {
+            font-family: 'Gochi Hand', cursive;
         }
 
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal-overlay.active .modal-content {
-            transform: scale(1);
-            opacity: 1;
-        }
-        
-        .close-button {
-            transition: color 0.2s;
-        }
-
-        .close-button:hover {
-            color: var(--color-pink);
-        }
-
-        @media (min-width: 640px) {
-            .periodic-grid {
-                grid-template-columns: repeat(10, 1fr); 
-            }
-            .element-card {
-                height: 6rem;
-                padding: 0.6rem 0.3rem;
-            }
-            .symbol {
-                font-size: 1.4rem;
-            }
-            .atomic-number {
-                font-size: 0.7rem;
-            }
+        h1,
+        h2,
+        h3 {
+            font-family: 'Pacifico', cursive;
         }
 
         button {
             user-select: none;
         }
+
+        #mainContent {
+            position: absolute;
+            top: 0;
+            left: 0;
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            height: -webkit-fill-available;
+            overflow: hidden;
+            background: linear-gradient(180deg, var(--dawn-purple) 0%, var(--dawn-pink) 70%);
+            color: white;
+            font-family: 'EB Garamond', 'Inter', serif;
+            -webkit-tap-highlight-color: transparent;
+            z-index: 1;
+        }
+
+        .river-background {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(180deg, #182848 0%, #0e1a35 100%);
+            z-index: 1;
+        }
+
+        .scene {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            z-index: 2;
+        }
+
+        .sun {
+            position: absolute;
+            top: 15vh;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 15vw;
+            height: 15vw;
+            max-width: 120px;
+            max-height: 120px;
+            background: var(--sun-color);
+            border-radius: 50%;
+            box-shadow: 0 0 40px var(--sun-glow-color), 0 0 80px var(--sun-glow-color);
+            animation: sun-pulse 8s ease-in-out infinite alternate;
+            z-index: 0;
+        }
+
+        @keyframes sun-pulse {
+            0% {
+                transform: translateX(-50%) scale(1);
+                opacity: 0.9;
+            }
+
+            100% {
+                transform: translateX(-50%) scale(1.02);
+                opacity: 1;
+            }
+        }
+
+        .shimmer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(60deg,
+                        rgba(255, 255, 255, 0.0) 0%,
+                        rgba(255, 255, 255, 0.0) 45%,
+                        rgba(255, 255, 255, 0.03) 50%,
+                        rgba(255, 255, 255, 0.0) 55%,
+                        rgba(255, 255, 255, 0.0) 100%);
+            background-size: 150px 150px;
+            opacity: 0.7;
+            animation: shimmer 15s linear infinite;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 0 0;
+            }
+
+            100% {
+                background-position: 300px 300px;
+            }
+        }
+
+        .moon-reflection {
+            position: absolute;
+            top: 25vh;
+            left: 50%;
+            width: 50vw;
+            max-width: 400px;
+            height: 15vh;
+            background: var(--dawn-reflection);
+            border-radius: 50%;
+            filter: blur(20px);
+            transform: translateX(-50%) rotateX(75deg);
+            animation: pulse 10s ease-in-out infinite;
+            z-index: 4;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.7;
+                transform: translateX(-50%) rotateX(75deg) scale(1);
+            }
+
+            50% {
+                opacity: 0.5;
+                transform: translateX(-50%) rotateX(75deg) scale(0.98);
+            }
+        }
+
+        .fog {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 200%;
+            height: 25vh;
+            background: linear-gradient(to top, var(--fog-color) 0%, transparent 100%);
+            animation: drift 70s linear infinite;
+            z-index: 6;
+            pointer-events: none;
+        }
+
+        @keyframes drift {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 4px white, 0 0 8px white;
+            animation: sparkle 12s linear infinite;
+        }
+
+        .particle:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-delay: -1s;
+        }
+
+        .particle:nth-child(2) {
+            top: 40%;
+            left: 30%;
+            animation-delay: -3s;
+        }
+
+        .particle:nth-child(3) {
+            top: 60%;
+            left: 20%;
+            animation-delay: -5s;
+        }
+
+        .particle:nth-child(4) {
+            top: 50%;
+            left: 50%;
+            animation-delay: -7s;
+        }
+
+        .particle:nth-child(5) {
+            top: 70%;
+            left: 70%;
+            animation-delay: -2s;
+        }
+
+        .particle:nth-child(6) {
+            top: 30%;
+            left: 80%;
+            animation-delay: -6s;
+        }
+
+        .particle:nth-child(7) {
+            top: 80%;
+            left: 90%;
+            animation-delay: -8s;
+        }
+
+        .particle:nth-child(8) {
+            top: 10%;
+            left: 60%;
+            animation-delay: -4s;
+        }
+
+        .particle:nth-child(9) {
+            top: 85%;
+            left: 40%;
+            animation-delay: -10s;
+        }
+
+        .particle:nth-child(10) {
+            top: 90%;
+            left: 15%;
+            animation-delay: -12s;
+        }
+
+
+        @keyframes sparkle {
+
+            0%,
+            100% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .boat-container {
+            position: absolute;
+            left: 0;
+            width: 100px;
+            height: 80px;
+            animation: glide-initial linear;
+            z-index: 10;
+            cursor: pointer; 
+        }
+
+        .boat {
+            width: 22vw;
+            height: 22vw;
+            max-width: 80px;
+            max-height: 80px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            cursor: pointer;
+            
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cG9seWdvbiBwb2ludHM9IjEwLDgwIDUwLDIwIDkwLDgwIDUwLDgwIiBmaWxsPSJ3aGl0ZSIvPjxwb2x5Z29uIHBvaW50cz0iMTAsODAgOTAsODAgNzUsOTUgMjUsOTUiIGZpbGw9IiNmMGYwZjAiLz48L3N2Zz4=');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.7));
+            animation: float 4s ease-in-out infinite;
+            transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1),
+                filter 1s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        @keyframes glide-initial {
+            0% {
+                transform: translateX(-20vw);
+            }
+
+            100% {
+                transform: translateX(110vw);
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(3px);
+            }
+        }
+
+        .boat.tapped {
+            transform: translateY(-15px);
+            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 1.2));
+            animation-play-state: paused;
+        }
+
+        .ripple {
+            position: absolute;
+            border: 2px solid rgba(255, 215, 0, 0.7);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            opacity: 1;
+            animation: ripple-effect 1.5s ease-out;
+            pointer-events: none;
+            z-index: 9;
+        }
+
+        @keyframes ripple-effect {
+            to {
+                transform: translate(-50%, -50%) scale(4);
+                opacity: 0;
+            }
+        }
+
+        .message {
+            position: absolute;
+            width: 70vw;
+            max-width: 300px;
+            text-align: center;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 100;
+            animation: reveal 2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+
+            left: 0;
+            top: 0;
+
+            font-family: 'EB Garamond', 'Inter', serif;
+            font-style: italic;
+            font-size: clamp(14px, 3.5vw, 16px);
+            color: var(--golden-glow);
+            text-shadow: 0 0 8px var(--golden-glow), 0 0 15px var(--golden-glow);
+        }
+
+        @keyframes reveal {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, 20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translate(-50%, -15px);
+            }
+        }
+
+        .message.hide {
+            animation: hide 1.5s ease-in forwards;
+        }
+
+        @keyframes hide {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -15px);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(-50%, 5px);
+            }
+        }
     </style>
 </head>
-<body class="antialiased overflow-hidden">
 
-    <button id="navToggle" class="fixed top-6 left-6 z-[70] p-2 bg-neutral-950 text-purple-400 rounded-full shadow-lg hover:bg-neutral-900 focus:outline-none focus:ring-2 focus:ring-purple-400 focus:ring-offset-2">
-        <svg id="navToggleIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-8 6h8"></path></svg>
-        <svg id="navToggleX" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+<body class="antialiased overflow-hidden text-gray-800">
+
+    <button id="navToggle" class="fixed top-6 left-6 p-2 bg-[var(--dawn-pink)] text-[var(--golden-glow)] rounded-full shadow-lg hover:bg-[var(--dawn-purple)] focus:outline-none focus:ring-2 focus:ring-[var(--dawn-pink)] focus:ring-offset-2" style="z-index: 70;">
+        <svg id="navToggleIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-8 6h8"></path>
+        </svg>
+        <svg id="navToggleX" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
     </button>
+    
+    <nav id="topNav" class="nav-panel fixed top-0 left-0 right-0 z-[60] h-16 bg-[var(--dawn-purple)] text-[var(--golden-glow)] shadow-md flex items-center justify-center space-x-6 -translate-y-full">
+        <a href="index.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Home</a>
+        <a href="Special.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Special</a>
+        <a href="letter.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Letter</a>
+    </nav>
 
-        <nav id="topNav" class="nav-panel fixed top-0 left-0 right-0 z-[60] h-16 shadow-md flex items-center justify-center space-x-6 -translate-y-full dark-nav-style">
-            <a href="index.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Home</a>
-            <a href="Special.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Special</a>
-            <a href="letter.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Letter</a>
-        </nav>
+    <nav id="bottomNav" class="nav-panel fixed bottom-0 left-0 right-0 z-[60] h-16 bg-[var(--dawn-purple)] text-[var(--golden-glow)] shadow-md flex items-center justify-center space-x-6 translate-y-full">
+        <a href="anatomy.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Anatomy</a>
+        <a href="chat.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Heaven</a>
+        <a href="you.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">You</a>
+    </nav>
 
-        <nav id="bottomNav" class="nav-panel fixed bottom-0 left-0 right-0 z-[60] h-16 shadow-md flex items-center justify-center space-x-6 translate-y-full dark-nav-style">
-            <a href="anatomy.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Anatomy</a>
-            <a href="chat.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Heaven</a>
-            <a href="you.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">You</a>
-        </nav>
+    <nav id="leftNav" class="nav-panel fixed left-0 top-0 bottom-0 z-[60] w-20 bg-[var(--dawn-purple)] text-[var(--golden-glow)] shadow-md flex flex-col items-center space-y-6 -translate-x-full overflow-y-auto py-20">
+        <a href="Diary.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Diary</a>
+        <a href="Universe.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Universe</a>
+        <a href="Box.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Box</a>
+        <a href="color.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Color</a>
+        <a href="Teacher.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Teacher</a>
+        <a href="The_River.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">River</a>
+        <a href="Mountain.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Mountain</a>
+        <a href="Paper_Star.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Paper Star</a>
+        <a href="Carttoon.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Cartoon</a>
+        <a href="Santa.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Santa</a>
+        <a href="Cloud.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Cloud</a>
+        <a href="Ink.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Paint</a>
+        <a href="Butterfly.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Butterfly</a>
+        <a href="Weather.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Weather</a>
+    </nav>
 
-        <nav id="leftNav" class="nav-panel fixed left-0 top-0 bottom-0 z-[60] w-20 shadow-md flex flex-col items-center space-y-6 -translate-x-full overflow-y-auto py-20 dark-nav-style">
-            <a href="Diary.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Diary</a>
-            <a href="Universe.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Universe</a>
-            <a href="Box.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Box</a>
-            <a href="color.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Color</a>
-            <a href="Teacher.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Teacher</a>
-            <a href="The_River.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">River</a>
-            <a href="Mountain.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Mountain</a>
-            <a href="Paper_Star.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Paper Star</a>
-            <a href="Carttoon.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Cartoon</a>
-            <a href="Santa.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Santa</a>
-            <a href="Cloud.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Cloud</a>
-            <a href="Ink.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Paint</a>
-            <a href="Butterfly.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Butterfly</a>
-            <a href="Weather.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Weather</a>
-        </nav>
+    <nav id="rightNav" class="nav-panel fixed right-0 top-0 bottom-0 z-[60] w-20 bg-[var(--dawn-purple)] text-[var(--golden-glow)] shadow-md flex flex-col items-center space-y-6 translate-x-full overflow-y-auto py-20">
+        <a href="Skill.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Skill</a>
+        <a href="Msg.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Massege</a>
+        <a href="21_Wish.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">21_Door</a>
+        <a href="Cake.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Cake</a>
+        <a href="Periodik_table.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Periodik_table</a>
+        <a href="Presence.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Presence</a>
+        <a href="Concept.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Concept</a>
+        <a href="Calender.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Calender</a>
+        <a href="Perspective.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Perspective</a>
+        <a href="Spotlight.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Spotlight</a>
+        <a href="Room.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Room</a>
+        <a href="Radio.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Radio</a>
+        <a href="Food.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Food</a>
+        <a href="Music.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Music</a>
+    </nav>
 
-        <nav id="rightNav" class="nav-panel fixed right-0 top-0 bottom-0 z-[60] w-20 shadow-md flex flex-col items-center space-y-6 translate-x-full overflow-y-auto py-20 dark-nav-style">
-            <a href="Skill.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Skill</a>
-            <a href="Msg.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Massege</a>
-            <a href="21_Wish.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">21_Door</a>
-            <a href="Cake.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Cake</a>
-            <a href="Periodik_table.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Periodik_table</a>
-            <a href="Presence.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Presence</a>
-            <a href="Concept.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Concept</a>
-            <a href="Calender.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Calender</a>
-            <a href="Perspective.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Perspective</a>
-            <a href="Spotlight.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Spotlight</a>
-            <a href="Room.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Room</a>
-            <a href="Radio.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Radio</a>
-            <a href="Food.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Food</a>
-            <a href="Music.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Music</a>
-        </nav>
+    <div id="mainContent">
+        <div class="river-background"></div>
+        <div class="scene">
 
-    <div id="mainContent" class="absolute inset-0 pt-28 overflow-y-auto">
-
-        <div id="main-content" class="w-full max-w-4xl space-y-6 mx-auto px-4 py-12 sm:py-16">
+            <div class="sun"></div>
+            <div class="shimmer"></div>
+            <div class="moon-reflection"></div>
             
-            <header class="text-center space-y-2">
-                <p class="text-lg font-semibold color-group-1">Happy Birthday!</p>
-                <h1 id="main-title" class="text-3xl md:text-4xl font-extrabold tracking-tight bg-clip-text text-transparent" 
-                    style="background-image: linear-gradient(90deg, var(--color-gold), var(--color-purple), var(--color-pink));">
-                    The Element of You (1-118)
-                </h1>
-                <p class="text-sm text-gray-400 max-w-sm mx-auto">Every element is a fundamental part of what makes you amazing.</p>
-            </header>
-    
-            <div class="periodic-grid" id="periodic-table">
+            <div class="particles">
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
             </div>
-    
-            <div class="h-20 sm:h-24"></div> 
-    
-            <div class="text-center pt-4">
-                <p class="text-xs text-gray-500">-- From your most dedicated chemist --</p>
-            </div>
-    
-        </div>
 
-    </div>
-
-    <div id="message-modal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="flex justify-between items-center mb-4">
-                <h3 id="modal-title" class="text-xl font-bold text-yellow-300"></h3>
-                <button id="close-modal" class="text-gray-400 close-button text-2xl leading-none">&times;</button>
-            </div>
-            <p id="modal-message" class="text-lg text-white text-center font-medium my-4"></p>
+            <div class="fog"></div>
+            
         </div>
     </div>
-    
+
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            
-            var ALL_ELEMENTS = [
-                { number: 1, symbol: 'Ch', name: 'Charm', weight: '12.01', color: 'color-group-1', description: 'Charm (The most potent element. Completely unfair to everyone else, really.)' },
-                { number: 2, symbol: 'Sm', name: 'Smile', weight: '16.08', color: 'color-group-2', description: 'Smile (Has a 100% success rate of making my day. Highly reactive.)' },
-                { number: 3, symbol: 'Kn', name: 'Kindness', weight: '14.07', color: 'color-group-3', description: 'Kindness (The rarest element. You seem to have an unlimited supply.)' },
-                { number: 4, symbol: 'Bl', name: 'Brilliant', weight: '9.91', color: 'color-group-4', description: 'Brilliant (Your brain is so big it should have its own zip code. Seriously.)' },
-                { number: 5, symbol: 'La', name: 'Laugh', weight: '1.03', color: 'color-group-5', description: 'Laugh (The only sound I want on my Spotify Wrapped. It\'s just that good.)' },
-                { number: 6, symbol: 'Cr', name: 'Creativity', weight: '33.56', color: 'color-group-6', description: 'Creativity (Your ideas are so far outside the box, the box is just a dot.)' },
-                { number: 7, symbol: 'Ly', name: 'Loyalty', weight: '58.7', color: 'color-group-7', description: 'Loyalty (You\'re like human superglue, but in a good, non-messy way.)' },
-                { number: 8, symbol: 'Eg', name: 'Energy', weight: '7.89', color: 'color-group-1', description: 'Energy (Are you powered by coffee, magic, or just pure awesome?)' },
-                { number: 9, symbol: 'St', name: 'Style', weight: '41.1', color: 'color-group-2', description: 'Style (You could wear a potato sack and still make Vogue. It\'s unfair.)' },
-                { number: 10, symbol: 'Sl', name: 'Silly', weight: '2.22', color: 'color-group-3', description: 'Silly (The perfect amount of goofball. My favorite flavor of adorable.)' },
-                { number: 11, symbol: 'Fo', name: 'Focus', weight: '81.44', color: 'color-group-4', description: 'Focus (That \'get-it-done\' look you get? Extremely distracting, in the best way.)' },
-                { number: 12, symbol: 'Ha', name: 'Happy', weight: '8.88', color: 'color-group-5', description: 'Happiness (You\'re basically a walking sunshine emoji. I\'m here for it.)' },
-                { number: 13, symbol: 'Tr', name: 'Trust', weight: '55.3', color: 'color-group-6', description: 'Trust (You feel like a secret that\'s safe. The best kind of feeling.)' },
-                { number: 14, symbol: 'Wi', name: 'Witty', weight: '29.6', color: 'color-group-7', description: 'Witty (Your comebacks are so fast, they probably break the sound barrier.)' },
-                { number: 15, symbol: 'Pa', name: 'Passion', weight: '101.9', color: 'color-group-1', description: 'Passion (When you care about something, you CARE. It\'s seriously inspiring.)' },
-                { number: 16, symbol: 'Dr', name: 'Dreamy', weight: '4.17', color: 'color-group-2', description: 'Dreamy (The element of daydreams. (You\'re the main character in all of mine.))' },
-                { number: 17, symbol: 'Ge', name: 'Generous', weight: '77.2', color: 'color-group-3', description: 'Generous (You give the best gifts, advice, and hugs. A triple threat.)' },
-                { number: 18, symbol: 'He', name: 'Heart', weight: '10.0', color: 'color-group-4', description: 'Heart (Yours is basically a national treasure. We must protect it at all costs.)' },
-                { number: 19, symbol: 'Ca', name: 'Caring', weight: '99.9', color: 'color-group-5', description: 'Caring (You notice the little things, which is actually the biggest thing.)' },
-                { number: 20, symbol: 'Cl', name: 'Classy', weight: '3.31', color: 'color-group-6', description: 'Classy (You have a natural elegance. You\'re like a timeless movie star.)' },
-                { number: 21, symbol: 'Pu', name: 'Pure', weight: '1.00', color: 'color-group-7', description: 'Pure (You have zero bad vibes. Like, zero. How do you do that?)' },
-                { number: 22, symbol: 'Ho', name: 'Honest', weight: '45.0', color: 'color-group-1', description: 'Honest (You speak the truth, but you do it nicely. A rare skill.)' },
-                { number: 23, symbol: 'Fi', name: 'Fierce', weight: '50.9', color: 'color-group-2', description: 'Fierce (Strong, capable, and not afraid to stand up for what\'s right. Respect.)' },
-                { number: 24, symbol: 'Co', name: 'Cool', weight: '52.0', color: 'color-group-3', description: 'Cool (Just... effortlessly cool. You don\'t even have to try.)' },
-                { number: 25, symbol: 'Ts', name: 'Tease', weight: '54.9', color: 'color-group-4', description: 'Tease (Your specialty. You know *exactly* what you\'re doing, don\'t you?)' },
-                { number: 26, symbol: 'Ju', name: 'Joyful', weight: '55.8', color: 'color-group-5', description: 'Joyful (Being around you feels like a party, even on a Tuesday.)' },
-                { number: 27, symbol: 'Ta', name: 'Talented', weight: '58.9', color: 'color-group-6', description: 'Talented (Is there anything you\'re NOT good at? Seriously, asking.)' },
-                { number: 28, symbol: 'Ni', name: 'Nice', weight: '58.7', color: 'color-group-7', description: 'Nice (A genuinely good person. The world needs about a million more of you.)' },
-                { number: 29, symbol: 'Se', name: 'Sensitive', weight: '63.5', color: 'color-group-1', description: 'Sensitive (You feel things deeply, which is a sign of strength, not weakness.)' },
-                { number: 30, symbol: 'Zh', name: 'Zestful', weight: '65.4', color: 'color-group-2', description: 'Zestful (You add that extra \'sparkle\' to life. You\'re the human equivalent of glitter.)' },
-                { number: 31, symbol: 'Ad', name: 'Admirable', weight: '69.7', color: 'color-group-3', description: 'Admirable (I look up to you. Don\'t tell anyone I said that.)' },
-                { number: 32, symbol: 'Gr', name: 'Graceful', weight: '72.6', color: 'color-group-4', description: 'Graceful (You handle everything with so much class, even when things are chaotic.)' },
-                { number: 33, symbol: 'Ar', name: 'Artistic', weight: '74.9', color: 'color-group-5', description: 'Artistic (The way you see the world is beautiful. You make life more colorful.)' },
-                { number: 34, symbol: 'Ve', name: 'Vibrant', weight: '79.0', color: 'color-group-6', description: 'Vibrant (You\'re not just alive, you\'re *living*. It\'s captivating.)' },
-                { number: 35, symbol: 'Ba', name: 'Balanced', weight: '79.9', color: 'color-group-7', description: 'Balanced (Somehow you\'re both fun AND responsible. How?)' },
-                { number: 36, symbol: 'Fr', name: 'Friendly', weight: '83.8', color: 'color-group-1', description: 'Friendly (You\'re like a magnet for good people. Everyone loves you.)' },
-                { number: 37, symbol: 'Op', name: 'Optimistic', weight: '85.5', color: 'color-group-2', description: 'Optimistic (You always see the good side. It\'s a reminder that it\'s there.)' },
-                { number: 38, symbol: 'Stn', name: 'Strong', weight: '87.6', color: 'color-group-3', description: 'Strong (Not just physically, but mentally. You\'re a rock.)' },
-                { number: 39, symbol: 'El', name: 'Elegant', weight: '88.9', color: 'color-group-4', description: 'Elegant (You have a poise that I find... extremely distracting. In a good way.)' },
-                { number: 40, symbol: 'Di', name: 'Driven', weight: '91.2', color: 'color-group-5', description: 'Driven (You have goals and you go for them. It\'s impressive and very attractive.)' },
-                { number: 41, symbol: 'De', name: 'Deep', weight: '92.9', color: 'color-group-6', description: 'Deep (You\'re not just small talk. Talking to you is always interesting.)' },
-                { number: 42, symbol: 'Ma', name: 'Mature', weight: '95.9', color: 'color-group-7', description: 'Mature (You know who you are and what you want. That\'s rare and amazing.)' },
-                { number: 43, symbol: 'Be', name: 'Beautiful', weight: '98.0', color: 'color-group-1', description: 'Beautiful (The unifying theory that explains... well, everything. Both inside and out.)' },
-                { number: 44, symbol: 'Po', name: 'Polite', weight: '101.1', color: 'color-group-2', description: 'Polite (You\'re respectful to everyone, even when they don\'t deserve it. That\'s class.)' },
-                { number: 45, symbol: 'Re', name: 'Reliable', weight: '102.9', color: 'color-group-3', description: 'Reliable (You\'re the person I\'d call at 3 AM. (But I\'ll try not to, I promise.))' },
-                { number: 46, symbol: 'Pln', name: 'Playful', weight: '106.4', color: 'color-group-4', description: 'Playful (The element of mischief. That little smirk is my favorite.)' },
-                { number: 47, symbol: 'Su', name: 'Sweet', weight: '107.9', color: 'color-group-5', description: 'Sweet (You are dangerously sweet. I think I\'m getting a cavity just thinking about it.)' },
-                { number: 48, symbol: 'Cal', name: 'Calm', weight: '112.4', color: 'color-group-6', description: 'Calm (You\'re my personal chill-pill. Being near you is so peaceful.)' },
-                { number: 49, symbol: 'Pe', name: 'Perfect', weight: '114.8', color: 'color-group-7', description: 'Perfect (I know nobody\'s perfect, but you\'re cutting it dangerously close.)' },
-                { number: 50, symbol: 'So', name: 'Soft', weight: '118.7', color: 'color-group-1', description: 'Soft (You have a gentle side that is just... everything. So adorable.)' },
-                { number: 51, symbol: 'We', name: 'Welcoming', weight: '121.8', color: 'color-group-2', description: 'Welcoming (You make people feel at home instantly. It\'s a real gift.)' },
-                { number: 52, symbol: 'PaI', name: 'Patient', weight: '127.6', color: 'color-group-3', description: 'Patient (Your level of patience is superhuman. Are you a saint?)' },
-                { number: 53, symbol: 'Ex', name: 'Excellent', weight: '126.9', color: 'color-group-4', description: 'Excellent (Just... *chef\'s kiss*. Top-tier human being.)' },
-                { number: 54, symbol: 'Un', name: 'Unique', weight: '131.3', color: 'color-group-5', description: 'Unique (You\'re not like anyone else. That\'s why I like you so much.)' },
-                { number: 55, symbol: 'Vi', name: 'Visionary', weight: '132.9', color: 'color-group-6', description: 'Visionary (You see things in a way no one else does. It\'s fascinating.)' },
-                { number: 56, symbol: 'Chr', name: 'Charming', weight: '137.3', color: 'color-group-7', description: 'Charming (Okay, I put \'Charm\' at #1, but you have so much it needed a second spot.)' },
-                { number: 57, symbol: 'Ex', name: 'Exciting', weight: '138.9', color: 'color-group-1', description: 'Exciting (Life is never, ever boring with you. It\'s like an adventure.)' },
-                { number: 58, symbol: 'Ra', name: 'Radiant', weight: '140.1', color: 'color-group-2', description: 'Radiant (You don\'t just enter a room, you light it up. You practically glow.)' },
-                { number: 59, symbol: 'Me', name: 'Memory', weight: '140.9', color: 'color-group-3', description: 'Memory (The moments I spend with you are the ones I never want to forget.)' },
-                { number: 60, symbol: 'Ne', name: 'Neat', weight: '144.2', color: 'color-group-4', description: 'Neat (You\'re so organized. My chaotic brain respects this deeply.)' },
-                { number: 61, symbol: 'Dei', name: 'Delightful', weight: '145.0', color: 'color-group-5', description: 'Delightful (A 100% accurate description. You are a literal delight.)' },
-                { number: 62, symbol: 'Be2', name: 'Benevolent', weight: '150.4', color: 'color-group-6', description: 'Benevolent (Just a fancy word for \'super-duper kind.\' It fits.)' },
-                { number: 63, symbol: 'Fi2', name: 'Fiery', weight: '152.0', color: 'color-group-7', description: 'Fiery (You\'ve got that spark. That passionate, amazing, slightly scary spark.)' },
-                { number: 64, symbol: 'In', name: 'Incredible', weight: '157.3', color: 'color-group-1', description: 'Incredible (Sometimes I look at you and just think... wow. Just... wow.)' },
-                { number: 65, symbol: 'Ad2', name: 'Adventurous', weight: '158.9', color: 'color-group-2', description: 'Adventurous (You\'re always up for anything. It makes me want to be braver.)' },
-                { number: 66, symbol: 'He2', name: 'Helpful', weight: '162.5', color: 'color-group-3', description: 'Helpful (You\'re always there for people. You\'re just... good. Pure good.)' },
-                { number: 68, symbol: 'Spi', name: 'Spirited', weight: '167.2', color: 'color-group-5', description: 'Spirited (You have a life force that\'s just... *zoom*. It\'s infectious.)' },
-                { number: 67, symbol: 'Ha2', name: 'Hardworking', weight: '164.9', color: 'color-group-4', description: 'Hardworking (You deserve all the success. You work so hard for it.)' },
-                { number: 69, symbol: 'Hu', name: 'Humorous', weight: '168.9', color: 'color-group-6', description: 'Humorous (You are genuinely funny. You make me laugh for real.)' },
-                { number: 70, symbol: 'Yo', name: 'Youthful', weight: '173.0', color: 'color-group-7', description: 'Youthful (You have a \'forever young\' heart that\'s so fun to be around.)' },
-                { number: 71, symbol: 'Ca2', name: 'Captivating', weight: '175.0', color: 'color-group-1', description: 'Captivating (An element with its own gravity. It\'s impossible to look away.)' },
-                { number: 72, symbol: 'Gr2', name: 'Grateful', weight: '178.5', color: 'color-group-2', description: 'Grateful (You appreciate the small things, which is such a lovely way to be.)' },
-                { number: 73, symbol: 'Lo', name: 'Lovely', weight: '180.9', color: 'color-group-3', description: 'Lovely (The only word for it. Just absolutely, completely lovely.)' },
-                { number: 74, symbol: 'Wi2', name: 'Wise', weight: '183.8', color: 'color-group-4', description: 'Wise (You\'re like a secret old soul. You give the best advice.)' },
-                { number: 75, symbol: 'Da', name: 'Dazzling', weight: '186.2', color: 'color-group-5', description: 'Dazzling (You know when the sun hits just right? You\'re like that, but all the time.)' },
-                { number: 76, symbol: 'Wo', name: 'Wondrous', weight: '190.2', color: 'color-group-6', description: 'Wondrous (You make me believe in a little bit of magic.)' },
-                { number: 77, symbol: 'Af', name: 'Affectionate', weight: '192.2', color: 'color-group-7', description: 'Affectionate (You\'re a warm person. You\'re easy to be around and easy to... well...)' },
-                { number: 78, symbol: 'Tr2', name: 'True', weight: '195.1', color: 'color-group-1', description: 'True (You\'re real. No fakeness, no games. Just 100% you. It\'s the best.)' },
-                { number: 79, symbol: 'Au', name: 'Awesome', weight: '24K', color: 'color-group-6', description: 'Awesome (The gold standard. The element all other elements wish they were.)' },
-                { number: 80, symbol: 'Wa', name: 'Warmth', weight: '200.6', color: 'color-group-2', description: 'Warmth (Being with you feels like being wrapped in a cozy blanket.)' },
-                { number: 81, symbol: 'Fe', name: 'Feeling', weight: '204.4', color: 'color-group-3', description: 'Feeling (You\'re so full of... feelings. You\'re not afraid to be human.)' },
-                { number: 82, symbol: 'Vi2', name: 'Vigilant', weight: '207.2', color: 'color-group-4', description: 'Vigilant (You\'re always looking out for your friends. You\'re a protector.)' },
-                { number: 83, symbol: 'En', name: 'Enchanting', weight: '209.0', color: 'color-group-5', description: 'Enchanting (This element is basically magic. Yep, I\'m pretty sure you\'re a witch.)' },
-                { number: 84, symbol: 'Ch3', name: 'Chilled', weight: '209.0', color: 'color-group-6', description: 'Chilled (You\'re so laid-back. You\'re the opposite of stress.)' },
-                { number: 85, symbol: 'Ac', name: 'Accepting', weight: '210.0', color: 'color-group-7', description: 'Accepting (You take people as they are. It makes me feel... safe.)' },
-                { number: 86, symbol: 'Gl', name: 'Glow', weight: '222.0', color: 'color-group-1', description: 'Glow (You have this... aura. This happy, bright glow.)' },
-                { number: 87, symbol: 'Go', name: 'Golden', weight: '223.0', color: 'color-group-2', description: 'Golden (Like a golden retriever in human form. Just pure, happy, good vibes.)' },
-                { number: 88, symbol: 'Ra2', name: 'Radical', weight: '226.0', color: 'color-group-3', description: 'Radical (In the 80s way. Just totally, awesomely cool.)' },
-                { number: 89, symbol: 'As', name: 'Assertive', weight: '227.0', color: 'color-group-4', description: 'Assertive (You know what you want and you\'re not afraid to say it. Respect.)' },
-                { number: 90, symbol: 'Sp', name: 'Sparkle', weight: '232.0', color: 'color-group-5', description: 'Sparkle (You have that \'twinkle\' in your eye. Usually when you\'re being mischievous.)' },
-                { number: 91, symbol: 'Pu2', name: 'Powerful', weight: '231.0', color: 'color-group-6', description: 'Powerful (You have a quiet strength that is more powerful than being loud.)' },
-                { number: 92, symbol: 'Un2', name: 'Unstoppable', weight: '238.0', color: 'color-group-7', description: 'Unstoppable (When you decide to do something, it\'s as good as done.)' },
-                { number: 93, symbol: 'My', name: 'Mystery', weight: '237.0', color: 'color-group-1', description: 'Mystery (There\'s so much to you. I love learning all your secrets.)' },
-                { number: 94, symbol: 'Fe2', name: 'Fearless', weight: '244.0', color: 'color-group-2', description: 'Fearless (You\'re brave. You face things head-on. I admire that a lot.)' },
-                { number: 95, symbol: 'Pr', name: 'Precious', weight: '243.0', color: 'color-group-3', description: 'Precious (A total treasure. The kind you find and want to protect forever.)' },
-                { number: 96, symbol: 'Cu', name: 'Curious', weight: '247.0', color: 'color-group-4', description: 'Curious (You\'re interested in everything. It makes you so interesting.)' },
-                { number: 97, symbol: 'Co2', name: 'Comforting', weight: '247.0', color: 'color-group-5', description: 'Comforting (You have a way of making everything feel... okay.)' },
-                { number: 98, symbol: 'We2', name: 'Wealthy', weight: '251.0', color: 'color-group-6', description: 'Wealthy (Rich in all the things that actually matter. Like kindness and humor.)' },
-                { number: 99, symbol: 'Be3', name: 'Beloved', weight: '252.0', color: 'color-group-7', description: 'Beloved (By everyone. But especially... well, you know.)' },
-                { number: 100, symbol: 'Fa', name: 'Fabulous', weight: '257.0', color: 'color-group-1', description: 'Fabulous (Just... look at you. Absolutely fabulous.)' },
-                { number: 101, symbol: 'Ho2', name: 'Hopeful', weight: '258.0', color: 'color-group-2', description: 'Hopeful (You\'re the light at the end of the tunnel. You give me hope.)' },
-                { number: 102, symbol: 'En2', name: 'Enlightened', weight: '259.0', color: 'color-group-3', description: 'Enlightened (You\'re smart, but you\'re also wise. That\'s a killer combo.)' },
-                { number: 103, symbol: 'Sm2', name: 'Smart', weight: '262.0', color: 'color-group-4', description: 'Smart (Your brain is just... *wow*. It\'s as beautiful as your... well, everything.)' },
-                { number: 104, symbol: 'Ca3', name: 'Capable', weight: '261.0', color: 'color-group-5', description: 'Capable (You can handle anything. It makes me feel... confident.)' },
-                { number: 105, symbol: 'Ta2', name: 'Tasteful', weight: '262.0', color: 'color-group-6', description: 'Tasteful (You just *know* what\'s good. You have impeccable taste.)' },
-                { number: 106, symbol: 'Fl2', name: 'Flexible', weight: '266.0', color: 'color-group-7', description: 'Flexible (You go with the flow. It\'s so easy to be with you.)' },
-                { number: 107, symbol: 'Ge2', name: 'Genuine', weight: '264.0', color: 'color-group-1', description: 'Genuine (The realest person I know. It\'s so refreshing.)' },
-                { number: 108, symbol: 'Di2', name: 'Dignified', weight: '277.0', color: 'color-group-2', description: 'Dignified (You have a self-respect that is so, so respectable.)' },
-                { number: 109, symbol: 'Co3', name: 'Courageous', weight: '268.0', color: 'color-group-3', description: 'Courageous (You\'re brave enough to be yourself. That\'s the hardest kind of brave.)' },
-                { number: 110, symbol: 'He3', name: 'Heroic', weight: '281.0', color: 'color-group-4', description: 'Heroic (You\'re my personal superhero. (No cape required, but it\'s an option.))' },
-                { number: 111, symbol: 'Ra3', name: 'Rare', weight: '272.0', color: 'color-group-5', description: 'Rare (A \'limited edition\' human. I feel so lucky to have found you.)' },
-                { number: 112, symbol: 'Br3', name: 'Brave', weight: '285.0', color: 'color-group-6', description: 'Brave (I know, I said it twice. But your courage deserves two spots.)' },
-                { number: 113, symbol: 'Pe2', name: 'Peaceful', weight: '286.0', color: 'color-group-7', description: 'Peaceful (My heart literally slows down when I\'m near you. It\'s magic.)' },
-                { number: 114, symbol: 'Ha3', name: 'Harmonious', weight: '289.0', color: 'color-group-1', description: 'Harmonious (You just... fit. With everyone, with everything. With me.)' },
-                { number: 115, symbol: 'Lo2', name: 'Loved', weight: '290.0', color: 'color-group-2', description: 'Loved (You are. So, so much. Never forget that.)' },
-                { number: 116, symbol: 'Mi', name: 'Magical', weight: '293.0', color: 'color-group-3', description: 'Magical (You make the world feel less... boring. You\'re pure magic.)' },
-                { number: 117, symbol: 'Be4', name: 'Best', weight: '294.0', color: 'color-group-4', description: 'Best (The Best. That\'s it. That\'s the message.)' },
-                { number: 118, symbol: 'Yo2', name: 'Yours', weight: '294.0', color: 'color-group-5', description: 'Yours (Okay, this one\'s just wishful thinking... but a guy can dream. Happy Birthday.)' }
-            ];
-
-            var elementMap = {};
-            ALL_ELEMENTS.forEach(function(el) {
-                elementMap[el.number] = el;
-            });
-
-            var periodicTable = document.getElementById('periodic-table');
-            var mainTitle = document.getElementById('main-title'); 
-            var messageModal = document.getElementById('message-modal');
-            var modalTitle = document.getElementById('modal-title');
-            var modalMessage = document.getElementById('modal-message');
-            var closeModalButton = document.getElementById('close-modal');
-
-            var activeCardTimeout = null; 
-            var ORIGINAL_TITLE = "The Element of You (1-118)";
-
-            function createElementCard(data) {
-                var classes = "element-card cursor-pointer " + (data.number === 79 ? 'gold-element' : '');
-                var symbolClasses = "symbol " + data.color;
-                
-                return (
-                    '<div class="' + classes + '" data-full-description="' + data.description + '" data-element-name="' + data.name + '">' +
-                        '<div class="atomic-number">' + data.number + '</div>' +
-                        '<div class="' + symbolClasses + '">' + data.symbol + '</div>' +
-                        '<div class="atomic-weight">' + data.weight + '</div>' +
-                        '<div class="name">' + data.name + '</div>' +
-                    '</div>'
-                );
-            }
-            
-            function populatePeriodicTable() {
-                var html = '';
-                for (var i = 1; i <= 118; i++) {
-                    var elementData = elementMap[i]; 
-                    if (elementData) {
-                        html += createElementCard(elementData);
-                    }
-                }
-                periodicTable.innerHTML = html;
-                
-                attachEventListeners();
-            }
-
-            function extractConciseMessage(fullDescription) {
-                var match = fullDescription.match(/\(([^)]+)\)/);
-                return match ? match[1].trim() : fullDescription;
-            }
-
-            function handleElementInteraction(e) {
-                var card = e.target.closest('.element-card');
-
-                if (!card) {
-                    return; 
-                }
-
-                var cardName = card.dataset.elementName; 
-                
-                if (mainTitle) {
-                    mainTitle.textContent = "Processing " + cardName + "...";
-                    setTimeout(function() {
-                        mainTitle.textContent = ORIGINAL_TITLE;
-                    }, 1000); 
-                }
-                
-                if (activeCardTimeout) {
-                    clearTimeout(activeCardTimeout);
-                }
-                document.querySelectorAll('.element-card').forEach(function(c) { c.classList.remove('element-active'); });
-
-                card.classList.add('element-active');
-
-                activeCardTimeout = setTimeout(function() {
-                    card.classList.remove('element-active');
-                }, 5000); 
-
-                var fullDescription = card.dataset.fullDescription; 
-                var conciseMessage = extractConciseMessage(fullDescription);
-                
-                if (modalTitle && modalMessage && messageModal) {
-                    modalTitle.textContent = cardName;
-                    modalMessage.textContent = conciseMessage;
-                    messageModal.classList.add('active');
-                }
-
-                document.body.style.backgroundColor = 'var(--color-purple)';
-                setTimeout(function() {
-                    document.body.style.backgroundColor = 'var(--color-bg-dark)';
-                }, 150);
-            }
-            
-            function closeModal() {
-                if (messageModal) {
-                    messageModal.classList.remove('active');
-                }
-            }
-
-            function attachEventListeners() {
-                periodicTable.addEventListener('click', handleElementInteraction);
-
-                closeModalButton.addEventListener('click', closeModal);
-                messageModal.addEventListener('click', function(e) {
-                    if (e.target === messageModal) {
-                        closeModal(); 
-                    }
-                });
-            }
-
-            populatePeriodicTable();
-
 
             const navLinks = document.querySelectorAll('.nav-panel .nav-link');
             const mainContent = document.getElementById('mainContent');
@@ -556,8 +536,6 @@
                 bottomNav.classList.remove('translate-y-full');
                 leftNav.classList.remove('-translate-x-full');
                 rightNav.classList.remove('translate-x-full');
-                mainContent.classList.add('pt-16', 'pb-16', 'pl-24', 'pr-24');
-                mainContent.classList.remove('pt-28');
                 navToggleIcon.classList.add('hidden');
                 navToggleX.classList.remove('hidden');
                 areNavsOpen = true;
@@ -568,8 +546,6 @@
                 bottomNav.classList.add('translate-y-full');
                 leftNav.classList.add('-translate-x-full');
                 rightNav.classList.add('translate-x-full');
-                mainContent.classList.remove('pt-16', 'pb-16', 'pl-24', 'pr-24');
-                mainContent.classList.add('pt-28');
                 navToggleIcon.classList.remove('hidden');
                 navToggleX.classList.add('hidden');
                 areNavsOpen = false;
@@ -584,31 +560,213 @@
             }
 
             navToggle.addEventListener('click', (e) => {
-                e.stopPropagation(); 
+                e.stopPropagation();
                 toggleAllNavs();
             });
-            
+
             mainContent.addEventListener('click', () => {
                 if (areNavsOpen) {
                     closeAllNavs();
                 }
             });
-            
-            navLinks.forEach(function(link) {
-                link.addEventListener('click', function(e) {
-                    var targetHref = e.currentTarget.getAttribute('href');
-                    
-                    if (targetHref.startsWith('#')) {
-                        e.preventDefault(); 
-                    }
 
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const targetHref = e.currentTarget.getAttribute('href');
+                    if (targetHref.startsWith('#')) {
+                        e.preventDefault();
+                    }
                     if (areNavsOpen) {
                         closeAllNavs();
                     }
                 });
             });
+
+
+            let audioStarted = false;
+            let synth;
+
+            const ALL_MESSAGES = [
+                "You carried storms without letting anyone drown with you.",
+                "Someone is quietly grateful you exist.",
+                "Your dreams are already walking toward you.",
+                "The world is softer because you are gentle.",
+                "You are made of all the stories you've survived.",
+                "Your kindness is a language everyone understands.",
+                "You are not a burden. You are a universe.",
+                "It's brave to be soft in a world that isn't.",
+                "You are a rare and beautiful thing.",
+                "Your light hasn't gone out. It's just resting.",
+                "Someone finds peace in the thought of you.",
+                "You are exactly who you need to be in this moment.",
+                "Your capacity for love is your greatest strength.",
+                "Even on your worst day, you are still trying.",
+                "The seeds of your future are in the kindness you show today.",
+                "You are more than your darkest moments.",
+                "Your heart is a map to a thousand beautiful places.",
+                "You are healing, even when it doesn't feel like it.",
+                "The universe is conspiring to help you.",
+                "Your quiet courage is louder than you think.",
+                "You are a poem waiting to be read.",
+                "Someone sees the magic in you. I hope you do too."
+            ];
+            let availableMessages = [...ALL_MESSAGES];
+
+            const scene = document.querySelector('.scene');
+            let activeMessageEl = null; 
+
+            function initAudio() {
+                if (audioStarted) return;
+                Tone.start();
+                
+                synth = new Tone.MembraneSynth({
+                    pitchDecay: 0.01,
+                    octaves: 2,
+                    envelope: {
+                        attack: 0.001,
+                        decay: 0.3,
+                        sustain: 0
+                    }
+                }).toDestination();
+                synth.volume.value = -10;
+                audioStarted = true;
+            }
+
+            function playRippleSound() {
+                if (!audioStarted) initAudio();
+                synth.triggerAttackRelease("C2", "8n", Tone.now());
+            }
+
+            function getUniqueMessage() {
+                if (availableMessages.length === 0) {
+                    availableMessages = [...ALL_MESSAGES];
+                }
+                const msgIndex = Math.floor(Math.random() * availableMessages.length);
+                const msg = availableMessages.splice(msgIndex, 1)[0];
+                return msg;
+            }
+
+            function createBoat() {
+                const boatContainer = document.createElement('div');
+                boatContainer.className = 'boat-container';
+
+                const boatEl = document.createElement('div');
+                boatEl.className = 'boat';
+
+                boatEl.dataset.message = getUniqueMessage();
+
+                
+                const initialDuration = Math.random() * 20 + 50; 
+                const topPos = Math.random() * 30 + 55; 
+                boatContainer.style.animationDuration = initialDuration + 's';
+                boatContainer.style.top = topPos + 'vh';
+                
+                
+                function onTapped() {
+                    if (boatEl.classList.contains('tapped')) return; 
+
+                    
+                    initAudio();
+                    playRippleSound();
+
+                    
+                    if (activeMessageEl) {
+                        activeMessageEl.classList.add('hide');
+                        activeMessageEl.onanimationend = () => activeMessageEl.remove();
+                    }
+
+                    
+                    const ripple = document.createElement('div');
+                    ripple.className = 'ripple';
+                    document.body.appendChild(ripple);
+
+                    const rect = boatEl.getBoundingClientRect();
+                    ripple.style.top = (rect.top + rect.height / 2) + 'px';
+                    ripple.style.left = (rect.left + rect.width / 2) + 'px';
+
+                    ripple.onanimationend = () => {
+                        ripple.remove();
+                    };
+
+                    
+                    boatEl.classList.add('tapped');
+                    boatEl.style.animationPlayState = 'paused'; 
+                    boatContainer.style.animationPlayState = 'paused'; 
+
+                    
+                    const messageText = boatEl.dataset.message;
+                    const messageEl = document.createElement('div');
+                    messageEl.className = 'message';
+                    messageEl.textContent = messageText;
+                    activeMessageEl = messageEl;
+
+                    const boatRect = rect;
+                    let messageLeft = boatRect.left + (boatRect.width / 2);
+                    const messageTop = boatRect.top - 10;
+
+                    
+                    const messageWidth = Math.min(window.innerWidth * 0.7, 300);
+                    const halfMessageWidth = messageWidth / 2;
+                    const padding = 10;
+                    
+                    if (messageLeft - halfMessageWidth < padding) {
+                        messageLeft = halfMessageWidth + padding;
+                    }
+                    if (messageLeft + halfMessageWidth > window.innerWidth - padding) {
+                        messageLeft = window.innerWidth - halfMessageWidth - padding;
+                    }
+
+                    messageEl.style.left = messageLeft + 'px';
+                    messageEl.style.top = messageTop + 'px';
+
+                    scene.appendChild(messageEl);
+
+                    
+                    setTimeout(() => {
+                        if (messageEl === activeMessageEl) {
+                             activeMessageEl = null;
+                        }
+                        messageEl.classList.add('hide');
+                        boatEl.classList.remove('tapped');
+                        
+                        
+                        boatEl.style.animationPlayState = 'running';
+                        boatContainer.style.animationPlayState = 'running';
+
+                        messageEl.onanimationend = () => {
+                            messageEl.remove();
+                        };
+                    }, 4500);
+                }
+
+                
+                boatContainer.addEventListener('click', onTapped);
+                
+                
+                boatContainer.addEventListener('touchstart', (e) => {
+                    e.preventDefault(); 
+                    onTapped();
+                }, { passive: false });
+
+                
+                boatContainer.addEventListener('animationend', () => {
+                    boatContainer.remove();
+                });
+
+                boatContainer.appendChild(boatEl);
+                scene.appendChild(boatContainer);
+            }
+
             
+            setInterval(createBoat, 3000);
+
+            
+            createBoat();
+            
+            
+            document.body.addEventListener('click', initAudio, { once: true });
         });
     </script>
+
 </body>
 </html>
