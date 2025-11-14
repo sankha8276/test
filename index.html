@@ -443,6 +443,7 @@
         </svg>
     </button>
     
+    <!-- Navigation Panels -->
     <nav id="topNav" class="nav-panel fixed top-0 left-0 right-0 z-[60] h-16 bg-[var(--dawn-purple)] text-[var(--golden-glow)] shadow-md flex items-center justify-center space-x-6 -translate-y-full">
         <a href="index.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Home</a>
         <a href="Special.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Special</a>
@@ -519,6 +520,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
 
+            // --- Navigation Logic ---
             const navLinks = document.querySelectorAll('.nav-panel .nav-link');
             const mainContent = document.getElementById('mainContent');
             const topNav = document.getElementById('topNav');
@@ -583,8 +585,13 @@
             });
 
 
+            // --- River Boat Logic ---
             let audioStarted = false;
             let synth;
+            
+            // State variables for message control
+            let activeMessageEl = null; 
+            let activeMessageTimeoutId = null; // NEW: Track the running timeout ID
 
             const ALL_MESSAGES = [
                 "You carried storms without letting anyone drown with you.",
@@ -613,7 +620,6 @@
             let availableMessages = [...ALL_MESSAGES];
 
             const scene = document.querySelector('.scene');
-            let activeMessageEl = null;
 
             function initAudio() {
                 if (audioStarted) return;
@@ -663,20 +669,27 @@
                 
                 
                 function onTapped() {
+                    // Prevent action if the same boat is tapped while it's mid-message
                     if (boatEl.classList.contains('tapped')) return; 
 
-                    
                     initAudio();
                     playRippleSound();
 
-                    // --- FIX FOR MOBILE RELIABILITY: Forcefully remove any old message instantly ---
-                    if (activeMessageEl) {
-                        activeMessageEl.remove(); 
-                        activeMessageEl = null; // Clear the state immediately
+                    // --- Fix: Aggressive cleanup of the previous message and state ---
+                    if (activeMessageTimeoutId) {
+                        clearTimeout(activeMessageTimeoutId); // Stop previous boat's timer
+                        activeMessageTimeoutId = null;
                     }
-                    // ---------------------------------------------------------------------------------
+
+                    if (activeMessageEl) {
+                        // Immediately remove the previous message, if it exists
+                        activeMessageEl.remove(); 
+                        activeMessageEl = null;
+                    }
+                    // ------------------------------------------------------------------
 
                     
+                    // 1. Create Ripple Effect
                     const ripple = document.createElement('div');
                     ripple.className = 'ripple';
                     document.body.appendChild(ripple);
@@ -690,11 +703,13 @@
                     };
 
                     
+                    // 2. Pause Boat Movement
                     boatEl.classList.add('tapped');
                     boatEl.style.animationPlayState = 'paused'; 
                     boatContainer.style.animationPlayState = 'paused'; 
 
                     
+                    // 3. Display Message
                     const messageText = boatEl.dataset.message;
                     const messageEl = document.createElement('div');
                     messageEl.className = 'message';
@@ -706,6 +721,7 @@
                     const messageTop = boatRect.top - 10;
 
                     
+                    // Adjust message position if it's too close to the screen edges
                     const messageWidth = Math.min(window.innerWidth * 0.7, 300);
                     const halfMessageWidth = messageWidth / 2;
                     const padding = 10;
@@ -723,19 +739,23 @@
                     scene.appendChild(messageEl);
 
                     
-                    setTimeout(() => {
+                    // 4. Schedule Hide/Resume (Reliable cleanup)
+                    activeMessageTimeoutId = setTimeout(() => {
+                        // Start the hide animation
                         messageEl.classList.add('hide');
-
-                        // Clear the active state ONLY if this message is still the current one
-                        if (messageEl === activeMessageEl) {
-                             activeMessageEl = null;
-                        }
                         
                         // Resume boat movement
                         boatEl.classList.remove('tapped');
                         boatEl.style.animationPlayState = 'running';
                         boatContainer.style.animationPlayState = 'running';
 
+                        // Clear global state if this is still the active message
+                        if (messageEl === activeMessageEl) {
+                            activeMessageEl = null;
+                            activeMessageTimeoutId = null;
+                        }
+
+                        // Final removal after animation ends
                         messageEl.onanimationend = () => {
                             messageEl.remove();
                         };
@@ -743,16 +763,32 @@
                 }
 
                 
+                // Event Listeners (both click and touch for mobile reliability)
                 boatContainer.addEventListener('click', onTapped);
                 
-                
+                // Use touchstart to prevent 300ms delay on mobile
                 boatContainer.addEventListener('touchstart', (e) => {
                     e.preventDefault(); 
                     onTapped();
                 }, { passive: false });
 
                 
+                // Clean up boat element after it glides off screen
                 boatContainer.addEventListener('animationend', () => {
+                    // Check if this boat was the one tied to the active message
+                    // (prevents trying to remove an element that was already removed by quick tap)
+                    if (boatEl.classList.contains('tapped')) { 
+                        // If it was still 'tapped' when it left, it means the timer failed to clear.
+                        // We forcefully clear it here, though it should be caught by the timeout.
+                        if (activeMessageEl) {
+                            activeMessageEl.remove();
+                            activeMessageEl = null;
+                        }
+                        if (activeMessageTimeoutId) {
+                            clearTimeout(activeMessageTimeoutId);
+                            activeMessageTimeoutId = null;
+                        }
+                    }
                     boatContainer.remove();
                 });
 
@@ -760,12 +796,9 @@
                 scene.appendChild(boatContainer);
             }
 
-            
             setInterval(createBoat, 3000);
 
-            
             createBoat();
-            
             
             document.body.addEventListener('click', initAudio, { once: true });
         });
