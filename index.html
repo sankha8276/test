@@ -1,526 +1,639 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The River of Unwritten Destinies</title>
-
+    <title>Happy Birthday!</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Inter:wght@400;500;700&family=Pacifico&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400&family=EB+Garamond:ital@0;1&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
 
     <style>
-        :root {
-            --dawn-purple: #2c213d;
-            --dawn-pink: #8b5f8a;
-            --dawn-orange: #f8b195;
-            --golden-glow: #FFD700;
-            --dawn-reflection: rgba(255, 200, 150, 0.15);
-            --fog-color: rgba(255, 220, 200, 0.1);
-            --sun-color: #ff8c6b;
-            --sun-glow-color: rgba(255, 140, 107, 0.6);
-        }
-
-        html,
-        body {
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-            background-color: var(--dawn-purple);
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-
-        .nav-panel,
-        #navToggleIcon,
-        #navToggleX {
+        
+        .nav-panel, #mainContent, #navToggleIcon, #navToggleX {
             transition: all 0.3s ease-in-out;
         }
-
-        #mainContent,
-        .nav-panel {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+        
+        /* Hide scrollbars for a cleaner look */
+        #mainContent, .nav-panel {
+            -ms-overflow-style: none;  
+            scrollbar-width: none;  
         }
-
+        /* Allow scrollbars but hide them for main content/navs */
         #mainContent::-webkit-scrollbar,
         .nav-panel::-webkit-scrollbar {
-            display: none;
+            display: none; 
         }
-
+        
         .festive-text {
-            font-family: 'Gochi Hand', cursive;
+            font-family: 'VT323', monospace; 
+            font-size: 1.25rem;
+        }
+        
+        #navToggle {
+            transition: all 0.3s ease-in-out;
+            z-index: 1000; /* Ensure toggle is always on top */
+        }
+        
+        h1, h2, h3 {
+             font-family: 'VT323', monospace;
+             font-weight: normal; 
         }
 
-        h1,
-        h2,
-        h3 {
-            font-family: 'Pacifico', cursive;
+        
+        :root {
+            --cake-body: #C0C0C0; 
+            --frosting: #000080; 
+            --photo-frame-border: #808080; 
+            --eye: #333;
+            --flame: #f9a825; 
+            --sprinkle1: #FF0000; 
+            --sprinkle2: #fece5a; 
+            --sprinkle3: #96e05d; 
+            --sprinkle4: #54c1e0; 
+            
+            --brick-pink-light: #fec5d9;
+            --brick-pink-dark: #fca7c6;
+            --mortar: #fdfdfd;
         }
 
-        button {
-            user-select: none;
-        }
-
-        #mainContent {
-            position: absolute;
-            top: 0;
-            left: 0;
+        
+        html, body {
+            width: 100%;
+            height: 100%;
             margin: 0;
             padding: 0;
-            width: 100vw;
-            height: 100vh;
-            height: -webkit-fill-available;
-            overflow: hidden;
-            background: linear-gradient(180deg, var(--dawn-purple) 0%, var(--dawn-pink) 70%);
-            color: white;
-            font-family: 'EB Garamond', 'Inter', serif;
-            -webkit-tap-highlight-color: transparent;
-            z-index: 1;
+            overflow: hidden; /* Keep body fixed */
+            font-family: 'VT323', monospace;
         }
 
-        .river-background {
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 100%;
-            height: 50%;
-            background: linear-gradient(180deg, #182848 0%, #0e1a35 100%);
-            z-index: 1;
+        body {
+            background-color: #008080; 
+            background-image: linear-gradient(rgba(0,0,0,0.2) 1px, transparent 1px);
+            background-size: 100% 3px; 
+            display: block; 
         }
 
-        .scene {
+        
+        #mainContent {
+            display: grid;
+            place-items: center;
             width: 100%;
             height: 100%;
+            
+            position: absolute;
+            inset: 0;
+            overflow: auto; /* FIX: Allow scrolling for long content */
+            padding: 20px; 
+            transition: all 0.3s ease-in-out;
+        }
+        
+        /* FIX: Responsive layout for Navigation Open state */
+        .body-nav-open #mainContent {
+            /* Adjust content inset based on nav sizes (h-16 = 4rem, w-20 = 5rem) */
+            top: 4rem; 
+            bottom: 4rem; 
+            left: 5rem; 
+            right: 5rem; 
+            padding: 0; /* Let inner pages handle padding */
+        }
+
+        @keyframes gradient-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .letter-container {
             position: relative;
-            z-index: 2;
+            width: 220px;
+            height: 150px;
+            transition: opacity 0.5s ease-in-out, transform 0.5s ease;
+            transform: scale(0.9);
+            opacity: 0;
+            z-index: 15;
+            display: none; 
+        }
+        
+        .letter-container.active-letter {
+            display: block;
+            opacity: 1;
+            transform: scale(1.1);
         }
 
-        .sun {
-            position: absolute;
-            top: 15vh;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 15vw;
-            height: 15vw;
-            max-width: 120px;
-            max-height: 120px;
-            background: var(--sun-color);
-            border-radius: 50%;
-            box-shadow: 0 0 40px var(--sun-glow-color), 0 0 80px var(--sun-glow-color);
-            animation: sun-pulse 8s ease-in-out infinite alternate;
-            z-index: 0;
-        }
-
-        @keyframes sun-pulse {
-            0% {
-                transform: translateX(-50%) scale(1);
-                opacity: 0.9;
-            }
-
-            100% {
-                transform: translateX(-50%) scale(1.02);
-                opacity: 1;
+        @media (min-width: 400px) {
+            .letter-container.active-letter {
+                transform: scale(1.1);
             }
         }
-
-        .shimmer {
-            position: absolute;
-            top: 0;
-            left: 0;
+        
+        .envelope {
+            position: relative;
             width: 100%;
             height: 100%;
-            background: linear-gradient(60deg,
-                        rgba(255, 255, 255, 0.0) 0%,
-                        rgba(255, 255, 255, 0.0) 45%,
-                        rgba(255, 255, 255, 0.03) 50%,
-                        rgba(255, 255, 255, 0.0) 55%,
-                        rgba(255, 255, 255, 0.0) 100%);
-            background-size: 150px 150px;
-            opacity: 0.7;
-            animation: shimmer 15s linear infinite;
-            z-index: 3;
-            pointer-events: none;
         }
-
-        @keyframes shimmer {
-            0% {
-                background-position: 0 0;
-            }
-
-            100% {
-                background-position: 300px 300px;
-            }
-        }
-
-        .moon-reflection {
-            position: absolute;
-            top: 25vh;
-            left: 50%;
-            width: 50vw;
-            max-width: 400px;
-            height: 15vh;
-            background: var(--dawn-reflection);
-            border-radius: 50%;
-            filter: blur(20px);
-            transform: translateX(-50%) rotateX(75deg);
-            animation: pulse 10s ease-in-out infinite;
-            z-index: 4;
-            pointer-events: none;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
-                opacity: 0.7;
-                transform: translateX(-50%) rotateX(75deg) scale(1);
-            }
-
-            50% {
-                opacity: 0.5;
-                transform: translateX(-50%) rotateX(75deg) scale(0.98);
-            }
-        }
-
-        .fog {
+        .envelope-body {
             position: absolute;
             bottom: 0;
-            left: 0;
-            width: 200%;
-            height: 25vh;
-            background: linear-gradient(to top, var(--fog-color) 0%, transparent 100%);
-            animation: drift 70s linear infinite;
-            z-index: 6;
-            pointer-events: none;
+            width: 100%;
+            height: 100%;
+            background: var(--cake-body); 
+            border: 2px outset #FFFFFF; 
+            z-index: 16;
         }
-
-        @keyframes drift {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-50%);
-            }
-        }
-
-        .particles {
+        .envelope-flap {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            z-index: 5;
-            pointer-events: none;
+            height: 75px; 
+            background: var(--cake-body);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            z-index: 17;
+            transform-origin: top;
+            transition: transform 0.5s ease-in-out;
+            border-bottom: 1px solid #808080;
+        }
+        .heart-seal {
+            display: none;
+        }
+        
+        .letter-container.open .envelope-flap {
+            transform: rotateX(180deg);
         }
 
-        .particle {
+        .page {
+            display: none; 
+            width: 100%;
+            max-width: 380px;
+            padding: 25px;
+            background: var(--cake-body); 
+            border: 2px outset #FFFFFF; 
+            text-align: left;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            z-index: 15;
+            /* Allow content to fill viewport, but also allow internal scroll if necessary */
+            max-height: 90vh; 
+            overflow-y: auto;
+        }
+
+        .page.active-page {
+            display: block; 
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .page-content {
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem; 
+            line-height: 1.7;
+            color: #000000; 
+        }
+        .page-content p {
+            margin-bottom: 1.5rem;
+        }
+        .page-content span {
+            display: block;
+            font-size: 1.25rem;
+            font-weight: normal;
+            color: var(--frosting); 
+            font-style: normal;
+        }
+        .page h2 {
+            font-family: 'VT323', monospace;
+            color: var(--frosting); 
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 2.25rem;
+        }
+        .page-signature {
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            text-align: right;
+            margin-top: 1.5rem;
+            color: #000000;
+        }
+        
+        .photo-frame {
+            display: block;
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover;
+            border: 4px outset var(--photo-frame-border);
+            padding: 2px;
+            background-color: #FFFFFF;
+        }
+        
+        #image-wrapper {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            
+            width: 200px; 
+            height: 130px; 
+            
             position: absolute;
-            width: 2px;
-            height: 2px;
-            background: white;
-            border-radius: 50%;
-            box-shadow: 0 0 4px white, 0 0 8px white;
-            animation: sparkle 12s linear infinite;
-        }
-
-        .particle:nth-child(1) {
-            top: 20%;
-            left: 10%;
-            animation-delay: -1s;
-        }
-
-        .particle:nth-child(2) {
-            top: 40%;
-            left: 30%;
-            animation-delay: -3s;
-        }
-
-        .particle:nth-child(3) {
-            top: 60%;
-            left: 20%;
-            animation-delay: -5s;
-        }
-
-        .particle:nth-child(4) {
+            z-index: 20; 
+            
             top: 50%;
             left: 50%;
-            animation-delay: -7s;
+            transform: translate(-50%, -50%); 
+            cursor: pointer; /* Indicate clickability */
         }
 
-        .particle:nth-child(5) {
-            top: 70%;
-            left: 70%;
-            animation-delay: -2s;
-        }
-
-        .particle:nth-child(6) {
-            top: 30%;
-            left: 80%;
-            animation-delay: -6s;
-        }
-
-        .particle:nth-child(7) {
-            top: 80%;
-            left: 90%;
-            animation-delay: -8s;
-        }
-
-        .particle:nth-child(8) {
-            top: 10%;
-            left: 60%;
-            animation-delay: -4s;
-        }
-
-        .particle:nth-child(9) {
-            top: 85%;
-            left: 40%;
-            animation-delay: -10s;
-        }
-
-        .particle:nth-child(10) {
-            top: 90%;
-            left: 15%;
-            animation-delay: -12s;
-        }
-
-
-        @keyframes sparkle {
-
-            0%,
-            100% {
-                opacity: 0;
-                transform: scale(0.5);
-            }
-
-            50% {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .boat-container {
+        
+        /* UPDATED POSITIONING: Moved to below the centered letter/image */
+        #button-container {
             position: absolute;
-            left: 0;
-            width: 100px;
-            height: 80px;
-            animation: glide-initial linear;
-            z-index: 10;
+            top: 50%; /* Start vertical positioning from the center */
+            left: 50%;
+            transform: translateX(-50%) translateY(120px); /* Move horizontally centered, and 120px down from center (below the 150px tall letter) */
+            display: flex;
+            flex-direction: column; 
+            gap: 15px;
+            z-index: 16; 
+        }
+        
+        #start-button-container {
+             position: relative;
+             z-index: 16;
+        }
+        
+        .action-button {
+            padding: 12px 28px;
+            background: var(--cake-body); 
+            color: #000000; 
+            font-size: 1.25rem; 
+            font-weight: normal; 
+            border: 2px outset #FFFFFF; 
             cursor: pointer;
-        }
-
-        .boat {
-            width: 22vw;
-            height: 22vw;
-            max-width: 80px;
-            max-height: 80px;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            cursor: pointer;
-
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTAwIDEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cG9seWdvbiBwb2ludHM9IjEwLDgwIDUwLDIwIDkwLDgwIDUwLDgwIiBmaWxsPSJ3aGl0ZSIvPjxwb2x5Z29uIHBvaW50cz0iMTAsODAgOTAsODAgNzUsOTUgMjUsOTUiIGZpbGw9IiNmMGYwZjAiLz48L3N2Zz4=');
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.7));
-            animation: float 4s ease-in-out infinite;
-            transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1),
-                filter 1s cubic-bezier(0.19, 1, 0.22, 1);
-        }
-
-        @keyframes glide-initial {
-            0% {
-                transform: translateX(-20vw);
-            }
-
-            100% {
-                transform: translateX(110vw);
-            }
-        }
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(3px);
-            }
-        }
-
-        .boat.tapped {
-            transform: translateY(-15px);
-            filter: drop-shadow(0 0 15px rgba(255, 215, 0, 1.2));
-            animation-play-state: paused;
-        }
-
-        .ripple {
-            position: absolute;
-            border: 2px solid rgba(255, 215, 0, 0.7);
-            border-radius: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            opacity: 1;
-            animation: ripple-effect 1.5s ease-out;
-            pointer-events: none;
-            z-index: 9;
-        }
-
-        @keyframes ripple-effect {
-            to {
-                transform: translate(-50%, -50%) scale(4);
-                opacity: 0;
-            }
-        }
-
-        .message {
-            position: absolute;
-            width: 70vw;
-            max-width: 300px;
-            text-align: center;
+            
             opacity: 0;
             pointer-events: none;
-            z-index: 100;
-            animation: reveal 2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
-
-            left: 0;
-            top: 0;
-
-            font-family: 'EB Garamond', 'Inter', serif;
-            font-style: italic;
-            font-size: clamp(14px, 3.5vw, 16px);
-            color: var(--golden-glow);
-            text-shadow: 0 0 8px var(--golden-glow), 0 0 15px var(--golden-glow);
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            white-space: nowrap;
+            font-family: 'VT323', monospace;
+        }
+        .action-button:active {
+            border-style: inset;
+        }
+        
+        #start-button {
+            background: var(--cake-body);
+            color: #000000;
+            font-family: 'VT323', monospace;
+            font-size: 1.3rem;
         }
 
-        @keyframes reveal {
-            0% {
-                opacity: 0;
-                transform: translate(-50%, 20px);
-            }
-
-            100% {
-                opacity: 1;
-                transform: translate(-50%, -15px);
-            }
+        /* FIX: Ensure a larger, reliably clickable area for page navigation buttons */
+        .page-nav-button {
+            display: block; /* Make it a block element */
+            max-width: 250px; /* Constrain max width but ensure it's a good target */
+            margin: 1rem auto 0 auto; /* Center it using auto margins */
+            background: var(--cake-body);
+            color: #000000;
+            font-family: 'VT323', monospace;
+            font-size: 1.25rem;
+            font-weight: normal;
+            padding: 10px 24px;
+            border: 2px outset #FFFFFF;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.2s;
+        }
+        .page-nav-button:hover {
+            background-color: #808080; 
+            color: #FFFFFF;
+        }
+        .page-nav-button:active {
+            border-style: inset;
         }
 
-        .message.hide {
-            animation: hide 1.5s ease-in forwards;
+        
+        .action-button.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+        
+        .action-button:hover, .action-button.clicked {
+            animation: none;
         }
 
-        @keyframes hide {
-            0% {
-                opacity: 1;
-                transform: translate(-50%, -15px);
-            }
-
-            100% {
-                opacity: 0;
-                transform: translate(-50%, 5px);
-            }
-        }
     </style>
 </head>
+<body class="font-sans overflow-hidden">
 
-<body class="antialiased overflow-hidden text-gray-800">
-
-    <button id="navToggle" class="fixed top-6 left-6 p-2 bg-[var(--dawn-pink)] text-[var(--golden-glow)] rounded-full shadow-lg hover:bg-[var(--dawn-purple)] focus:outline-none focus:ring-2 focus:ring-[var(--dawn-pink)] focus:ring-offset-2" style="z-index: 70;">
-        <svg id="navToggleIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-8 6h8"></path>
-        </svg>
-        <svg id="navToggleX" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-        </svg>
-    </button>
     
-    <!-- Navigation Panels -->
-    <nav id="topNav" class="nav-panel fixed top-0 left-0 right-0 z-[60] h-16 bg-[var(--dawn-purple)] text-[var(--golden-glow)] shadow-md flex items-center justify-center space-x-6 -translate-y-full">
-        <a href="index.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Home</a>
-        <a href="Special.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Special</a>
-        <a href="letter.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Letter</a>
-    </nav>
+    
+    <button id="navToggle" class="fixed top-6 left-6 z-[110] p-2 shadow-lg hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2"
+        style="border-radius: 0; background: #C0C0C0; border: 2px outset #FFFFFF; color: #000;">
+        <svg id="navToggleIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-8 6h8"></path></svg>
+        <svg id="navToggleX" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+    </button>
 
-    <nav id="bottomNav" class="nav-panel fixed bottom-0 left-0 right-0 z-[60] h-16 bg-[var(--dawn-purple)] text-[var(--golden-glow)] shadow-md flex items-center justify-center space-x-6 translate-y-full">
-        <a href="anatomy.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Anatomy</a>
-        <a href="chat.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Heaven</a>
-        <a href="you.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">You</a>
-    </nav>
 
-    <nav id="leftNav" class="nav-panel fixed left-0 top-0 bottom-0 z-[60] w-20 bg-[var(--dawn-purple)] text-[var(--golden-glow)] shadow-md flex flex-col items-center space-y-6 -translate-x-full overflow-y-auto py-20">
-        <a href="Diary.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Diary</a>
-        <a href="Universe.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Universe</a>
-        <a href="Box.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Box</a>
-        <a href="color.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Color</a>
-        <a href="Teacher.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Teacher</a>
-        <a href="The_River.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">River</a>
-        <a href="Mountain.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Mountain</a>
-        <a href="Paper_Star.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Paper Star</a>
-        <a href="Carttoon.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Cartoon</a>
-        <a href="Santa.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Santa</a>
-        <a href="Cloud.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Cloud</a>
-        <a href="Ink.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Paint</a>
-        <a href="Butterfly.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Butterfly</a>
-        <a href="Weather.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Weather</a>
-    </nav>
+        <nav id="topNav" class="nav-panel fixed top-0 left-0 right-0 z-[60] h-16 text-yellow-100 flex items-center justify-center space-x-6 -translate-y-full"
+            style="background-color: #C0C0C0; color: #000000; box-shadow: none;">
+            <a href="index.html" class="nav-link px-3 py-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Home</a>
+            <a href="Special.html" class="nav-link px-3 py-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Special</a>
+            <a href="letter.html" class="nav-link px-3 py-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Letter</a>
+        </nav>
 
-    <nav id="rightNav" class="nav-panel fixed right-0 top-0 bottom-0 z-[60] w-20 bg-[var(--dawn-purple)] text-[var(--golden-glow)] shadow-md flex flex-col items-center space-y-6 translate-x-full overflow-y-auto py-20">
-        <a href="Skill.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Skill</a>
-        <a href="Msg.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Massege</a>
-        <a href="21_Wish.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">21_Door</a>
-        <a href="Cake.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Cake</a>
-        <a href="Periodik_table.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Periodik_table</a>
-        <a href="Presence.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Presence</a>
-        <a href="Concept.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Concept</a>
-        <a href="Calender.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Calender</a>
-        <a href="Perspective.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Perspective</a>
-        <a href="Spotlight.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Spotlight</a>
-        <a href="Room.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Room</a>
-        <a href="Radio.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Radio</a>
-        <a href="Food.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Food</a>
-        <a href="Music.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-[var(--dawn-pink)] transition-colors duration-200 festive-text">Music</a>
-    </nav>
+        <nav id="bottomNav" class="nav-panel fixed bottom-0 left-0 right-0 z-[60] h-16 text-yellow-100 flex items-center justify-center space-x-6 translate-y-full"
+            style="background-color: #C0C0C0; color: #000000; box-shadow: none;">
+            <a href="anatomy.html" class="nav-link px-3 py-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Anatomy</a>
+            <a href="chat.html" class="nav-link px-3 py-2 text-sm font-font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Heaven</a>
+            <a href="you.html" class="nav-link px-3 py-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">You</a>
+        </nav>
 
-    <div id="mainContent">
-        <div class="river-background"></div>
-        <div class="scene">
+        <nav id="leftNav" class="nav-panel fixed left-0 top-0 bottom-0 z-[60] w-20 text-yellow-100 flex flex-col items-center space-y-6 -translate-x-full overflow-y-auto py-20"
+            style="background-color: #C0C0C0; color: #000000; box-shadow: none;">
+            <a href="Diary.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Diary</a>
+            <a href="Universe.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Universe</a>
+            <a href="Box.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Box</a>
+            <a href="color.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Color</a>
+            <a href="Teacher.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Teacher</a>
+            <a href="The_River.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">River</a>
+            <a href="Mountain.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Mountain</a>
+            <a href="Paper_Star.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Paper Star</a>
+            <a href="Carttoon.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Cartoon</a>
+            <a href="Santa.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Santa</a>
+            <a href="Cloud.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Cloud</a>
+            <a href="Ink.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Paint</a>
+            <a href="Butterfly.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Butterfly</a>
+            <a href="Weather.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Weather</a>
+        </nav>
 
-            <div class="sun"></div>
-            <div class="shimmer"></div>
-            <div class="moon-reflection"></div>
-            
-            <div class="particles">
-                <div class="particle"></div>
-                <div class="particle"></div>
-                <div class="particle"></div>
-                <div class="particle"></div>
-                <div class="particle"></div>
-                <div class="particle"></div>
-                <div class="particle"></div>
-                <div class="particle"></div>
-                <div class="particle"></div>
-                <div class="particle"></div>
-            </div>
+        <nav id="rightNav" class="nav-panel fixed right-0 top-0 bottom-0 z-[60] w-20 text-yellow-100 flex flex-col items-center space-y-6 translate-x-full overflow-y-auto py-20"
+            style="background-color: #C0C0C0; color: #000000; box-shadow: none;">
+            <a href="Skill.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Skill</a>
+            <a href="Msg.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Massege</a>
+            <a href="21_Wish.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">21_Door</a>
+            <a href="Cake.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Cake</a>
+            <a href="Periodik_table.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-2Two-Time festive-text">Periodik_table</a>
+            <a href="Presence.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Presence</a>
+            <a href="Concept.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Concept</a>
+            <a href="Calender.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Calender</a>
+            <a href="Perspective.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Perspective</a>
+            <a href="Spotlight.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Spotlight</a>
+            <a href="Room.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Room</a>
+            <a href="Radio.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Radio</a>
+            <a href="Food.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Food</a>
+            <a href="Music.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Music</a>
+        </nav>
 
-            <div class="fog"></div>
-            
+    
+    <main id="mainContent">
+        
+        <div id="start-button-container">
+            <button id="start-button" class="action-button visible">A message from the heart...</button>
         </div>
-    </div>
+        
+        <div id="letter-container" class="letter-container">
+            <div class="envelope">
+                <div class="envelope-flap"></div>
+                <div class="envelope-body"></div>
+            </div>
+        </div>
 
+        
+        <div id="image-wrapper">
+            <img id="birthday-photo" class="photo-frame" 
+                 src="Letter.png" 
+                 alt="A place for the birthday recipient's photo."
+                 onerror="this.src='https://placehold.co/150x150/C0C0C0/000080?text=Error';">
+        </div>
+
+        <div id="button-container">
+            <button id="open-letter-button" class="action-button">Open the letter</button>
+        </div>
+
+
+        <div id="page-1" class="page">
+            <h2 class="text-3xl">Happy Birthday, June!</h2>
+            
+            
+            <div class="page-content">
+                <p>
+                    <span>Part 1: The Wish</span>
+                    First off, just a huge, happy, happy birthday. I hope your day is filled with tons of fun, amazing surprises, and everything that makes you smile.
+                </p>
+            </div>
+            <div class="text-center">
+                <button class="page-nav-button next-button" data-target="2">Next</button>
+            </div>
+        </div>
+
+        <div id="page-2" class="page">
+            <h2 class="text-3xl">Part 2</h2>
+            
+            <div class="page-content">
+            <p>
+               <span>Who you are?</span>
+               Kabhi socha hai kon ho tum? Kisi ke liye beti, kisi ke liye behen,<br>
+               kisi ke liye pyaar, kisi ke liye dost. <br>
+               Kisi ke liye student, to kisi ke liye teacher. <br>
+               Lekin asal mein...tum kaun ho tum? <br>
+            </p>
+            </div>
+            <div class="text-center">
+                <button class="page-nav-button next-button" data-target="3">Next</button>
+            </div>
+        </div>
+
+        <div id="page-3" class="page">
+            <h2 class="text-3xl">Part 3</h2>
+            <div class="page-content">
+                <p>
+                    <span>Your impact in everyone’s life</span>
+                          Kabhi-kabhi ek insan ki kami se
+                          puri kainat kami lagti hai,
+                          aur tum to sach-me kisi ki kainat ho.
+
+                          Kisi ki umeed ki kiran tum ho,
+                          kabhi kisi ka hasne ka karan ban jaati ho.
+
+                          Kabhi tumhari ek chhoti si baat
+                          dil me gehra asar chhod jaati hai.
+
+                          Aur kabhi tum bas saamne ho,
+                          to sab kuch thoda behtar lagne lagta hai           
+               </p>
+            </div>
+            <div class="text-center">
+                <button class="page-nav-button next-button" data-target="4">Next</button>
+            </div>
+        </div>
+
+        <div id="page-4" class="page">
+            <h2 class="text-3xl">Part 4</h2>
+            <div class="page-content">
+                <p> Apne liye kaun ho tum?
+                    <span>You have a very simple and calm nature.
+                          You don’t talk too much, You don’t talk too much, but whatever you say always feels special.
+                          You care for people quietly, in small ways, without trying to show it.
+                          Your behaviour is soft, and your heart is clean
+                          and that’s what makes you different from others.
+
+                          Tum Carbon ho.
+                          Carbon ki tarah tum alag–alag roop mein khoobsurat lagti ho.
+                          Jab zindagi tough hoti hai, tum diamond ki tarah strong ban jaati ho,
+                          bilkul clear, bilkul steady.
+                          Aur jab kisi ko halka sa support chahiye hota hai,
+                          tab tum graphite ki tarah soft aur samajhdaar ban jaati ho.
+                          Carbon ka kaam hota hai dusron ko jodna…
+                          aur tum bhi waise hi ho , log tumse aasaani se jud jaate hain.
+
+                          Carbon life banata hai…
+                          aur tum apne aas–paas ke logon ki life thodi si better kar deti ho,
+                          sirf apni achhi nature ki wajah se.
+
+                          Hamesha aise hi rehna ,
+                          simple, strong, aur apne jaise
+
+                </p>
+            </div>
+            <div class="text-center">
+                <button class="page-nav-button next-button" data-target="5">Next</button>
+            </div>
+        </div>
+
+        <div id="page-5" class="page">
+            <h2 class="text-3xl">Part 5</h2>
+            <div class="page-content">
+                <p>
+                    <span>Who you are for me</span>
+                         Mere liye tum kaun ho?
+                         Dharkanon ka geet ho,
+                         jeevan ka ek sangeet ho.
+
+                         Roshni jaisi ho, taazgi jaisi ho,
+                         aur khushiyon ki wajah jaisi ho.
+
+                         Kabhi-kabhi ankho ke saamne
+                         tumhari muskan aa jaati hai,
+                         aur kuch pal yaad reh jaate hain.
+
+                         Tum meri life ka wo hissa ho
+                         jo bina koshish ke dil me jagah bana leta ha                </p>
+            </div>
+            <p class="page-signature" style="text-align: center;">
+                Tumhara Subhchintak
+            </p>
+            <div class="text-center">
+            </div>
+        </div>
+
+    </main> 
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        
+        window.onload = function() {
+            
+            const body = document.body;
+            
+            const startButtonContainer = document.getElementById('start-button-container');
+            const startButton = document.getElementById('start-button');
+            const letterContainer = document.getElementById('letter-container');
+            const openLetterButton = document.getElementById('open-letter-button');
+            const buttonContainer = document.getElementById('button-container'); 
+            const imageWrapper = document.getElementById('image-wrapper');
+            const pageElements = document.querySelectorAll('.page');
+            const nextButtons = document.querySelectorAll('.next-button');
 
-            // --- Navigation Logic ---
+            
+            function showPage(pageNumber) {
+                pageElements.forEach(page => {
+                    page.classList.remove('active-page');
+                    page.style.display = 'none'; 
+                });
+
+                if (pageNumber > 0) {
+                    const targetPage = document.getElementById(`page-${pageNumber}`);
+                    if (targetPage) {
+                        targetPage.style.display = 'block'; 
+                        
+                        setTimeout(() => targetPage.classList.add('active-page'), 50);
+                    }
+                }
+            }
+            
+            function openLetterSequence() {
+                openLetterButton.classList.remove('visible'); 
+                
+                letterContainer.classList.add('open');
+                imageWrapper.style.opacity = '0'; 
+
+                setTimeout(() => {
+                    letterContainer.classList.remove('active-letter');
+                    letterContainer.style.opacity = '0'; 
+                    imageWrapper.style.display = 'none';
+                    
+                    setTimeout(() => {
+
+                        letterContainer.style.display = 'none';
+                        showPage(1); 
+                    }, 500); 
+
+                }, 800); 
+            }
+            
+            function resetToStart() {
+                showPage(0); 
+                
+                letterContainer.style.display = 'none';
+                letterContainer.classList.remove('open', 'active-letter');
+                letterContainer.style.opacity = '0'; 
+
+                imageWrapper.style.display = 'none';
+                imageWrapper.style.opacity = '0';
+
+                openLetterButton.classList.remove('visible');
+                
+                startButtonContainer.style.display = 'block';
+                startButton.classList.add('visible');
+                startButton.classList.remove('clicked');
+            }
+
+            
+            startButton.addEventListener('click', () => {
+                
+                startButton.classList.remove('visible');
+                startButtonContainer.style.display = 'none'; 
+                
+                
+                letterContainer.style.display = 'block';
+                
+                setTimeout(() => letterContainer.classList.add('active-letter'), 50);
+
+                
+                imageWrapper.style.display = 'block';
+                setTimeout(() => imageWrapper.style.opacity = '1', 100);
+
+                
+                setTimeout(() => openLetterButton.classList.add('visible'), 550);
+            });
+
+            openLetterButton.addEventListener('click', openLetterSequence);
+
+            imageWrapper.addEventListener('click', openLetterSequence);
+
+            nextButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetPageNumber = button.getAttribute('data-target');
+                    showPage(targetPageNumber);
+                });
+            });
+
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            
             const navLinks = document.querySelectorAll('.nav-panel .nav-link');
             const mainContent = document.getElementById('mainContent');
             const topNav = document.getElementById('topNav');
@@ -538,6 +651,7 @@
                 bottomNav.classList.remove('translate-y-full');
                 leftNav.classList.remove('-translate-x-full');
                 rightNav.classList.remove('translate-x-full');
+                document.body.classList.add('body-nav-open');
                 navToggleIcon.classList.add('hidden');
                 navToggleX.classList.remove('hidden');
                 areNavsOpen = true;
@@ -548,6 +662,7 @@
                 bottomNav.classList.add('translate-y-full');
                 leftNav.classList.add('-translate-x-full');
                 rightNav.classList.add('translate-x-full');
+                document.body.classList.remove('body-nav-open');
                 navToggleIcon.classList.remove('hidden');
                 navToggleX.classList.add('hidden');
                 areNavsOpen = false;
@@ -562,248 +677,40 @@
             }
 
             navToggle.addEventListener('click', (e) => {
-                e.stopPropagation();
+                e.stopPropagation(); 
                 toggleAllNavs();
             });
-
-            mainContent.addEventListener('click', () => {
+            
+            
+            mainContent.addEventListener('click', (e) => {
+                
+                if (e.target.closest('button')) {
+                    return;
+                }
+                
                 if (areNavsOpen) {
                     closeAllNavs();
                 }
             });
-
+            
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
-                    const targetHref = e.currentTarget.getAttribute('href');
-                    if (targetHref.startsWith('#')) {
-                        e.preventDefault();
+                    const targetHash = e.currentTarget.getAttribute('href');
+                    if (targetHash.startsWith('#')) {
+                        e.preventDefault(); 
+                        if (areNavsOpen) {
+                            closeAllNavs();
+                        }
                     }
+                    
                     if (areNavsOpen) {
                         closeAllNavs();
                     }
                 });
             });
-
-
-            // --- River Boat Logic ---
-            let audioStarted = false;
-            let synth;
-            
-            // State variables for message control
-            let activeMessageEl = null; 
-            let activeMessageTimeoutId = null; // NEW: Track the running timeout ID
-
-            const ALL_MESSAGES = [
-                "You carried storms without letting anyone drown with you.",
-                "Someone is quietly grateful you exist.",
-                "Your dreams are already walking toward you.",
-                "The world is softer because you are gentle.",
-                "You are made of all the stories you've survived.",
-                "Your kindness is a language everyone understands.",
-                "You are not a burden. You are a universe.",
-                "It's brave to be soft in a world that isn't.",
-                "You are a rare and beautiful thing.",
-                "Your light hasn't gone out. It's just resting.",
-                "Someone finds peace in the thought of you.",
-                "You are exactly who you need to be in this moment.",
-                "Your capacity for love is your greatest strength.",
-                "Even on your worst day, you are still trying.",
-                "The seeds of your future are in the kindness you show today.",
-                "You are more than your darkest moments.",
-                "Your heart is a map to a thousand beautiful places.",
-                "You are healing, even when it doesn't feel like it.",
-                "The universe is conspiring to help you.",
-                "Your quiet courage is louder than you think.",
-                "You are a poem waiting to be read.",
-                "Someone sees the magic in you. I hope you do too."
-            ];
-            let availableMessages = [...ALL_MESSAGES];
-
-            const scene = document.querySelector('.scene');
-
-            function initAudio() {
-                if (audioStarted) return;
-                Tone.start();
-                
-                synth = new Tone.MembraneSynth({
-                    pitchDecay: 0.01,
-                    octaves: 2,
-                    envelope: {
-                        attack: 0.001,
-                        decay: 0.3,
-                        sustain: 0
-                    }
-                }).toDestination();
-                synth.volume.value = -10;
-                audioStarted = true;
-            }
-
-            function playRippleSound() {
-                if (!audioStarted) initAudio();
-                synth.triggerAttackRelease("C2", "8n", Tone.now());
-            }
-
-            function getUniqueMessage() {
-                if (availableMessages.length === 0) {
-                    availableMessages = [...ALL_MESSAGES];
-                }
-                const msgIndex = Math.floor(Math.random() * availableMessages.length);
-                const msg = availableMessages.splice(msgIndex, 1)[0];
-                return msg;
-            }
-
-            function createBoat() {
-                const boatContainer = document.createElement('div');
-                boatContainer.className = 'boat-container';
-
-                const boatEl = document.createElement('div');
-                boatEl.className = 'boat';
-
-                boatEl.dataset.message = getUniqueMessage();
-
-                
-                const initialDuration = Math.random() * 20 + 50; 
-                const topPos = Math.random() * 30 + 55; 
-                boatContainer.style.animationDuration = initialDuration + 's';
-                boatContainer.style.top = topPos + 'vh';
-                
-                
-                function onTapped() {
-                    // Prevent action if the same boat is tapped while it's mid-message
-                    if (boatEl.classList.contains('tapped')) return; 
-
-                    initAudio();
-                    playRippleSound();
-
-                    // --- Fix: Aggressive cleanup of the previous message and state ---
-                    if (activeMessageTimeoutId) {
-                        clearTimeout(activeMessageTimeoutId); // Stop previous boat's timer
-                        activeMessageTimeoutId = null;
-                    }
-
-                    if (activeMessageEl) {
-                        // Immediately remove the previous message, if it exists
-                        activeMessageEl.remove(); 
-                        activeMessageEl = null;
-                    }
-                    // ------------------------------------------------------------------
-
-                    
-                    // 1. Create Ripple Effect
-                    const ripple = document.createElement('div');
-                    ripple.className = 'ripple';
-                    document.body.appendChild(ripple);
-
-                    const rect = boatEl.getBoundingClientRect();
-                    ripple.style.top = (rect.top + rect.height / 2) + 'px';
-                    ripple.style.left = (rect.left + rect.width / 2) + 'px';
-
-                    ripple.onanimationend = () => {
-                        ripple.remove();
-                    };
-
-                    
-                    // 2. Pause Boat Movement
-                    boatEl.classList.add('tapped');
-                    boatEl.style.animationPlayState = 'paused'; 
-                    boatContainer.style.animationPlayState = 'paused'; 
-
-                    
-                    // 3. Display Message
-                    const messageText = boatEl.dataset.message;
-                    const messageEl = document.createElement('div');
-                    messageEl.className = 'message';
-                    messageEl.textContent = messageText;
-                    activeMessageEl = messageEl; // Set the new message as active
-
-                    const boatRect = rect;
-                    let messageLeft = boatRect.left + (boatRect.width / 2);
-                    const messageTop = boatRect.top - 10;
-
-                    
-                    // Adjust message position if it's too close to the screen edges
-                    const messageWidth = Math.min(window.innerWidth * 0.7, 300);
-                    const halfMessageWidth = messageWidth / 2;
-                    const padding = 10;
-                    
-                    if (messageLeft - halfMessageWidth < padding) {
-                        messageLeft = halfMessageWidth + padding;
-                    }
-                    if (messageLeft + halfMessageWidth > window.innerWidth - padding) {
-                        messageLeft = window.innerWidth - halfMessageWidth - padding;
-                    }
-
-                    messageEl.style.left = messageLeft + 'px';
-                    messageEl.style.top = messageTop + 'px';
-
-                    scene.appendChild(messageEl);
-
-                    
-                    // 4. Schedule Hide/Resume (Reliable cleanup)
-                    activeMessageTimeoutId = setTimeout(() => {
-                        // Start the hide animation
-                        messageEl.classList.add('hide');
-                        
-                        // Resume boat movement
-                        boatEl.classList.remove('tapped');
-                        boatEl.style.animationPlayState = 'running';
-                        boatContainer.style.animationPlayState = 'running';
-
-                        // Clear global state if this is still the active message
-                        if (messageEl === activeMessageEl) {
-                            activeMessageEl = null;
-                            activeMessageTimeoutId = null;
-                        }
-
-                        // Final removal after animation ends
-                        messageEl.onanimationend = () => {
-                            messageEl.remove();
-                        };
-                    }, 4500);
-                }
-
-                
-                // Event Listeners (both click and touch for mobile reliability)
-                boatContainer.addEventListener('click', onTapped);
-                
-                // Use touchstart to prevent 300ms delay on mobile
-                boatContainer.addEventListener('touchstart', (e) => {
-                    e.preventDefault(); 
-                    onTapped();
-                }, { passive: false });
-
-                
-                // Clean up boat element after it glides off screen
-                boatContainer.addEventListener('animationend', () => {
-                    // Check if this boat was the one tied to the active message
-                    // (prevents trying to remove an element that was already removed by quick tap)
-                    if (boatEl.classList.contains('tapped')) { 
-                        // If it was still 'tapped' when it left, it means the timer failed to clear.
-                        // We forcefully clear it here, though it should be caught by the timeout.
-                        if (activeMessageEl) {
-                            activeMessageEl.remove();
-                            activeMessageEl = null;
-                        }
-                        if (activeMessageTimeoutId) {
-                            clearTimeout(activeMessageTimeoutId);
-                            activeMessageTimeoutId = null;
-                        }
-                    }
-                    boatContainer.remove();
-                });
-
-                boatContainer.appendChild(boatEl);
-                scene.appendChild(boatContainer);
-            }
-
-            setInterval(createBoat, 3000);
-
-            createBoat();
-            
-            document.body.addEventListener('click', initAudio, { once: true });
+            closeAllNavs();
         });
     </script>
 
 </body>
-
 </html>
