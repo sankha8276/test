@@ -1,716 +1,685 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday!</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+<title>Butterfly Story — Cinematic Monarch (Soft Fold + Rest)</title>
 
-    <style>
-        
-        .nav-panel, #mainContent, #navToggleIcon, #navToggleX {
-            transition: all 0.3s ease-in-out;
-        }
-        
-        /* Hide scrollbars for a cleaner look */
-        #mainContent, .nav-panel {
-            -ms-overflow-style: none;  
-            scrollbar-width: none;  
-        }
-        /* Allow scrollbars but hide them for main content/navs */
-        #mainContent::-webkit-scrollbar,
-        .nav-panel::-webkit-scrollbar {
-            display: none; 
-        }
-        
-        .festive-text {
-            font-family: 'VT323', monospace; 
-            font-size: 1.25rem;
-        }
-        
-        #navToggle {
-            transition: all 0.3s ease-in-out;
-            z-index: 1000; /* Ensure toggle is always on top */
-        }
-        
-        h1, h2, h3 {
-             font-family: 'VT323', monospace;
-             font-weight: normal; 
-        }
+<script src="https://cdn.tailwindcss.com"></script>
 
-        
-        :root {
-            --cake-body: #C0C0C0; 
-            --frosting: #000080; 
-            --photo-frame-border: #808080; 
-            --eye: #333;
-            --flame: #f9a825; 
-            --sprinkle1: #FF0000; 
-            --sprinkle2: #fece5a; 
-            --sprinkle3: #96e05d; 
-            --sprinkle4: #54c1e0; 
-            
-            --brick-pink-light: #fec5d9;
-            --brick-pink-dark: #fca7c6;
-            --mortar: #fdfdfd;
-        }
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Inter:wght@400;500;700;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-        
-        html, body {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden; /* Keep body fixed */
-            font-family: 'VT323', monospace;
-        }
 
-        body {
-            background-color: #008080; 
-            background-image: linear-gradient(rgba(0,0,0,0.2) 1px, transparent 1px);
-            background-size: 100% 3px; 
-            display: block; 
-        }
+<style>
+:root{
+  --sky1:#f6fbff; --sky2:#eaf2ff; --sky3:#e2e9ff;
+  --ink:#26263a; --soft:#6a6a88; --accent:#ff7fb6; --pill:#ffffffee;
+  --glow:#ffdfb0;
+  --flap-slow: .85s;
+  --flap-fly:  .58s;
+  --flap-land: .95s;
+  --rest-angle: -8deg;
+  /* Sunflower Colors */
+  --sunflower-petal: #fcc419;
+  --sunflower-petal-dark: #f59f00;
+  --sunflower-center: #5c4033;
+  --sunflower-stem: #38761d;
+  /* Sun Colors */
+  --sun-color-start: #FFD700; /* Gold */
+  --sun-color-end: #FFA500; /* Orange */
+  --sun-glow-color: #FFECB3; /* Light yellow */
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+body{
+  height:100vh; overflow:hidden; font-family:Inter,system-ui,sans-serif;
+  background:
+    radial-gradient(120vmax 80vmax at 50% -20%, #fff6 0%, #0000 55%),
+    linear-gradient(180deg,var(--sky1),var(--sky2) 60%,var(--sky3));
+  color:var(--ink);
+}
 
-        
-        #mainContent {
-            display: grid;
-            place-items: center;
-            width: 100%;
-            height: 100%;
-            
-            position: absolute;
-            inset: 0;
-            overflow: auto; /* FIX: Allow scrolling for long content */
-            padding: 20px; 
-            transition: all 0.3s ease-in-out;
-        }
-        
-        /* FIX: Responsive layout for Navigation Open state */
-        .body-nav-open #mainContent {
-            /* Adjust content inset based on nav sizes (h-16 = 4rem, w-20 = 5rem) */
-            top: 4rem; 
-            bottom: 4rem; 
-            left: 5rem; 
-            right: 5rem; 
-            padding: 0; /* Let inner pages handle padding */
-        }
+.wrap{position:relative;width:100%;height:100%;overflow:hidden}
 
-        @keyframes gradient-flow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
+/* --- SUN STYLES --- */
+.sun {
+  position: absolute;
+  top: -10vh; /* Position slightly off-screen for a rising effect */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30vh; /* Adjust size as needed */
+  height: 30vh;
+  border-radius: 50%;
+  background: radial-gradient(circle at center, var(--sun-color-start) 0%, var(--sun-color-end) 100%);
+  box-shadow: 0 0 80px 30px var(--sun-glow-color); /* Soft glowing effect */
+  z-index: 0; /* Behind other elements */
+  pointer-events: none;
+}
+/* --- END SUN STYLES --- */
 
-        .letter-container {
-            position: relative;
-            width: 220px;
-            height: 150px;
-            transition: opacity 0.5s ease-in-out, transform 0.5s ease;
-            transform: scale(0.9);
-            opacity: 0;
-            z-index: 15;
-            display: none; 
-        }
-        
-        .letter-container.active-letter {
-            display: block;
-            opacity: 1;
-            transform: scale(1.1);
-        }
+/* --- SUNFLOWER STYLES FINAL FIX (Simplified) --- */
+.sunflower-svg {
+  position: absolute;
+  bottom: 0;
+  /* Increased height to 70vh (~2/3 coverage) */
+  height: 70vh; 
+  /* Increased width proportionally to maintain 2:1 aspect ratio */
+  width: 35vh; 
+  max-width: 250px; 
+  z-index: 2;
+  pointer-events: none;
+}
+.left-sun {
+  left: 0;
+  /* Use transform for reliable horizontal offset based on element width */
+  transform: translateX(-40%); 
+}
+.right-sun {
+  right: 0;
+  /* Flip the SVG and use transform for reliable horizontal offset */
+  transform: translateX(40%) scaleX(-1);
+}
+/* --- END SUNFLOWER STYLES FINAL FIX --- */
 
-        @media (min-width: 400px) {
-            .letter-container.active-letter {
-                transform: scale(1.1);
-            }
-        }
-        
-        .envelope {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-        .envelope-body {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--cake-body); 
-            border: 2px outset #FFFFFF; 
-            z-index: 16;
-        }
-        .envelope-flap {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 75px; 
-            background: var(--cake-body);
-            clip-path: polygon(0 0, 100% 0, 50% 100%);
-            z-index: 17;
-            transform-origin: top;
-            transition: transform 0.5s ease-in-out;
-            border-bottom: 1px solid #808080;
-        }
-        .heart-seal {
-            display: none;
-        }
-        
-        .letter-container.open .envelope-flap {
-            transform: rotateX(180deg);
-        }
 
-        .page {
-            display: none; 
-            width: 100%;
-            max-width: 380px;
-            padding: 25px;
-            background: var(--cake-body); 
-            border: 2px outset #FFFFFF; 
-            text-align: left;
-            opacity: 0;
-            transform: scale(0.9);
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-            z-index: 15;
-            /* Allow content to fill viewport, but also allow internal scroll if necessary */
-            max-height: 90vh; 
-            overflow-y: auto;
-        }
+.dust{position:absolute;inset:0;pointer-events:none;z-index:1}
+.d{
+  position:absolute;width:3px;height:3px;border-radius:50%;
+  background:#fff;opacity:.7;
+  filter:drop-shadow(0 0 6px #fff8);
+  animation:rise linear infinite;
+}
+@keyframes rise{
+  to{transform:translateY(-110vh) translateX(var(--drift));opacity:1}
+}
 
-        .page.active-page {
-            display: block; 
-            opacity: 1;
-            transform: scale(1);
-        }
+/* --- GROUND STYLES: BROWN SOIL --- */
+.ground{
+  position:absolute;left:0;right:0;bottom:-9vh;height:28vh;z-index:0;
+  background:
+    radial-gradient(60vmax 12vmax at 20% 0%,#c6ffd780 0 40%,#0000 41%),
+    radial-gradient(60vmax 12vmax at 80% 0%,#ffd9ea80 0 40%,#0000 41%),
+    /* New: Dark brown soil fading into light brown/beige at the top */
+    linear-gradient(180deg, #8B4513 0%, #A0522D 50%, #D2B48C 90%, #E4F7FF 100%); /* Adjusted fade into existing sky colors */
+  border-top-left-radius:50% 20%;
+  border-top-right-radius:50% 20%;
+  filter:blur(1px);
+}
+/* --- END GROUND STYLES --- */
 
-        .page-content {
-            font-family: 'VT323', monospace;
-            font-size: 1.5rem; 
-            line-height: 1.7;
-            color: #000000; 
-        }
-        .page-content p {
-            margin-bottom: 1.5rem;
-        }
-        .page-content span {
-            display: block;
-            font-size: 1.25rem;
-            font-weight: normal;
-            color: var(--frosting); 
-            font-style: normal;
-        }
-        .page h2 {
-            font-family: 'VT323', monospace;
-            color: var(--frosting); 
-            text-align: center;
-            margin-bottom: 1.5rem;
-            font-size: 2.25rem;
-        }
-        .page-signature {
-            font-family: 'VT323', monospace;
-            font-size: 1.5rem;
-            text-align: right;
-            margin-top: 1.5rem;
-            color: #000000;
-        }
-        
-        .photo-frame {
-            display: block;
-            width: 100%; 
-            height: 100%; 
-            object-fit: cover;
-            border: 4px outset var(--photo-frame-border);
-            padding: 2px;
-            background-color: #FFFFFF;
-        }
-        
-        #image-wrapper {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-            
-            width: 200px; 
-            height: 130px; 
-            
-            position: absolute;
-            z-index: 20; 
-            
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%); 
-            cursor: pointer; /* Indicate clickability */
-        }
 
-        
-        /* UPDATED POSITIONING: Moved to below the centered letter/image */
-        #button-container {
-            position: absolute;
-            top: 50%; /* Start vertical positioning from the center */
-            left: 50%;
-            transform: translateX(-50%) translateY(120px); /* Move horizontally centered, and 120px down from center (below the 150px tall letter) */
-            display: flex;
-            flex-direction: column; 
-            gap: 15px;
-            z-index: 16; 
-        }
-        
-        #start-button-container {
-             position: relative;
-             z-index: 16;
-        }
-        
-        .action-button {
-            padding: 12px 28px;
-            background: var(--cake-body); 
-            color: #000000; 
-            font-size: 1.25rem; 
-            font-weight: normal; 
-            border: 2px outset #FFFFFF; 
-            cursor: pointer;
-            
-            opacity: 0;
-            pointer-events: none;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-            white-space: nowrap;
-            font-family: 'VT323', monospace;
-        }
-        .action-button:active {
-            border-style: inset;
-        }
-        
-        #start-button {
-            background: var(--cake-body);
-            color: #000000;
-            font-family: 'VT323', monospace;
-            font-size: 1.3rem;
-        }
+.hint{
+  position:absolute;left:50%;bottom:18px;transform:translateX(-50%);
+  font-size:13px;color:var(--soft);
+  background:#ffffffc8;padding:8px 12px;border-radius:999px;
+  backdrop-filter:blur(6px);box-shadow:0 6px 18px #0001;
+  z-index:4;
+}
 
-        /* FIX: Ensure a larger, reliably clickable area for page navigation buttons */
-        .page-nav-button {
-            display: block; /* Make it a block element */
-            max-width: 250px; /* Constrain max width but ensure it's a good target */
-            margin: 1rem auto 0 auto; /* Center it using auto margins */
-            background: var(--cake-body);
-            color: #000000;
-            font-family: 'VT323', monospace;
-            font-size: 1.25rem;
-            font-weight: normal;
-            padding: 10px 24px;
-            border: 2px outset #FFFFFF;
-            cursor: pointer;
-            text-align: center;
-            transition: background-color 0.2s;
-        }
-        .page-nav-button:hover {
-            background-color: #808080; 
-            color: #FFFFFF;
-        }
-        .page-nav-button:active {
-            border-style: inset;
-        }
+.words{position:absolute;inset:0;pointer-events:none;z-index:3}
+.pill{
+  position:absolute;
+  transform:translate(-50%,-50%) translateY(-8px);
+  background:var(--pill);border-radius:999px;padding:8px 12px;
+  border:1px solid #00000012;color:var(--ink);
+  font-size:14px;opacity:0;
+  animation:drop .9s ease-out forwards;
+  box-shadow:0 6px 20px #0002,0 0 0 6px #ffffff60 inset;
+}
+@keyframes drop{
+  0%{transform:translate(-50%,-50%) translateY(-12px) scale(.96);opacity:0}
+  60%{opacity:1}
+  100%{transform:translate(-50%,-50%) translateY(0) scale(1);opacity:1}
+}
 
-        
-        .action-button.visible {
-            opacity: 1;
-            pointer-events: auto;
-            transform: translateY(0);
-        }
-        
-        .action-button:hover, .action-button.clicked {
-            animation: none;
-        }
+.butterfly{
+  position:absolute;left:0;top:0;
+  --x:50vw;--y:60vh;--r:0deg;
+  width:130px;height:110px;z-index:5;
+  transform:translate(var(--x),var(--y)) rotate(var(--r));
+  filter:drop-shadow(0 10px 16px rgba(0,0,0,.16));
+}
+.butterfly.glow{
+  filter:
+    drop-shadow(0 0 12px rgba(255,223,176,.75))
+    drop-shadow(0 10px 16px rgba(0,0,0,.18));
+}
 
-    </style>
+.wing{
+  position:absolute;top:20px;width:90px;height:80px;
+  animation: flap var(--flap-slow) ease-in-out infinite;
+  animation-delay: 0s !important;
+  will-change: transform;
+}
+.wing.left{
+  left:-12px; transform-origin:92% 50%;
+}
+.wing.right{
+  right:-12px; transform-origin:8% 50%; transform:scaleX(-1);
+}
+
+@keyframes flap{
+  0%   { transform: rotate(14deg); }
+  50%  { transform: rotate(-16deg); }
+  100% { transform: rotate(14deg); }
+}
+
+.body{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:18px;height:80px;border-radius:10px;
+  background:linear-gradient(#2a2a3d,#1a1a29);
+}
+.antenna{
+  position:absolute;left:50%;top:8px;width:32px;height:32px;
+  border-top:2px solid #1e1e2e;border-right:2px solid #1e1e2e;
+  border-radius:50%;transform:translateX(-50%) rotate(40deg);
+}
+
+.butterfly.flying   .wing{ animation-duration: var(--flap-fly); }
+.butterfly.landing  .wing{ animation-duration: var(--flap-land); }
+
+.butterfly.rest .wing{
+  animation-play-state: paused;
+  transform: rotate(var(--rest-angle)) !important;
+}
+
+.final{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:min(90vw,520px);padding:20px;
+  background:#ffffffee;border:1px solid #0001;border-radius:18px;
+  backdrop-filter:blur(8px);
+  text-align:center;
+  box-shadow:0 20px 60px #0002,0 0 0 8px #ffffff70 inset;
+  opacity:0;pointer-events:none;z-index:10;
+  transition:opacity .8s ease,transform .8s ease;
+}
+.final.show{opacity:1;transform:translate(-50%,-50%) scale(1.02)}
+.final h3{font-size:22px;margin:0 0 10px}
+.final p{font-size:15px;color:#4a4a66;line-height:1.6}
+.final .accent{color:var(--accent);text-shadow:0 0 10px var(--glow)}
+.final h3 {
+    font-family: 'Pacifico', cursive;
+}
+
+
+.controls{position:fixed;right:12px;bottom:12px;z-index:12}
+.btn{
+  background:#fff;border:1px solid #0002;padding:8px 12px;
+  border-radius:999px;box-shadow:0 6px 16px #0001;font-size:12px;
+  cursor:pointer;
+}
+.btn:active{transform:translateY(1px)}
+
+
+.nav-panel, #navToggleIcon, #navToggleX {
+    transition: all 0.3s ease-in-out;
+}
+.nav-panel {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+.nav-panel::-webkit-scrollbar {
+    display: none;
+}
+.festive-text {
+    font-family: 'Gochi Hand', cursive;
+}
+h1, h2 {
+     font-family: 'Pacifico', cursive;
+}
+button {
+    user-select: none;
+}
+</style>
 </head>
-<body class="font-sans overflow-hidden">
 
+<body>
+
+<button id="navToggle" class="fixed top-6 left-6 z-[70] p-2 bg-white/80 text-gray-700 backdrop-blur-sm rounded-full shadow-lg hover:bg-white focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2">
+    <svg id="navToggleIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-8 6h8"></path></svg>
+    <svg id="navToggleX" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+</button>
+
+<nav id="topNav" class="nav-panel fixed top-0 left-0 right-0 z-[60] h-16 bg-white/80 backdrop-blur-sm text-[var(--ink)] shadow-md flex items-center justify-center space-x-6 -translate-y-full">
+    <a href="index.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-white transition-colors duration-200 festive-text">Home</a>
+    <a href="Special.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-white transition-colors duration-200 festive-text">Special</a>
+    <a href="letter.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-white transition-colors duration-200 festive-text">Letter</a>
+</nav>
+
+<nav id="bottomNav" class="nav-panel fixed bottom-0 left-0 right-0 z-[60] h-16 bg-white/80 backdrop-blur-sm text-[var(--ink)] shadow-md flex items-center justify-center space-x-6 translate-y-full">
+    <a href="anatomy.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-white transition-colors duration-200 festive-text">Anatomy</a>
+    <a href="chat.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-white transition-colors duration-200 festive-text">Heaven</a>
+    <a href="you.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-white transition-colors duration-200 festive-text">You</a>
+</nav>
+
+<nav id="leftNav" class="nav-panel fixed left-0 top-0 bottom-0 z-[60] w-20 bg-white/90 backdrop-blur-sm text-[var(--ink)] shadow-md flex flex-col items-center space-y-6 -translate-x-full overflow-y-auto py-20">
+    <a href="Diary.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Diary</a>
+    <a href="Universe.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Universe</a>
+    <a href="Box.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Box</a>
+    <a href="color.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Color</a>
+    <a href="Teacher.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Teacher</a>
+    <a href="The_River.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">River</a>
+    <a href="Mountain.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Mountain</a>
+    <a href="Paper_Star.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Paper Star</a>
+    <a href="Carttoon.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Cartoon</a>
+    <a href="Santa.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Santa</a>
+    <a href="Cloud.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Cloud</a>
+    <a href="Ink.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Paint</a>
+    <a href="Butterfly.html" class="nav-link p-2 rounded-md text-sm font-medium bg-gray-200 font-bold transition-colors duration-200 festive-text">Butterfly</a>
+    <a href="Weather.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Weather</a>
+</nav>
+
+<nav id="rightNav" class="nav-panel fixed right-0 top-0 bottom-0 z-[60] w-20 bg-white/90 backdrop-blur-sm text-[var(--ink)] shadow-md flex flex-col items-center space-y-6 translate-x-full overflow-y-auto py-20">
+    <a href="Skill.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Skill</a>
+    <a href="Msg.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">message</a>
+    <a href="21_Wish.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">21_Door</a>
+    <a href="Cake.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Cake</a>
+    <a href="Periodik_table.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Periodik_table</a>
+    <a href="Presence.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Presence</a>
+    <a href="Concept.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Concept</a>
+    <a href="Calender.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Calender</a>
+    <a href="Perspective.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Perspective</a>
+    <a href="Spotlight.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Spotlight</a>
+    <a href="Room.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Room</a>
+    <a href="Radio.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Radio</a>
+    <a href="Food.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Food</a>
+    <a href="Music.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Music</a>
+</nav>
+
+<div class="wrap" id="scene">
+
+  <!-- THE NEW SUN ELEMENT --><div class="sun"></div>
+
+  <!-- LEFT SUNFLOWER (Decorative SVG Holder) --><svg class="sunflower-svg left-sun" viewBox="0 0 100 200" preserveAspectRatio="xMinYMax slice">
+    <defs>
+      <radialGradient id="sun-center-left" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#7a523a"/>
+        <stop offset="100%" stop-color="var(--sunflower-center)"/>
+      </radialGradient>
+    </defs>
+    <!-- Simplified group placement --><g transform="translate(0, 0)"> 
+      <!-- Stem --><rect x="45" y="50" width="10" height="180" fill="var(--sunflower-stem)" />
+      <!-- Leaf 1 --><path d="M55, 100 Q 80, 80 80, 130 C 80, 140 60, 120 55, 110 Z" fill="var(--sunflower-stem)" opacity="0.8" />
+      <!-- Petals --><g transform="translate(50, 60)">
+        <!-- 8-Petal Group 1 --><g fill="var(--sunflower-petal)">
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(0)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(45)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(90)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(135)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(180)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(225)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(270)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(315)" />
+        </g>
+        <!-- 8-Petal Group 2 (Offset and darker) --><g fill="var(--sunflower-petal-dark)" transform="rotate(22.5)">
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(0)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(45)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(90)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(135)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(180)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(225)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(270)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(315)" />
+        </g>
+        <!-- Center --><circle cx="0" cy="0" r="28" fill="url(#sun-center-left)" />
+      </g>
+    </g>
+  </svg>
+
+  <!-- RIGHT SUNFLOWER (Decorative SVG Holder) --><svg class="sunflower-svg right-sun" viewBox="0 0 100 200" preserveAspectRatio="xMinYMax slice">
+    <defs>
+      <radialGradient id="sun-center-right" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#7a523a"/>
+        <stop offset="100%" stop-color="var(--sunflower-center)"/>
+      </radialGradient>
+    </defs>
+    <!-- Simplified group placement --><g transform="translate(0, 0)"> 
+      <!-- Stem --><rect x="45" y="50" width="10" height="180" fill="var(--sunflower-stem)" />
+      <!-- Leaf 1 (Mirrored by CSS transform) --><path d="M55, 100 Q 80, 80 80, 130 C 80, 140 60, 120 55, 110 Z" fill="var(--sunflower-stem)" opacity="0.8" />
+      <!-- Petals --><g transform="translate(50, 60)">
+        <!-- 8-Petal Group 1 --><g fill="var(--sunflower-petal)">
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(0)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(45)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(90)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(135)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(180)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(225)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(270)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(315)" />
+        </g>
+        <!-- 8-Petal Group 2 (Offset and darker) --><g fill="var(--sunflower-petal-dark)" transform="rotate(22.5)">
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(0)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(45)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(90)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(135)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(180)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(225)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(270)" />
+          <polygon points="0,0 10,25 0,50 -10,25" transform="rotate(315)" />
+        </g>
+        <!-- Center --><circle cx="0" cy="0" r="28" fill="url(#sun-center-right)" />
+      </g>
+    </g>
+  </svg>
+  
+  <div class="dust" id="dust"></div>
+  <div class="words" id="words"></div>
+
+  <div class="butterfly glow rest" id="bf" aria-label="Butterfly (Monarch)">
+    <svg class="wing left" viewBox="0 0 200 160" aria-hidden="true">
+      <defs>
+        <linearGradient id="monoO1" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ffb14a"/>
+          <stop offset="55%" stop-color="#ff7a1f"/>
+          <stop offset="100%" stop-color="#e05612"/>
+        </linearGradient>
+      </defs>
+      <g>
+        <path d="M180,20 C120,10 70,25 30,70 C10,95 8,125 20,140
+                 C38,160 72,150 100,138 C132,124 160,104 180,80
+                 C196,60 198,40 180,20 Z"
+              fill="#16151c" stroke="#0b0b0f" stroke-width="3"/>
+        <path d="M170,28 C140,26 92,40 58,75 C50,84 46,95 48,110
+                 C58,120 72,118 98,106 C124,94 150,76 170,56 Z"
+              fill="url(#monoO1)"/>
+        <path d="M120,30 C94,36 70,52 52,74 C48,78 46,84 45,90
+                 C60,78 98,60 120,52 Z"
+              fill="url(#monoO1)"/>
+        <g fill="#fff">
+          <circle cx="155" cy="22" r="5"/>
+          <circle cx="140" cy="20" r="4"/>
+          <circle cx="125" cy="22" r="4"/>
+          <circle cx="112" cy="26" r="3.6"/>
+        </g>
+      </g>
+    </svg>
+
+    <svg class="wing right" viewBox="0 0 200 160" aria-hidden="true">
+      <g transform="translate(200,0) scale(-1,1)">
+        <path d="M180,20 C120,10 70,25 30,70 C10,95 8,125 20,140
+                 C38,160 72,150 100,138 C132,124 160,104 180,80
+                 C196,60 198,40 180,20 Z"
+              fill="#16151c" stroke="#0b0b0f" stroke-width="3"/>
+        <path d="M170,28 C140,26 92,40 58,75 C50,84 46,95 48,110
+                 C58,120 72,118 98,106 C124,94 150,76 170,56 Z"
+              fill="url(#monoO1)"/>
+        <path d="M120,30 C94,36 70,52 52,74 C48,78 46,84 45,90
+                 C60,78 98,60 120,52 Z"
+              fill="url(#monoO1)"/>
+        <g fill="#fff">
+          <circle cx="155" cy="22" r="5"/>
+          <circle cx="140" cy="20" r="4"/>
+          <circle cx="125" cy="22" r="4"/>
+          <circle cx="112" cy="26" r="3.6"/>
+        </g>
+      </g>
+    </svg>
+
+    <div class="body"></div>
+    <div class="antenna"></div>
+  </div>
+
+  <div class="hint" id="hint">Tap anywhere — she’ll fly there & drop a word.</div>
+
+  <div class="final" id="final">
+    <h3>Happy 21st Birthday <span class="accent">✨</span></h3>
+    <p>Happy Birthday  💛
+       Just like butterflies can’t see their own wings, you often don’t realize how beautiful, kind, and amazing you truly are…
+       but everyone around you does.
+
+       On your special day, I just want you to know:
+       You’re wonderful in ways you may not even notice,
+       and that’s what makes you even more special.
+
+       Wishing you a day as lovely as your heart. ✨💐  
+       Thank you for being <span class="accent">gentle, bright, thoughtful</span> —  
+       and quietly magical.</p>
+  </div>
+
+  <div class="controls">
+    <button class="btn" id="resetBtn">Reset</button>
+  </div>
+
+  <div class="ground"></div>
+</div>
+
+<script>
+(() => {
+  const scene = document.getElementById("scene");
+  const bf = document.getElementById("bf");
+  const wordsLayer = document.getElementById("words");
+  const finalCard = document.getElementById("final");
+  const hint = document.getElementById("hint");
+
+  let areNavsOpen = false;
+  const navLinks = document.querySelectorAll('.nav-panel .nav-link');
+  const mainContent = document.getElementById('scene'); 
+  const topNav = document.getElementById('topNav');
+  const bottomNav = document.getElementById('bottomNav');
+  const leftNav = document.getElementById('leftNav');
+  const rightNav = document.getElementById('rightNav');
+  const navToggle = document.getElementById('navToggle');
+  const navToggleIcon = document.getElementById('navToggleIcon');
+  const navToggleX = document.getElementById('navToggleX');
+
+
+  function openAllNavs() {
+      topNav.classList.remove('-translate-y-full');
+      bottomNav.classList.remove('translate-y-full');
+      leftNav.classList.remove('-translate-x-full');
+      rightNav.classList.remove('translate-x-full');
+      
+      navToggleIcon.classList.add('hidden');
+      navToggleX.classList.remove('hidden');
+      areNavsOpen = true;
+  }
+
+  function closeAllNavs() {
+      topNav.classList.add('-translate-y-full');
+      bottomNav.classList.add('translate-y-full');
+      leftNav.classList.add('-translate-x-full');
+      rightNav.classList.add('translate-x-full');
+      
+      navToggleIcon.classList.remove('hidden');
+      navToggleX.classList.add('hidden');
+      areNavsOpen = false;
+  }
+
+  function toggleAllNavs() {
+      if (areNavsOpen) {
+          closeAllNavs();
+      } else {
+          openAllNavs();
+      }
+  }
+
+  navToggle.addEventListener('click', (e) => {
+      e.stopPropagation(); 
+      toggleAllNavs();
+  });
+  
+  mainContent.addEventListener('click', () => {
+      if (areNavsOpen) {
+          closeAllNavs();
+      }
+  });
+  
+  navLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+          const targetHref = e.currentTarget.getAttribute('href');
+          
+          if (targetHref.startsWith('#')) {
+              e.preventDefault(); 
+          }
+
+          if (areNavsOpen) {
+              setTimeout(closeAllNavs, 100); 
+          }
+      });
+  });
+
+
+  const dust = document.getElementById("dust");
+  for (let i=0;i<38;i++){
+    const d=document.createElement("div");
+    d.className="d";
+    d.style.left=(Math.random()*100)+'vw';
+    d.style.bottom=(-10+Math.random()*110)+'vh';
+    d.style.animationDuration=(8+Math.random()*10)+'s';
+    d.style.animationDelay=(Math.random()*-12)+'s';
+    d.style.setProperty('--drift',(Math.random()*40-20)+'px');
+    dust.appendChild(d);
+  }
+
+  const WORDS = [
+    "gentle","bright","curious","kind","rare","soft-spoken",
+    "warm-hearted","patient","thoughtful","brave","magic","enough"
+  ];
+
+  let idx = 0, busy=false;
+  let bx = window.innerWidth*0.5;
+  let by = window.innerHeight*0.6;
+
+  let t=0, idleTimer=null;
+  function wobble(){
+    t+=0.016;
+    const wobX = Math.sin(t*1.2)*0.8;
+    const wobY = Math.cos(t*1.1)*0.8;
+    setPos(bx+wobX, by+wobY);
+    requestAnimationFrame(wobble);
+  }
+  wobble();
+
+  enterRest();
+
+  function setPos(x,y){
+    bf.style.setProperty('--x', x+'px');
+    bf.style.setProperty('--y', y+'px');
+  }
+
+  function ease(k){return k<.5 ? 2*k*k : -1+(4-2*k)*k;}
+
+  function clearIdleTimer(){ if(idleTimer){ clearTimeout(idleTimer); idleTimer=null; } }
+  function scheduleRest(){
+    clearIdleTimer();
+    idleTimer = setTimeout(()=> enterRest(), 3500);
+  }
+
+  function enterRest(){
+    bf.classList.remove('flying','landing');
+    bf.classList.add('rest');
+  }
+  function leaveRest(){
+    bf.classList.remove('rest');
+  }
+
+  function onStartFlight(){
+    leaveRest();
+    bf.classList.remove('landing');
+    bf.classList.add('flying');
+  }
+
+  function onLandSoftFold(){
+    bf.classList.remove('flying');
+    bf.classList.add('landing');
+    setTimeout(()=> enterRest(), 700);
+  }
+
+  function flyTo(x,y,done){
+    busy=true; if(hint) hint.remove(); clearIdleTimer(); onStartFlight();
+
+    const m=24;
+    x=Math.max(m,Math.min(window.innerWidth-m,x));
+    y=Math.max(m,Math.min(window.innerHeight-m-70,y));
+
+    const sx=bx, sy=by, dx=x-sx, dy=y-sy;
+    const dist=Math.hypot(dx,dy);
+    const dur=Math.min(1300,Math.max(550,dist*1.3));
+
+    const angle=Math.atan2(dy,dx)*180/Math.PI;
+    bf.style.setProperty('--r',(angle/6)+'deg');
+
+    const start=performance.now();
+    const arc=Math.min(130,Math.max(60,dist/4));
+
+    function step(time){
+      const k=Math.min(1,(time-start)/dur);
+      const e=ease(k);
+
+      bx=sx+dx*e + Math.sin(time*0.01)*3;
+      by=sy+dy*e - Math.sin(Math.PI*e)*arc + Math.cos(time*0.012)*2;
+
+      setPos(bx,by);
+
+      if(k<1){
+        requestAnimationFrame(step);
+      } else {
+        bf.style.setProperty('--r','0deg');
+        let tt=0, by0=by;
+        function land(){
+          tt+=0.06;
+          const off=Math.sin(tt)*1.3*Math.exp(-tt/3);
+          setPos(bx, by0+off);
+          if(tt<6) requestAnimationFrame(land);
+          else{
+            onLandSoftFold();
+            busy=false; done && done();
+            scheduleRest();
+          }
+        }
+        land();
+      }
+    }
+    requestAnimationFrame(step);
+  }
+
+  function dropWord(x,y,text){
+    const p=document.createElement("div");
+    p.className="pill";
+    p.textContent=text;
+    p.style.left=x+"px";
+    p.style.top=y+"px";
+    wordsLayer.appendChild(p);
+  }
+
+  scene.addEventListener("click",(e)=>{
+    if(areNavsOpen || busy) return; 
     
+    if(e.target.closest(".btn")) return;
+
+    const r=scene.getBoundingClientRect();
+    const x=e.clientX-r.left;
+    const y=e.clientY-r.top;
+
+    flyTo(x,y,()=>{
+      if(idx < WORDS.length){
+        dropWord(bx,by,WORDS[idx]);
+        idx++;
+        if(idx===WORDS.length){
+          setTimeout(()=>finalCard.classList.add("show"),600);
+        }
+      }
+    });
+  });
+
+  document.getElementById("resetBtn").onclick=()=>{
+    if (areNavsOpen) {
+        closeAllNavs();
+    }
     
-    <button id="navToggle" class="fixed top-6 left-6 z-[110] p-2 shadow-lg hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2"
-        style="border-radius: 0; background: #C0C0C0; border: 2px outset #FFFFFF; color: #000;">
-        <svg id="navToggleIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-8 6h8"></path></svg>
-        <svg id="navToggleX" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-    </button>
+    wordsLayer.innerHTML="";
+    idx=0;busy=false;
+    finalCard.classList.remove("show");
+    bf.style.setProperty('--r','0deg');
+    bx=window.innerWidth*0.5; by=window.innerHeight*0.6;
+    setPos(bx,by);
+    enterRest();
+  };
 
-
-        <nav id="topNav" class="nav-panel fixed top-0 left-0 right-0 z-[60] h-16 text-yellow-100 flex items-center justify-center space-x-6 -translate-y-full"
-            style="background-color: #C0C0C0; color: #000000; box-shadow: none;">
-            <a href="index.html" class="nav-link px-3 py-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Home</a>
-            <a href="Special.html" class="nav-link px-3 py-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Special</a>
-            <a href="letter.html" class="nav-link px-3 py-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Letter</a>
-        </nav>
-
-        <nav id="bottomNav" class="nav-panel fixed bottom-0 left-0 right-0 z-[60] h-16 text-yellow-100 flex items-center justify-center space-x-6 translate-y-full"
-            style="background-color: #C0C0C0; color: #000000; box-shadow: none;">
-            <a href="anatomy.html" class="nav-link px-3 py-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Anatomy</a>
-            <a href="chat.html" class="nav-link px-3 py-2 text-sm font-font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Heaven</a>
-            <a href="you.html" class="nav-link px-3 py-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">You</a>
-        </nav>
-
-        <nav id="leftNav" class="nav-panel fixed left-0 top-0 bottom-0 z-[60] w-20 text-yellow-100 flex flex-col items-center space-y-6 -translate-x-full overflow-y-auto py-20"
-            style="background-color: #C0C0C0; color: #000000; box-shadow: none;">
-            <a href="Diary.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Diary</a>
-            <a href="Universe.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Universe</a>
-            <a href="Box.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Box</a>
-            <a href="color.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Color</a>
-            <a href="Teacher.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Teacher</a>
-            <a href="The_River.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">River</a>
-            <a href="Mountain.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Mountain</a>
-            <a href="Paper_Star.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Paper Star</a>
-            <a href="Carttoon.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Cartoon</a>
-            <a href="Santa.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Santa</a>
-            <a href="Cloud.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Cloud</a>
-            <a href="Ink.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Paint</a>
-            <a href="Butterfly.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Butterfly</a>
-            <a href="Weather.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Weather</a>
-        </nav>
-
-        <nav id="rightNav" class="nav-panel fixed right-0 top-0 bottom-0 z-[60] w-20 text-yellow-100 flex flex-col items-center space-y-6 translate-x-full overflow-y-auto py-20"
-            style="background-color: #C0C0C0; color: #000000; box-shadow: none;">
-            <a href="Skill.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Skill</a>
-            <a href="Msg.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Massege</a>
-            <a href="21_Wish.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">21_Door</a>
-            <a href="Cake.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Cake</a>
-            <a href="Periodik_table.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-2Two-Time festive-text">Periodik_table</a>
-            <a href="Presence.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Presence</a>
-            <a href="Concept.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Concept</a>
-            <a href="Calender.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Calender</a>
-            <a href="Perspective.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Perspective</a>
-            <a href="Spotlight.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Spotlight</a>
-            <a href="Room.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Room</a>
-            <a href="Radio.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Radio</a>
-            <a href="Food.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Food</a>
-            <a href="Music.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Music</a>
-        </nav>
-
-    
-    <main id="mainContent">
-        
-        <div id="start-button-container">
-            <button id="start-button" class="action-button visible">A message from the heart...</button>
-        </div>
-        
-        <div id="letter-container" class="letter-container">
-            <div class="envelope">
-                <div class="envelope-flap"></div>
-                <div class="envelope-body"></div>
-            </div>
-        </div>
-
-        
-        <div id="image-wrapper">
-            <img id="birthday-photo" class="photo-frame" 
-                 src="Letter.png" 
-                 alt="A place for the birthday recipient's photo."
-                 onerror="this.src='https://placehold.co/150x150/C0C0C0/000080?text=Error';">
-        </div>
-
-        <div id="button-container">
-            <button id="open-letter-button" class="action-button">Open the letter</button>
-        </div>
-
-
-        <div id="page-1" class="page">
-            <h2 class="text-3xl">Happy Birthday, June!</h2>
-            
-            
-            <div class="page-content">
-                <p>
-                    <span>Part 1: The Wish</span>
-                    First off, just a huge, happy, happy birthday. I hope your day is filled with tons of fun, amazing surprises, and everything that makes you smile.
-                </p>
-            </div>
-            <div class="text-center">
-                <button class="page-nav-button next-button" data-target="2">Next</button>
-            </div>
-        </div>
-
-        <div id="page-2" class="page">
-            <h2 class="text-3xl">Part 2</h2>
-            
-            <div class="page-content">
-            <p>
-               <span>Who you are?</span>
-               Kabhi socha hai kon ho tum? Kisi ke liye beti, kisi ke liye behen,<br>
-               kisi ke liye pyaar, kisi ke liye dost. <br>
-               Kisi ke liye student, to kisi ke liye teacher. <br>
-               Lekin asal mein...tum kaun ho tum? <br>
-            </p>
-            </div>
-            <div class="text-center">
-                <button class="page-nav-button next-button" data-target="3">Next</button>
-            </div>
-        </div>
-
-        <div id="page-3" class="page">
-            <h2 class="text-3xl">Part 3</h2>
-            <div class="page-content">
-                <p>
-                    <span>Your impact in everyone’s life</span>
-                          Kabhi-kabhi ek insan ki kami se
-                          puri kainat kami lagti hai,
-                          aur tum to sach-me kisi ki kainat ho.
-
-                          Kisi ki umeed ki kiran tum ho,
-                          kabhi kisi ka hasne ka karan ban jaati ho.
-
-                          Kabhi tumhari ek chhoti si baat
-                          dil me gehra asar chhod jaati hai.
-
-                          Aur kabhi tum bas saamne ho,
-                          to sab kuch thoda behtar lagne lagta hai           
-               </p>
-            </div>
-            <div class="text-center">
-                <button class="page-nav-button next-button" data-target="4">Next</button>
-            </div>
-        </div>
-
-        <div id="page-4" class="page">
-            <h2 class="text-3xl">Part 4</h2>
-            <div class="page-content">
-                <p> Apne liye kaun ho tum?
-                    <span>You have a very simple and calm nature.
-                          You don’t talk too much, You don’t talk too much, but whatever you say always feels special.
-                          You care for people quietly, in small ways, without trying to show it.
-                          Your behaviour is soft, and your heart is clean
-                          and that’s what makes you different from others.
-
-                          Tum Carbon ho.
-                          Carbon ki tarah tum alag–alag roop mein khoobsurat lagti ho.
-                          Jab zindagi tough hoti hai, tum diamond ki tarah strong ban jaati ho,
-                          bilkul clear, bilkul steady.
-                          Aur jab kisi ko halka sa support chahiye hota hai,
-                          tab tum graphite ki tarah soft aur samajhdaar ban jaati ho.
-                          Carbon ka kaam hota hai dusron ko jodna…
-                          aur tum bhi waise hi ho , log tumse aasaani se jud jaate hain.
-
-                          Carbon life banata hai…
-                          aur tum apne aas–paas ke logon ki life thodi si better kar deti ho,
-                          sirf apni achhi nature ki wajah se.
-
-                          Hamesha aise hi rehna ,
-                          simple, strong, aur apne jaise
-
-                </p>
-            </div>
-            <div class="text-center">
-                <button class="page-nav-button next-button" data-target="5">Next</button>
-            </div>
-        </div>
-
-        <div id="page-5" class="page">
-            <h2 class="text-3xl">Part 5</h2>
-            <div class="page-content">
-                <p>
-                    <span>Who you are for me</span>
-                         Mere liye tum kaun ho?
-                         Dharkanon ka geet ho,
-                         jeevan ka ek sangeet ho.
-
-                         Roshni jaisi ho, taazgi jaisi ho,
-                         aur khushiyon ki wajah jaisi ho.
-
-                         Kabhi-kabhi ankho ke saamne
-                         tumhari muskan aa jaati hai,
-                         aur kuch pal yaad reh jaate hain.
-
-                         Tum meri life ka wo hissa ho
-                         jo bina koshish ke dil me jagah bana leta ha                </p>
-            </div>
-            <p class="page-signature" style="text-align: center;">
-                Tumhara Subhchintak
-            </p>
-            <div class="text-center">
-            </div>
-        </div>
-
-    </main> 
-
-    <script>
-        
-        window.onload = function() {
-            
-            const body = document.body;
-            
-            const startButtonContainer = document.getElementById('start-button-container');
-            const startButton = document.getElementById('start-button');
-            const letterContainer = document.getElementById('letter-container');
-            const openLetterButton = document.getElementById('open-letter-button');
-            const buttonContainer = document.getElementById('button-container'); 
-            const imageWrapper = document.getElementById('image-wrapper');
-            const pageElements = document.querySelectorAll('.page');
-            const nextButtons = document.querySelectorAll('.next-button');
-
-            
-            function showPage(pageNumber) {
-                pageElements.forEach(page => {
-                    page.classList.remove('active-page');
-                    page.style.display = 'none'; 
-                });
-
-                if (pageNumber > 0) {
-                    const targetPage = document.getElementById(`page-${pageNumber}`);
-                    if (targetPage) {
-                        targetPage.style.display = 'block'; 
-                        
-                        setTimeout(() => targetPage.classList.add('active-page'), 50);
-                    }
-                }
-            }
-            
-            function openLetterSequence() {
-                openLetterButton.classList.remove('visible'); 
-                
-                letterContainer.classList.add('open');
-                imageWrapper.style.opacity = '0'; 
-
-                setTimeout(() => {
-                    letterContainer.classList.remove('active-letter');
-                    letterContainer.style.opacity = '0'; 
-                    imageWrapper.style.display = 'none';
-                    
-                    setTimeout(() => {
-
-                        letterContainer.style.display = 'none';
-                        showPage(1); 
-                    }, 500); 
-
-                }, 800); 
-            }
-            
-            function resetToStart() {
-                showPage(0); 
-                
-                letterContainer.style.display = 'none';
-                letterContainer.classList.remove('open', 'active-letter');
-                letterContainer.style.opacity = '0'; 
-
-                imageWrapper.style.display = 'none';
-                imageWrapper.style.opacity = '0';
-
-                openLetterButton.classList.remove('visible');
-                
-                startButtonContainer.style.display = 'block';
-                startButton.classList.add('visible');
-                startButton.classList.remove('clicked');
-            }
-
-            
-            startButton.addEventListener('click', () => {
-                
-                startButton.classList.remove('visible');
-                startButtonContainer.style.display = 'none'; 
-                
-                
-                letterContainer.style.display = 'block';
-                
-                setTimeout(() => letterContainer.classList.add('active-letter'), 50);
-
-                
-                imageWrapper.style.display = 'block';
-                setTimeout(() => imageWrapper.style.opacity = '1', 100);
-
-                
-                setTimeout(() => openLetterButton.classList.add('visible'), 550);
-            });
-
-            openLetterButton.addEventListener('click', openLetterSequence);
-
-            imageWrapper.addEventListener('click', openLetterSequence);
-
-            nextButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const targetPageNumber = button.getAttribute('data-target');
-                    showPage(targetPageNumber);
-                });
-            });
-
-        };
-
-        document.addEventListener('DOMContentLoaded', () => {
-            
-            const navLinks = document.querySelectorAll('.nav-panel .nav-link');
-            const mainContent = document.getElementById('mainContent');
-            const topNav = document.getElementById('topNav');
-            const bottomNav = document.getElementById('bottomNav');
-            const leftNav = document.getElementById('leftNav');
-            const rightNav = document.getElementById('rightNav');
-            const navToggle = document.getElementById('navToggle');
-            const navToggleIcon = document.getElementById('navToggleIcon');
-            const navToggleX = document.getElementById('navToggleX');
-
-            let areNavsOpen = false;
-
-            function openAllNavs() {
-                topNav.classList.remove('-translate-y-full');
-                bottomNav.classList.remove('translate-y-full');
-                leftNav.classList.remove('-translate-x-full');
-                rightNav.classList.remove('translate-x-full');
-                document.body.classList.add('body-nav-open');
-                navToggleIcon.classList.add('hidden');
-                navToggleX.classList.remove('hidden');
-                areNavsOpen = true;
-            }
-
-            function closeAllNavs() {
-                topNav.classList.add('-translate-y-full');
-                bottomNav.classList.add('translate-y-full');
-                leftNav.classList.add('-translate-x-full');
-                rightNav.classList.add('translate-x-full');
-                document.body.classList.remove('body-nav-open');
-                navToggleIcon.classList.remove('hidden');
-                navToggleX.classList.add('hidden');
-                areNavsOpen = false;
-            }
-
-            function toggleAllNavs() {
-                if (areNavsOpen) {
-                    closeAllNavs();
-                } else {
-                    openAllNavs();
-                }
-            }
-
-            navToggle.addEventListener('click', (e) => {
-                e.stopPropagation(); 
-                toggleAllNavs();
-            });
-            
-            
-            mainContent.addEventListener('click', (e) => {
-                
-                if (e.target.closest('button')) {
-                    return;
-                }
-                
-                if (areNavsOpen) {
-                    closeAllNavs();
-                }
-            });
-            
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    const targetHash = e.currentTarget.getAttribute('href');
-                    if (targetHash.startsWith('#')) {
-                        e.preventDefault(); 
-                        if (areNavsOpen) {
-                            closeAllNavs();
-                        }
-                    }
-                    
-                    if (areNavsOpen) {
-                        closeAllNavs();
-                    }
-                });
-            });
-            closeAllNavs();
-        });
-    </script>
+})();
+</script>
 
 </body>
 </html>
