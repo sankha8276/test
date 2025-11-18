@@ -2,651 +2,199 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Presence</title>
-
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>When the Universe Spoke About Her — Cinematic</title>
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Inter:wght@400;500;700&family=Pacifico&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap" rel="stylesheet">
 
 <style>
-  :root{
-    --c1: #8a2be2;
-    --c2: #00c8ff;
-    --c3: #ff4b9e;
-    --bg1:#fdfcff;
-    --bg2:#f5f4f7;
-    --gold-1:#D8B765;
-    --gold-2:#E7C987;
-    --char:#222;
-    --nav-pink:#FF69B4;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  html,body{height:100%}
-  body{
-    background: radial-gradient(1200px 800px at 50% 60%, var(--bg2), var(--bg1));
-    overflow:hidden;
-    font-family:"Merriweather","Poppins",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-    color:#334;
-  }
+.nav-panel, #navToggleIcon, #navToggleX {
+    transition: all 0.3s ease-in-out;
+}
+.nav-panel {
+    -ms-overflow-style: none;  
+    scrollbar-width: none;  
+}
+.nav-panel::-webkit-scrollbar {
+    display: none;  
+}
+h1, h2, h3 {
+    font-family: 'Pacifico', cursive; 
+}
+.festive-text {
+    font-family: 'Gochi Hand', cursive;
+}
 
-  /* background blobs */
-  #bg{ position:fixed; inset:0; z-index:1; overflow:hidden; pointer-events:none; }
-  .blob{ position:absolute; width:52vmin; height:52vmin; border-radius:50%; filter: blur(70px) saturate(130%); opacity:.65; mix-blend-mode:multiply; will-change: transform; }
-  .b1{ background: radial-gradient(circle at 30% 30%, var(--c1), transparent 65%); left:-10vmin; top:-8vmin; animation:floatA 22s ease-in-out infinite alternate; }
-  .b2{ background: radial-gradient(circle at 60% 40%, var(--c2), transparent 65%); right:-12vmin; top:10vmin; animation:floatB 18s ease-in-out infinite alternate-reverse; }
-  .b3{ background: radial-gradient(circle at 50% 60%, var(--c3), transparent 65%); left:15vmin; bottom:-12vmin; animation:floatC 26s ease-in-out infinite alternate; }
-  @keyframes floatA {0%{transform:translate(-10%,-6%) scale(1)}50%{transform:translate(5%,-12%) scale(1.18)}100%{transform:translate(-8%,8%) scale(.96)}}
-  @keyframes floatB {0%{transform:translate(10%,8%) scale(1.05)}50%{transform:translate(-4%,-6%) scale(1.22)}100%{transform:translate(8%,12%) scale(.92)}}
-  @keyframes floatC {0%{transform:translate(0%,0%) scale(.95)}50%{transform:translate(8%,10%) scale(1.12)}100%{transform:translate(-6%,-8%) scale(1)}}
-
-  /* slides */
-  .slide{ position:fixed; inset:0; z-index:3; display:flex; flex-direction:column; align-items:center; justify-content:center; padding: clamp(16px,4vw,32px); text-align:center; opacity:0; transform:translateY(24px) scale(.995); transition: opacity .6s ease, transform .6s ease; pointer-events:none; }
-  .slide.active{ opacity:1; transform:translateY(0) scale(1); pointer-events:auto; }
-
-  .title{ font-weight:700; font-size: clamp(22px,5vw,38px); letter-spacing:.2px; text-shadow:0 0 12px rgba(0,0,0,.12); font-family:'Merriweather',serif; }
-  .title .letter{ display:inline-block; transform:translateY(30px); opacity:0; transition: all .7s cubic-bezier(.175,.885,.32,1.275); transition-delay: var(--delay); }
-  .slide.active .title .letter{ transform:translateY(0); opacity:1; }
-
-  /* analog area under title - clock always visible here */
-  .analog-wrap{ margin-top:10px; display:flex; align-items:center; justify-content:center; height:140px; }
-  .shared-clock{ width:126px; height:126px; display:block; }
-  @media (max-width:380px){ .shared-clock{ width:98px; height:98px } }
-
-  /* IMPORTANT: for SVG where hands live inside a translated group, origin is 0 0 */
-  .hand {
-    transform-origin: 0px 0px;
-  }
-  .hand-hour, .hand-minute { transition: transform 1400ms cubic-bezier(.22,.9,.18,1); will-change: transform; }
-  .hand-second { transition: transform 900ms cubic-bezier(.22,.9,.18,1), opacity 250ms; will-change: transform; }
-  .hand-second.hidden{ opacity:0; }
-
-  .description{ font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; font-size: clamp(13px,1.8vw,16px); line-height:1.6; margin-top:14px; max-width:700px; color:#667; white-space: pre-line; opacity:0; transform:translateY(20px); transition: opacity .7s ease .6s, transform .7s ease .6s; }
-  .slide.active .description{ opacity:1; transform:translateY(0); }
-
-  .actions{ position: fixed; left:0; right:0; bottom: clamp(12px,3.5vh,30px); z-index:4; display:flex; justify-content:center; pointer-events:none; }
-  .btn{ pointer-events:auto; padding:10px 26px; border-radius:999px; cursor:pointer; font-size:16px; backdrop-filter: blur(10px); box-shadow: 0 8px 24px rgba(0,0,0,.08); background: rgba(255,255,255,0.6); border:1px solid rgba(0,0,0,0.06); }
-  .btn:hover{ transform: translateY(-2px); }
-
-  #fade{ position:fixed; inset:0; z-index:5; background: rgba(255,255,255,.5); opacity:0; pointer-events:none; transition: opacity .35s ease; }
-
-  /* NAV */
-  .nav-panel{ position: fixed; z-index:60; color:#fff; background:var(--nav-pink); box-shadow:0 10px 30px rgba(0,0,0,.15); transition: transform 320ms cubic-bezier(.22,.9,.18,1); -webkit-overflow-scrolling: touch; }
-  #navTop{ left:0; right:0; top:0; height:64px; transform: translateY(-120%); display:flex; align-items:center; justify-content:center; gap:18px; }
-  #navBottom{ left:0; right:0; bottom:0; height:64px; transform: translateY(120%); display:flex; align-items:center; justify-content:center; gap:18px; }
-  #navLeft{ top:0; bottom:0; left:0; width:84px; transform: translateX(-120%); display:flex; flex-direction:column; align-items:center; padding-top:80px; gap:14px; overflow:auto; }
-  #navRight{ top:0; bottom:0; right:0; width:84px; transform: translateX(120%); display:flex; flex-direction:column; align-items:center; padding-top:80px; gap:14px; overflow:auto; }
-
-  .nav-link{ padding:8px 12px; border-radius:10px; font-weight:600; color:#fff; text-decoration:none; font-size:14px; }
-  .nav-link:hover{ background: rgba(0,0,0,0.08); }
-
-  .open-top{ transform: translateY(0) !important; }
-  .open-bottom{ transform: translateY(0) !important; }
-  .open-left{ transform: translateX(0) !important; }
-  .open-right{ transform: translateX(0) !important; }
-
-  #navToggle{ position: fixed; z-index:70; left:14px; top:14px; width:44px; height:44px; border-radius:999px; background:var(--nav-pink); color:white; display:flex; align-items:center; justify-content:center; box-shadow:0 8px 20px rgba(0,0,0,0.12); border:none; cursor:pointer; }
-  #navToggle:active{ transform:scale(.98); }
-
-  #navDim{ position: fixed; inset:0; z-index:59; background: rgba(0,0,0,0.25); opacity:0; pointer-events:none; transition: opacity 220ms; }
-  #navDim.visible{ opacity:1; pointer-events:auto; }
-
-  .center-dot{ filter: drop-shadow(0 2px 2px rgba(0,0,0,0.12)); }
-
-  @media (max-width:420px){ #navLeft,#navRight{ width:68px } }
+:root{--txt:#eef1ff;--gold:#ffdca8;}
+body{margin:0;background:#05070e;color:var(--txt);font-family:"Inter",system-ui,sans-serif;overflow:hidden;}
+canvas#stars,canvas#fireflies{position:fixed;inset:0;z-index:-3;pointer-events:none}
+.overlay{position:fixed;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.8);color:white;font-size:1.5rem;cursor:pointer;z-index:10;transition:opacity .6s ease}
+.overlay.hidden{opacity:0;visibility:hidden}
+.stage{position:fixed;inset:0;display:grid;place-items:center;perspective:1000px; transition: all 0.3s ease-in-out;} /* Added transition for padding */
+.scene{position:absolute;inset:0;display:grid;place-items:center;opacity:0;transform:scale(.97);transition:opacity .8s ease,transform 1s ease}
+.scene.active{opacity:1;transform:scale(1)}
+.caption{z-index:2;max-width:900px;text-align:center;padding:0 1rem}
+.line{opacity:0;transform:translateY(10px);transition:opacity .6s ease,transform .7s ease;font-size:1.3rem;margin:.4rem 0;}
+.line.show{opacity:1;transform:none}
+.planet{position:absolute;width:min(70vmin,500px);height:min(70vmin,500px);border-radius:50%;z-index:1}
+.sun{background:radial-gradient(circle at 40% 30%,#ffb144,#8b3000 90%)}
+.sun .planet{background:radial-gradient(circle at 30% 30%,#ffd08a 0%,#ff9f3b 35%,#bf4e00 70%,#5a2200 100%)}
+.mars{background:radial-gradient(circle at 40% 30%,#d14a21,#140202 90%)}
+.mars .planet{background:radial-gradient(circle at 35% 30%,#ff7a4f 0%,#d14a21 40%,#7b1f11 75%,#320905 100%)}
+.jupiter{background:linear-gradient(180deg,#0c0906,#2b2016,#0a0705)}
+.jupiter .planet{background:conic-gradient(from 180deg,#cfa788,#f3e0cc,#b98e6b,#e9d4bd,#ac7d5b,#e0c9b2,#cfa788)}
+.saturn{background:linear-gradient(180deg,#0a0905,#302715,#0b0a06)}
+.saturn .planet{background:radial-gradient(circle at 40% 30%,#ffe49a,#7b5e30 80%,#33270f)}
+.rings{position:absolute;left:50%;top:50%;width:min(88vmin,680px);height:min(24vmin,180px);transform:translate(-50%,-50%) rotate(-18deg);border-radius:50%;box-shadow:0 0 0 14px rgba(255,255,255,.06)}
+.neptune{background:linear-gradient(180deg,#051018,#10324b,#061018)}
+.neptune .planet{background:radial-gradient(circle at 35% 30%,#78c6ff 0%,#2e77b8 40%,#10406a 80%,#072136 100%)}
+.earth{background:linear-gradient(180deg,#0f1f2f,#041923,#081d29)}
+.earth .planet{background:url('https://upload.wikimedia.org/wikipedia/commons/9/97/The_Earth_seen_from_Apollo_17.jpg') center/cover no-repeat;border-radius:50%;box-shadow:0 0 30px rgba(150,220,200,.4);}
+.finale{position:absolute;inset:0;display:grid;place-items:center;background:linear-gradient(180deg,#160a21,#261238,#10091a);animation:aurora 30s ease-in-out infinite alternate}
+@keyframes aurora{0%{filter:hue-rotate(0deg);}50%{filter:hue-rotate(40deg);}100%{filter:hue-rotate(80deg);}}
+.endwrap{display:grid;place-items:center;gap:20px;z-index:2}
+.endwrap img{width:min(78vw,520px);aspect-ratio:4/5;object-fit:cover;border-radius:20px;box-shadow:0 0 40px 10px rgba(255,200,220,.5);opacity:0;transition:1s ease;}
+.endwrap h2{font-family:'Great Vibes',cursive;font-size:clamp(2rem,6vw,3rem);color:#ffe9f4;opacity:0;transition:1.2s ease;text-shadow:0 0 25px rgba(255,220,240,.6),0 0 60px rgba(255,200,210,.4)}
+.endwrap.show img,.endwrap.show h2{opacity:1}
 </style>
 </head>
-<body class="antialiased text-gray-800">
+<body>
 
-<div id="bg">
-  <div class="blob b1"></div>
-  <div class="blob b2"></div>
-  <div class="blob b3"></div>
-</div>
-
-<canvas id="particle-canvas"></canvas>
-
-<!-- audio (autoplay as requested) -->
-<audio id="bgAudio" src="bgm.mp3" preload="auto" autoplay playsinline></audio>
-
-<!-- nav dim -->
-<div id="navDim" aria-hidden="true"></div>
-
-<!-- nav panels -->
-<nav id="navTop" class="nav-panel" aria-label="Top navigation">
-  <a class="nav-link" href="index.html">Home</a>
-  <a class="nav-link" href="Special.html">Special</a>
-  <a class="nav-link" href="letter.html">Letter</a>
-</nav>
-
-<nav id="navBottom" class="nav-panel" aria-label="Bottom navigation">
-  <a class="nav-link" href="anatomy.html">Anatomy</a>
-  <a class="nav-link" href="chat.html">Heaven</a>
-  <a class="nav-link" href="you.html">You</a>
-</nav>
-
-<nav id="navLeft" class="nav-panel" aria-label="Left navigation">
-  <a class="nav-link" href="Diary.html">Diary</a>
-  <a class="nav-link" href="Universe.html">Universe</a>
-  <a class="nav-link" href="Box.html">Box</a>
-  <a class="nav-link" href="color.html">Color</a>
-  <a class="nav-link" href="Teacher.html">Teacher</a>
-  <a class="nav-link" href="The_River.html">River</a>
-  <a class="nav-link" href="Mountain.html">Mountain</a>
-  <a class="nav-link" href="Paper_Star.html">Paper Star</a>
-  <a class="nav-link" href="Carttoon.html">Cartoon</a>
-  <a class="nav-link" href="Santa.html">Santa</a>
-  <a class="nav-link" href="Cloud.html">Cloud</a>
-  <a class="nav-link" href="Ink.html">Paint</a>
-  <a class="nav-link" href="Butterfly.html">Butterfly</a>
-  <a class="nav-link" href="Weather.html">Weather</a>
-</nav>
-
-<nav id="navRight" class="nav-panel" aria-label="Right navigation">
-  <a class="nav-link" href="Skill.html">Skill</a>
-  <a class="nav-link" href="Msg.html">Message</a>
-  <a class="nav-link" href="21_Wish.html">21_Door</a>
-  <a class="nav-link" href="Cake.html">Cake</a>
-  <a class="nav-link" href="Periodik_table.html">Periodic Table</a>
-  <a class="nav-link" href="Presence.html">Presence</a>
-  <a class="nav-link" href="Concept.html">Concept</a>
-  <a class="nav-link" href="Calender.html">Calendar</a>
-  <a class="nav-link" href="Perspective.html">Perspective</a>
-  <a class="nav-link" href="Spotlight.html">Spotlight</a>
-  <a class="nav-link" href="Room.html">Room</a>
-  <a class="nav-link" href="Radio.html">Radio</a>
-  <a class="nav-link" href="Food.html">Food</a>
-  <a class="nav-link" href="Music.html">Music</a>
-</nav>
-
-<!-- nav toggle -->
-<button id="navToggle" aria-label="Open navigation">
-  <svg id="navIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-    <path d="M4 6h16M4 12h16M4 18h16"></path>
-  </svg>
-  <svg id="navCloseIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none">
-    <path d="M6 18L18 6M6 6l12 12"></path>
-  </svg>
+<button id="navToggle" class="fixed top-6 left-6 z-[70] p-2 bg-slate-900 text-white rounded-full shadow-lg hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2">
+    <svg id="navToggleIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-8 6h8"></path></svg>
+    <svg id="navToggleX" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
 </button>
 
-<!-- SHARED GOLDEN CLOCK SVG (generated new) -->
-<div id="sharedClockTemplate" style="display:none">
-  <svg class="shared-clock" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Analog clock">
-    <defs>
-      <radialGradient id="g1" cx="50%" cy="40%">
-        <stop offset="0%" stop-color="#fff8e6"/>
-        <stop offset="45%" stop-color="#E7C987"/>
-        <stop offset="100%" stop-color="#D8B765"/>
-      </radialGradient>
-    </defs>
+        <nav id="topNav" class="nav-panel fixed top-0 left-0 right-0 z-[60] h-16 bg-slate-900 text-yellow-100 shadow-md flex items-center justify-center space-x-6 -translate-y-full">
+            <a href="index.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Home</a>
+            <a href="Special.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Special</a>
+            <a href="letter.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Letter</a>
+        </nav>
 
-    <!-- outer ring -->
-    <circle cx="60" cy="60" r="56" fill="url(#g1)" stroke="#b58f40" stroke-width="2"/>
-    <!-- face -->
-    <circle cx="60" cy="60" r="50" fill="#fafafa" stroke="rgba(0,0,0,0.03)" stroke-width="1"/>
+        <nav id="bottomNav" class="nav-panel fixed bottom-0 left-0 right-0 z-[60] h-16 bg-slate-900 text-yellow-100 shadow-md flex items-center justify-center space-x-6 translate-y-full">
+            <a href="anatomy.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Anatomy</a>
+            <a href="chat.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Heaven</a>
+            <a href="you.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">You</a>
+        </nav>
 
-    <!-- ticks (12) -->
-    <g transform="translate(60,60)" stroke="rgba(0,0,0,0.14)" stroke-width="1.6">
-      <g><line x1="0" y1="-42" x2="0" y2="-50" stroke="#8a6b2d" stroke-width="2.4"/></g>
-      <g transform="rotate(30)"><line x1="0" y1="-42" x2="0" y2="-50" stroke="#8a6b2d" stroke-width="2.4"/></g>
-      <g transform="rotate(60)"><line x1="0" y1="-42" x2="0" y2="-50" stroke="#8a6b2d" stroke-width="2.4"/></g>
-      <g transform="rotate(90)"><line x1="0" y1="-42" x2="0" y2="-50" stroke="#8a6b2d" stroke-width="2.4"/></g>
-      <g transform="rotate(120)"><line x1="0" y1="-42" x2="0" y2="-50" stroke="#8a6b2d" stroke-width="2.4"/></g>
-      <g transform="rotate(150)"><line x1="0" y1="-42" x2="0" y2="-50" stroke="#8a6b2d" stroke-width="2.4"/></g>
-      <g transform="rotate(180)"><line x1="0" y1="-42" x2="0" y2="-50" stroke="#8a6b2d" stroke-width="2.4"/></g>
-      <g transform="rotate(210)"><line x1="0" y1="-42" x2="0" y2="-50" stroke="#8a6b2d" stroke-width="2.4"/></g>
-      <g transform="rotate(240)"><line x1="0" y1="-42" x2="0" y2="-50" stroke="#8a6b2d" stroke-width="2.4"/></g>
-      <g transform="rotate(270)"><line x1="0" y1="-42" x2="0" y2="-50" stroke="#8a6b2d" stroke-width="2.4"/></g>
-      <g transform="rotate(300)"><line x1="0" y1="-42" x2="0" y2="-50" stroke="#8a6b2d" stroke-width="2.4"/></g>
-      <g transform="rotate(330)"><line x1="0" y1="-42" x2="0" y2="-50" stroke="#8a6b2d" stroke-width="2.4"/></g>
-    </g>
+        <nav id="leftNav" class="nav-panel fixed left-0 top-0 bottom-0 z-[60] w-20 bg-slate-900 text-yellow-100 shadow-md flex flex-col items-center space-y-6 -translate-x-full overflow-y-auto py-20">
+            <a href="Diary.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Diary</a>
+            <a href="Universe.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Universe</a>
+            <a href="Box.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Box</a>
+            <a href="color.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Color</a>
+            <a href="Teacher.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Teacher</a>
+            <a href="The_River.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">River</a>
+            <a href="Mountain.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Mountain</a>
+            <a href="Paper_Star.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Paper Star</a>
+            <a href="Carttoon.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Cartoon</a>
+            <a href="Santa.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Santa</a>
+            <a href="Cloud.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Cloud</a>
+            <a href="Ink.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Paint</a>
+            <a href="Butterfly.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Butterfly</a>
+            <a href="Weather.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-2Services_text">Weather</a>
+        </nav>
 
-    <!-- hands group with precise center at 60,60 -->
-    <g id="hands" transform="translate(60,60)">
-      <!-- hour hand (short, thick) -->
-      <g id="hourHand" class="hand hand-hour" style="transform: rotate(0deg);">
-        <rect x="-2" y="-32" width="4" height="32" rx="2" fill="#2b2b2b"></rect>
-      </g>
-      <!-- minute hand (longer) -->
-      <g id="minuteHand" class="hand hand-minute" style="transform: rotate(0deg);">
-        <rect x="-1.5" y="-45" width="3" height="45" rx="1.5" fill="#2b2b2b"></rect>
-      </g>
-      <!-- second hand (thin) -->
-      <g id="secondHand" class="hand hand-second" style="transform: rotate(0deg);">
-        <rect x="-1" y="-52" width="2" height="52" rx="1" fill="#b33"></rect>
-      </g>
-      <circle cx="0" cy="0" r="3.2" fill="var(--gold-1)" stroke="#b58f40" stroke-width="0.6" class="center-dot"/>
-    </g>
-  </svg>
-</div>
+        <nav id="rightNav" class="nav-panel fixed right-0 top-0 bottom-0 z-[60] w-20 bg-slate-900 text-yellow-100 shadow-md flex flex-col items-center space-y-6 translate-x-full overflow-y-auto py-20">
+            <a href="Skill.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Skill</a>
+            <a href="Msg.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Massege</a>
+            <a href="21_Wish.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">21_Door</a>
+            <a href="Cake.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Cake</a>
+            <a href="Periodik_table.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Periodik_table</a>
+            <a href="Presence.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Presence</a>
+            <a href="Concept.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Concept</a>
+            <a href="Calender.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Calender</a>
+            <a href="Perspective.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Perspective</a>
+            <a href="Spotlight.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Spotlight</a>
+            <a href="Room.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Room</a>
+            <a href="Radio.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Radio</a>
+            <a href="Food.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Food</a>
+            <a href="Music.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-slate-700 transition-colors duration-200 festive-text">Music</a>
+        </nav>
 
-<!-- slides -->
-<div id="slide-container" style="position:absolute; inset:0; z-index:3;">
-
-  <section class="slide active" data-theme="0">
-    <h1 class="title">The Quiet Hour</h1>
-    <div class="analog-wrap" aria-hidden="true"></div>
-    <p class="description">🌅 1 hour to come
-
-The place waits quietly for you — still calm, still normal, but already aware
-that something soft and bright is on the way.
-Even the air feels like it's warming up in advance. 🌤️✨</p>
-  </section>
-
-  <section class="slide" data-theme="1">
-    <h1 class="title">The Half-Hour Glow</h1>
-    <div class="analog-wrap" aria-hidden="true"></div>
-    <p class="description">⏳ 30 minutes to come
-
-A little excitement starts spreading in the corners.
-
-Lights look brighter, shadows behave better,
-and the whole place seems to whisper,
-“She’ll be here soon… look alive.” 😌🌸</p>
-  </section>
-
-  <section class="slide" data-theme="2">
-    <h1 class="title">The Soft Fifteen</h1>
-    <div class="analog-wrap" aria-hidden="true"></div>
-    <p class="description">⌛ 15 minutes to come
-
-The silence softens itself,
-the wind slows down as if practising a gentle welcome,
-and everything prepares for the kind of peace
-that only your presence brings. 🌬️💗</p>
-  </section>
-
-  <section class="slide" data-theme="3">
-    <h1 class="title">The Final Five</h1>
-    <div class="analog-wrap" aria-hidden="true"></div>
-    <p class="description">⏱ 5 minutes to come
-
-The surroundings straighten up,
-colors adjust themselves like they’re fixing their makeup,
-and the moment starts glowing quietly —
-because you’re almost here. 🌼💫</p>
-  </section>
-
-  <section class="slide" data-theme="4">
-    <h1 class="title">The Shy Minute</h1>
-    <div class="analog-wrap" aria-hidden="true"></div>
-    <p class="description">⏰ 1 minute to come
-
-Time becomes shy.
-The air pauses.
-Even the smallest details wait politely,
-as if the whole place is holding its breath
-just to welcome you right. 🌙🤍</p>
-  </section>
-
-  <section class="slide" data-theme="5">
-    <h1 class="title">The Last Ten Seconds</h1>
-    <div class="analog-wrap" aria-hidden="true"></div>
-    <p class="description">👣 10 seconds to come (seeing you from a distance)
-
-Everything slips into natural slow-motion.
-The world brightens one shade higher,
-the breeze aligns with your footsteps,
-and your presence starts colouring the place
-even before you reach it. ✨🌷</p>
-  </section>
-
-  <section class="slide" data-theme="6">
-    <h1 class="title">Arrival</h1>
-    <div class="analog-wrap" aria-hidden="true"></div>
-    <p class="description">🤝 While meeting
-
-When you arrive, the atmosphere shifts instantly —
-warm, calm, gently glowing.
-Chairs, sunlight, even the background air
-start behaving extra nicely,
-as if trying to match your energy. 🌞💞
-
-A small smile from you feels like
-the whole place gets better lighting.
-A tiny laugh from you feels like
-the day itself becomes lighter. 💐😄</p>
-  </section>
-
-  <section class="slide" data-theme="7">
-    <h1 class="title">The Gentle Goodbye</h1>
-    <div class="analog-wrap" aria-hidden="true"></div>
-    <p class="description">⏳ 10 seconds after you leave
-
-The place goes strangely quiet —
-like it suddenly remembers it has nothing smart left to say.
-The air still holds a hint of your warmth,
-as if you’re just one breath away. 🌫️💗</p>
-  </section>
-
-  <section class="slide" data-theme="8">
-    <h1 class="title">One Minute After</h1>
-    <div class="analog-wrap" aria-hidden="true"></div>
-    <p class="description">⏳ 1 minute after you leave
-
-The surroundings try to return to normal…
-but fail adorably.
-The light looks confused,
-the breeze slows down like it’s still expecting you to turn back. 🌥️✨</p>
-  </section>
-
-  <section class="slide" data-theme="9">
-    <h1 class="title">Fifteen Minutes After</h1>
-    <div class="analog-wrap" aria-hidden="true"></div>
-    <p class="description">⏳ 15 minutes after you leave
-
-A gentle dullness settles in.
-The colors dim a little,
-as if your brightness was borrowed
-and now the place doesn’t know what to do without it. 🌙🌸</p>
-  </section>
-
-  <section class="slide" data-theme="10">
-    <h1 class="title">Thirty Minutes After</h1>
-    <div class="analog-wrap" aria-hidden="true"></div>
-    <p class="description">⏳ 30 minutes after you leave
-
-Everything finally goes back to its routine,
-but the atmosphere keeps a quiet softness —
-a leftover trace of your presence
-that refuses to fade quickly. 🍃🤍</p>
-  </section>
-
-  <section class="slide" data-theme="11">
-    <h1 class="title">One Hour After</h1>
-    <div class="analog-wrap" aria-hidden="true"></div>
-    <p class="description">⏳ 1 hour after you leave
-
-The world is completely normal again…
-but the place still remembers you
-the way a window remembers sunlight
-long after the sun has moved on. 🌦️💞</p>
-  </section>
-
-  <section class="slide" data-theme="12">
-    <h1 class="title">Happy Birthday</h1>
-    <div class="analog-wrap" aria-hidden="true"></div>
-    <p class="description">🎂 Happy Birthday
-
-You’re not just a person passing through a place —
-you’re the reason the place feels sweeter,
-softer, warmer, calmer,
-and a little more alive. ✨💖
-Happy Birthday — may your day glow like your presence. 🎉🌸</p>
-  </section>
-
-</div>
-
-<div class="actions">
-  <button class="btn" id="nextBtn">Next →</button>
-</div>
-
-<div id="fade"></div>
+<canvas id="stars"></canvas>
+<div class="overlay" id="overlay">Tap to Begin the Journey ✨</div>
+<main class="stage" id="stage"></main>
+<canvas id="fireflies"></canvas>
+<audio id="bgm" preload="auto"><source src="https://cdn.pixabay.com/download/audio/2021/10/07/audio_9d9a1c3f28.mp3?filename=the-epic-romance-122185.mp3" type="audio/mp3"></audio>
 
 <script>
-/* --- slides & times --- */
-const slides = [...document.querySelectorAll('.slide')];
-const nextBtn = document.getElementById('nextBtn');
-const fade = document.getElementById('fade');
-let currentIndex = 0;
+const scenes=[{key:'sun',lines:['I created light so fierce it could birth worlds.','Yet none could warm hearts the way she does.','Even the Sun, proud and eternal, bows before her smile.','Its fire burns , hers heals.','And for the first time, I saw brilliance learn humility.','Even dawn itself blushed to rise after her.'],dur:13000},{key:'mars',lines:['I painted Mars red, the hue of passion.','But her presence turned desire into devotion.','Its dust storms roar, yet her silence speaks louder.','Mars burns from within , she glows with grace.','Even its lonely surface envies her warmth.','She taught the planet of war the meaning of peace.'],dur:13000},{key:'jupiter',lines:['I made Jupiter vast , storms spinning like thoughts unspoken.','But her calm gaze stilled even my tempests.','Its size is grand, yet her heart holds more gravity.','The thunder it carries, she softens with a glance.','And so the giant learned gentleness.','Even the great red storm turned pale before her patience.'],dur:13000},{key:'saturn',lines:['I adorned Saturn with rings , perfect circles of beauty.','Yet she wears no jewels, and still outshines the stars.','Each ring reflects elegance; she embodies it.','I spun gold in space; she spun kindness in hearts.','Even my masterpiece envied her simplicity.','I realized grace was not in form, but in soul.'],dur:13000},{key:'neptune',lines:['I shaped Neptune with oceans of mystery and depth.','But her thoughts swim deeper than I ever dared.','Its waves whisper secrets , she understands them all.','My bluest world feels small beside her serenity.','For she is where peace and wonder meet.','Even eternity feels shallow next to her mind.'],dur:13000},{key:'earth',lines:['I crafted Earth, hoping to mirror her , and failed gloriously.','The snow in Greenland , pure, but not as kind as her heart.','The spices of India , rich, but not as vibrant as her soul.','The cherry blossoms of Japan , delicate, yet not as fleeting as her smile.','The Eiffel Tower in France , proud, but not as timeless as her grace.','The deserts of Arabia , vast, yet not as deep as her silence.','The lights of New York , bright, yet none shine like her eyes.','The beaches of Hawaii , serene, yet not as tranquil as her thoughts.','The forests of Amazon , alive, yet not as nurturing as her soul.','And so I stopped creating… because beauty had already taken form , in her.'],dur:20000},{key:'finale',lines:[],dur:10000}];
+const stage=document.getElementById('stage');const overlay=document.getElementById('overlay');const bgm=document.getElementById('bgm');
+function makeScene(s){const el=document.createElement('section');el.className=`scene ${s.key}`;if(s.key==='finale'){el.innerHTML=`<div class='finale'></div><div class='endwrap'><img src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1200&auto=format&fit=crop'><h2>Happy Birthday, My Universe ✨</h2></div>`;}else{const planet=document.createElement('div');planet.className='planet';el.appendChild(planet);if(s.key==='saturn'){const r=document.createElement('div');r.className='rings';el.appendChild(r);}const cap=document.createElement('div');cap.className='caption';s.lines.forEach(t=>{const l=document.createElement('div');l.className='line';l.textContent=t;cap.appendChild(l);});el.appendChild(cap);}return el;}
+const elements=scenes.map(makeScene);
+let i=0,timers=[];
+function enterScene(idx){const el=elements[idx];stage.appendChild(el);setTimeout(()=>el.classList.add('active'),50);setTimeout(()=>{if(scenes[idx].key==='finale'){el.querySelector('.endwrap').classList.add('show');startFireflies();return;}const lines=el.querySelectorAll('.line');const per=Math.max(900,Math.floor(scenes[idx].dur/(lines.length+.5)));lines.forEach((ln,j)=>timers.push(setTimeout(()=>ln.classList.add('show'),j*per)));},800);}
+function exitScene(idx){const el=elements[idx];if(!el)return;el.classList.remove('active');setTimeout(()=>el.remove(),800);}
+function clearTimers(){timers.forEach(clearTimeout);timers=[];}
+function scheduleNext(){clearTimers();const dur=scenes[i].dur;setTimeout(()=>{exitScene(i);i++;if(i<scenes.length){enterScene(i);scheduleNext();}},dur);}
+function begin(){overlay.classList.add('hidden');bgm.volume=0.8;bgm.play();enterScene(0);scheduleNext();bgm.addEventListener('timeupdate',()=>{if(bgm.currentTime>80){bgm.volume=Math.max(0,0.8-(bgm.currentTime-80)*0.08);}});}
+overlay.onclick=begin;
+function startFireflies(){const cvs=document.getElementById('fireflies');const ctx=cvs.getContext('2d');function size(){cvs.width=innerWidth;cvs.height=innerHeight;}size();addEventListener('resize',size);const bugs=Array.from({length:25},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,a:Math.random()*Math.PI*2,r:1+Math.random()*2,speed:0.4+Math.random()*0.3,hue:50+Math.random()*60}));(function loop(){ctx.clearRect(0,0,cvs.width,cvs.height);for(const b of bugs){b.a+=(Math.random()-.5)*0.2;b.x+=Math.cos(b.a)*b.speed;b.y+=Math.sin(b.a)*b.speed;if(b.x<0)b.x=cvs.width;if(b.x>cvs.width)b.x=0;if(b.y<0)b.y=cvs.height;if(b.y>cvs.height)b.y=0;const grd=ctx.createRadialGradient(b.x,b.y,0,b.x,b.y,b.r*6);grd.addColorStop(0,`hsla(${b.hue},100%,70%,0.9)`);grd.addColorStop(1,'transparent');ctx.fillStyle=grd;ctx.beginPath();ctx.arc(b.x,b.y,b.r,0,Math.PI*2);ctx.fill();}requestAnimationFrame(loop);})();}
+const starCanvas=document.getElementById('stars'),sctx=starCanvas.getContext('2d');function sizeStars(){starCanvas.width=innerWidth;starCanvas.height=innerHeight;}sizeStars();addEventListener('resize',sizeStars);const stars=Array.from({length:220},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.1+.4,s:Math.random()*.6+.2,t:Math.random()*Math.PI*2}));(function drawStars(){sctx.clearRect(0,0,innerWidth,innerHeight);for(const st of stars){st.t+=0.02;st.y+=st.s*0.04;if(st.y>innerHeight+5)st.y=-5;const g=0.5+Math.sin(st.t)*0.5;sctx.beginPath();sctx.arc(st.x,st.y,st.r+g*.7,0,Math.PI*2);const grd=sctx.createRadialGradient(st.x,st.y,0,st.x,st.y,st.r*4);grd.addColorStop(0,'rgba(255,255,255,.95)');grd.addColorStop(1,'rgba(255,255,255,0)');sctx.fillStyle=grd;sctx.fill();}requestAnimationFrame(drawStars);})();
 
-// times with seconds when needed; last is birthday
-const slideTimes = [
-  {h:16,m:0,s:0, showSeconds:false},    // 4:00
-  {h:16,m:30,s:0, showSeconds:false},   // 4:30
-  {h:16,m:45,s:0, showSeconds:false},   // 4:45
-  {h:16,m:55,s:0, showSeconds:false},   // 4:55
-  {h:16,m:59,s:0, showSeconds:false},   // 4:59
-  {h:16,m:59,s:50, showSeconds:true},   // 4:59:50
-  {h:17,m:0,s:0, showSeconds:false},    // 5:00
-  {h:23,m:0,s:10, showSeconds:true},    // 11:00:10
-  {h:23,m:1,s:0, showSeconds:false},    // 11:01
-  {h:23,m:15,s:0, showSeconds:false},   // 11:15
-  {h:23,m:30,s:0, showSeconds:false},   // 11:30
-  {h:0,m:0,s:0, showSeconds:false},     // 12:00
-  {h:0,m:0,s:0, showSeconds:false}      // Birthday (final)
-];
+document.addEventListener('DOMContentLoaded', () => {
+    const mainContent = document.getElementById('stage'); 
+    
+    const topNav = document.getElementById('topNav');
+    const bottomNav = document.getElementById('bottomNav');
+    const leftNav = document.getElementById('leftNav');
+    const rightNav = document.getElementById('rightNav');
+    const navToggle = document.getElementById('navToggle');
+    const navToggleIcon = document.getElementById('navToggleIcon');
+    const navToggleX = document.getElementById('navToggleX');
 
-/* --- build shared clock from template --- */
-const template = document.getElementById('sharedClockTemplate');
-const sharedClock = template.firstElementChild.cloneNode(true);
-template.remove();
+    let areNavsOpen = false;
 
-const hourHand = sharedClock.querySelector('#hourHand');
-const minuteHand = sharedClock.querySelector('#minuteHand');
-const secondHand = sharedClock.querySelector('#secondHand');
-
-// absolute angles (to always rotate forward)
-let absHourAngle = null;
-let absMinuteAngle = null;
-let absSecondAngle = null;
-
-// attach the shared clock under the slide title and keep moving it to the active slide
-function attachClock(index){
-  const wrap = slides[index].querySelector('.analog-wrap');
-  wrap.innerHTML = '';
-  wrap.appendChild(sharedClock);
-  sharedClock.style.opacity = '1';
-  sharedClock.setAttribute('aria-hidden','false');
-}
-
-/* helpers to compute normalized angles (0..360) */
-function timeToAngles(t){
-  const hour12 = t.h % 12;
-  const hourAngle = (hour12 * 30) + (t.m * 0.5) + (t.s * (0.5/60)); // deg
-  const minuteAngle = (t.m * 6) + (t.s * 0.1);
-  const secondAngle = t.s * 6;
-  return {h: hourAngle, m: minuteAngle, s: secondAngle};
-}
-
-/* ensure forward rotation target - fixed version */
-function computeForwardTarget(currentAbs, targetNorm){
-  // if no previous absolute angle, return target (first time)
-  if (currentAbs === null) return targetNorm;
-
-  // normalize current absolute to [0,360)
-  const curNorm = ((currentAbs % 360) + 360) % 360;
-
-  // small difference considered equal -> no rotation
-  let delta = targetNorm - curNorm;
-  if (Math.abs(delta) < 1e-9) {
-    // already exactly at target; keep absolute angle as-is
-    return currentAbs;
-  }
-
-  // we want a forward-only rotation: if negative add 360
-  if (delta < 0) delta += 360;
-
-  return currentAbs + delta;
-}
-
-/* easing */
-function easeInOutCubic(t){ return t<0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2; }
-
-/* animate hands to target normalized angles (duration ms) */
-function animateHandsTo(targetNorms, duration=1400, showSeconds=false){
-  // compute absolute targets that are >= currentAbs (forward)
-  const targetHourAbs = computeForwardTarget(absHourAngle, targetNorms.h);
-  const targetMinuteAbs = computeForwardTarget(absMinuteAngle, targetNorms.m);
-  const targetSecondAbs = computeForwardTarget(absSecondAngle, targetNorms.s);
-
-  const startHour = (absHourAngle === null) ? targetHourAbs : absHourAngle;
-  const startMinute = (absMinuteAngle === null) ? targetMinuteAbs : absMinuteAngle;
-  const startSecond = (absSecondAngle === null) ? targetSecondAbs : absSecondAngle;
-
-  const t0 = performance.now();
-
-  if(showSeconds) secondHand.classList.remove('hidden');
-
-  return new Promise(resolve=>{
-    function step(now){
-      const p = Math.min(1, (now - t0) / duration);
-      const eased = easeInOutCubic(p);
-
-      const curH = startHour + (targetHourAbs - startHour) * eased;
-      const curM = startMinute + (targetMinuteAbs - startMinute) * eased;
-      const curS = startSecond + (targetSecondAbs - startSecond) * eased;
-
-      // apply transforms (use style.transform to avoid attribute conflicts)
-      hourHand.style.transform = `rotate(${curH}deg)`;
-      minuteHand.style.transform = `rotate(${curM}deg)`;
-      secondHand.style.transform = `rotate(${curS}deg)`;
-
-      if(p < 1) requestAnimationFrame(step);
-      else {
-        absHourAngle = targetHourAbs;
-        absMinuteAngle = targetMinuteAbs;
-        absSecondAngle = targetSecondAbs;
-
-        if(!showSeconds) secondHand.classList.add('hidden'); else secondHand.classList.remove('hidden');
-
-        resolve();
-      }
+    function openAllNavs() {
+        topNav.classList.remove('-translate-y-full');
+        bottomNav.classList.remove('translate-y-full');
+        leftNav.classList.remove('-translate-x-full');
+        rightNav.classList.remove('translate-x-full');
+        
+        mainContent.classList.add('pt-16', 'pb-16', 'pl-24', 'pr-24');
+        
+        navToggleIcon.classList.add('hidden');
+        navToggleX.classList.remove('hidden');
+        areNavsOpen = true;
     }
-    requestAnimationFrame(step);
-  });
-}
 
-/* initial attach + initialize angles to first slide (4:00) */
-attachClock(0);
+    function closeAllNavs() {
+        topNav.classList.add('-translate-y-full');
+        bottomNav.classList.add('translate-y-full');
+        leftNav.classList.add('-translate-x-full');
+        rightNav.classList.add('translate-x-full');
+        
+        mainContent.classList.remove('pt-16', 'pb-16', 'pl-24', 'pr-24');
+        
+        navToggleIcon.classList.remove('hidden');
+        navToggleX.classList.add('hidden');
+        areNavsOpen = false;
+    }
 
-// compute initial normalized angles for slide 0
-const initNorm = timeToAngles(slideTimes[0]);
+    function toggleAllNavs() {
+        if (areNavsOpen) {
+            closeAllNavs();
+        } else {
+            openAllNavs();
+        }
+    }
 
-// set absolute angles to the normalized values (first absolute == normalized)
-absHourAngle = initNorm.h;
-absMinuteAngle = initNorm.m;
-absSecondAngle = initNorm.s;
+    navToggle.addEventListener('click', (e) => {
+        e.stopPropagation(); 
+        toggleAllNavs();
+    });
 
-// apply transforms after DOM paint to ensure CSS transform origin works correctly
-requestAnimationFrame(() => {
-  hourHand.style.transform = `rotate(${absHourAngle}deg)`;
-  minuteHand.style.transform = `rotate(${absMinuteAngle}deg)`;
-  secondHand.style.transform = `rotate(${absSecondAngle}deg)`;
+    mainContent.addEventListener('click', () => {
+        if (areNavsOpen) {
+            closeAllNavs();
+        }
+    });
 
-  if (!slideTimes[0].showSeconds) secondHand.classList.add('hidden');
-  else secondHand.classList.remove('hidden');
+
 });
-
-/* theme palettes */
-function applyTheme(idx){
-  const palettes = [
-    ['#8a2be2','#00c8ff','#ff4b9e'],
-    ['#ff7ad9','#7ad9ff','#ffd36e'],
-    ['#7c7bff','#54ffd9','#ff7a9e'],
-    ['#64a8ff','#b57aff','#ff8f66'],
-    ['#78ffd6','#7aa2ff','#ff66c4'],
-    ['#a47bff','#66ffe2','#ffbd6e'],
-    ['#6ee7ff','#b380ff','#ff6ea6'],
-    ['#ffb6c1','#89f7fe','#ffd1dc'],
-    ['#ffc3a0','#b8f2e6','#f6b6ff'],
-    ['#c1ffd7','#b3d4ff','#ffb3d2'],
-    ['#d7c1ff','#bff6e0','#ffd9b3'],
-    ['#bfe7ff','#d3b7ff','#ffb7da'],
-    ['#8a2be2','#00c8ff','#ff4b9e'],
-  ];
-  const p = palettes[idx] || palettes[0];
-  document.documentElement.style.setProperty('--c1', p[0]);
-  document.documentElement.style.setProperty('--c2', p[1]);
-  document.documentElement.style.setProperty('--c3', p[2]);
-}
-
-/* show slide */
-async function showSlide(index){
-  if(index < 0 || index >= slides.length) return;
-  slides[currentIndex].classList.remove('active');
-  currentIndex = index;
-  const s = slides[currentIndex];
-  s.classList.add('active');
-
-  // move clock under new slide title (keeps clock always visible under active heading)
-  attachClock(currentIndex);
-
-  // compute target
-  const t = slideTimes[currentIndex];
-  const norms = timeToAngles(t);
-  await animateHandsTo(norms, 1400, !!t.showSeconds);
-  applyTheme(currentIndex);
-}
-
-/* Next button */
-let isAnimating = false;
-nextBtn.addEventListener('click', async ()=>{
-  if(isAnimating) return;
-  isAnimating = true;
-  startAudioIfNeeded();
-  fade.style.opacity = 1;
-  await new Promise(r=>setTimeout(r,220));
-  const nextIndex = (currentIndex === slides.length - 1) ? 0 : currentIndex + 1;
-  await showSlide(nextIndex);
-  setTimeout(()=>{ fade.style.opacity = 0; isAnimating = false; }, 200);
-});
-
-/* keyboard/swipe */
-window.addEventListener('keydown', e=>{
-  if(['ArrowRight','Enter',' '].includes(e.key)){ e.preventDefault(); nextBtn.click(); }
-  if(e.key==='ArrowLeft'){ e.preventDefault(); const prev = (currentIndex === 0)? slides.length - 1 : currentIndex - 1; if(isAnimating) return; isAnimating=true; fade.style.opacity=1; setTimeout(()=>{ showSlide(prev); fade.style.opacity=0; isAnimating=false; },280); }
-});
-let touchX = null;
-window.addEventListener('touchstart', e=>{ touchX = e.touches[0].clientX; startAudioIfNeeded(); }, {passive:true});
-window.addEventListener('touchend', e=>{ if(touchX==null) return; const dx = e.changedTouches[0].clientX - touchX; if(dx < -40) nextBtn.click(); if(dx > 40){ const prev = (currentIndex === 0)? slides.length - 1 : currentIndex - 1; if(isAnimating) return; isAnimating=true; fade.style.opacity=1; setTimeout(()=>{ showSlide(prev); fade.style.opacity=0; isAnimating=false; },280); } touchX = null; });
-
-/* title letter animation + initial theme */
-document.addEventListener('DOMContentLoaded', ()=>{
-  document.querySelectorAll('.title').forEach(title => {
-    title.innerHTML = title.textContent.split('').map((c,idx)=>`<span class="letter" style="--delay:${idx*28}ms">${c===' ' ? '&nbsp;' : c}</span>`).join('');
-  });
-  applyTheme(0);
-});
-
-/* --- audio fade-in on first load attempt --- */
-const audioEl = document.getElementById('bgAudio'); audioEl.loop = false;
-function tryPlayAudioOnLoad(){
-  // attempt to play (some browsers block autoplay; user interaction will always work)
-  const p = audioEl.play();
-  if (p && typeof p.then === 'function') {
-    p.catch(()=>{ /* autoplay blocked - will start on interaction */ });
-  }
-}
-window.addEventListener('load', ()=>{ tryPlayAudioOnLoad(); });
-
-let audioStarted = false, webAudioGain = null;
-function initWebAudioGain(){ try{ const AudioContext = window.AudioContext || window.webkitAudioContext; if(!AudioContext) return null; const ac = new AudioContext(); const src = ac.createMediaElementSource(audioEl); const g = ac.createGain(); g.gain.value = 0; src.connect(g).connect(ac.destination); return {ac,g}; }catch(e){return null;} }
-function fadeInAudio(){ const TARGET=0.35, DURATION=1800; if(webAudioGain){ const now = webAudioGain.ac.currentTime; webAudioGain.gain.gain.cancelScheduledValues(now); webAudioGain.gain.gain.setValueAtTime(0, now); webAudioGain.gain.gain.linearRampToValueAtTime(TARGET, now + DURATION/1000); } else { audioEl.volume = 0; const steps=20; let step=0; const t = setInterval(()=>{ step++; audioEl.volume = Math.min(TARGET, (TARGET * step/steps)); if(step>=steps) clearInterval(t); }, DURATION/steps); } }
-function startAudioIfNeeded(){ if(audioStarted) return; audioStarted=true; webAudioGain = initWebAudioGain(); const p = audioEl.play(); if(p && typeof p.then === 'function'){ p.then(()=>fadeInAudio()).catch(()=>fadeInAudio()); } else fadeInAudio(); }
-
-/* --- particles --- */
-const canvas = document.getElementById('particle-canvas'); const ctx = canvas.getContext('2d'); let particles = [], canvasW, canvasH, lastParticleTime=0; const particleThrottle=30;
-function resizeCanvas(){ canvasW = canvas.width = window.innerWidth; canvasH = canvas.height = window.innerHeight; }
-window.addEventListener('resize', resizeCanvas, {passive:true}); resizeCanvas();
-function getThemeColor(){ const s = getComputedStyle(document.documentElement); const arr = [s.getPropertyValue('--c1').trim(), s.getPropertyValue('--c2').trim(), s.getPropertyValue('--c3').trim()]; return arr[Math.floor(Math.random()*arr.length)]; }
-function createParticle(e){ const now = Date.now(); if(now - lastParticleTime < particleThrottle) return; lastParticleTime = now; let x = e.clientX || (e.touches && e.touches[0] && e.touches[0].clientX) || canvasW/2; let y = e.clientY || (e.touches && e.touches[0] && e.touches[0].clientY) || canvasH/2; const count=2; if(particles.length>200) particles.splice(0,Math.floor(particles.length*0.1)); for(let i=0;i<count;i++){ particles.push({x,y,color:getThemeColor(),size:Math.random()*4+2,vx:Math.random()*2-1,vy:Math.random()*2-1,life:Math.random()*50+50}); } }
-window.addEventListener('mousemove', createParticle, {passive:true}); window.addEventListener('touchmove', createParticle, {passive:true});
-function particleLoop(){ ctx.fillStyle='rgba(245,244,247,0.25)'; ctx.fillRect(0,0,canvasW,canvasH); for(let i=particles.length-1;i>=0;i--){ const p = particles[i]; p.x+=p.vx; p.y+=p.vy; p.life--; p.size*=0.98; if(p.life>0 && p.size>0.5){ ctx.beginPath(); ctx.fillStyle = p.color; ctx.globalAlpha = Math.max(0, p.life/75); ctx.arc(p.x,p.y,p.size,0,Math.PI*2); ctx.fill(); ctx.globalAlpha=1; } else particles.splice(i,1); } requestAnimationFrame(particleLoop); }
-particleLoop();
-
-/* --- Navigation open/close (all at once) --- */
-const navToggle = document.getElementById('navToggle');
-const navTop = document.getElementById('navTop');
-const navBottom = document.getElementById('navBottom');
-const navLeft = document.getElementById('navLeft');
-const navRight = document.getElementById('navRight');
-const navDim = document.getElementById('navDim');
-const navIcon = document.getElementById('navIcon');
-const navCloseIcon = document.getElementById('navCloseIcon');
-let navOpen = false;
-function openAllNavs(){ navTop.classList.add('open-top'); navBottom.classList.add('open-bottom'); navLeft.classList.add('open-left'); navRight.classList.add('open-right'); navDim.classList.add('visible'); navIcon.style.display='none'; navCloseIcon.style.display='block'; navOpen=true; }
-function closeAllNavs(){ navTop.classList.remove('open-top'); navBottom.classList.remove('open-bottom'); navLeft.classList.remove('open-left'); navRight.classList.remove('open-right'); navDim.classList.remove('visible'); navIcon.style.display='block'; navCloseIcon.style.display='none'; navOpen=false; }
-navToggle.addEventListener('click', (e)=>{ e.stopPropagation(); startAudioIfNeeded(); if(navOpen) closeAllNavs(); else openAllNavs(); });
-navDim.addEventListener('click', closeAllNavs);
-document.querySelectorAll('.nav-panel .nav-link').forEach(a=>a.addEventListener('click', ()=>setTimeout(closeAllNavs,120)));
-[navTop,navBottom,navLeft,navRight].forEach(p=>{ p.addEventListener('click', e=>e.stopPropagation()); p.addEventListener('touchstart', e=>e.stopPropagation(), {passive:true}); });
-
 </script>
 </body>
 </html>
