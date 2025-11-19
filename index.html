@@ -203,7 +203,18 @@
             border-radius: 5px 2px 2px 5px;
             margin: 1rem;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8px;
+            font-size: 0.65rem;
+            color: #f0e68c;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+            line-height: 1.4;
         }
         .book:nth-child(1) { transform: rotate(-5deg); margin-top: 10px; }
         .book:nth-child(2) { transform: rotate(3deg); margin-top: -5px; }
@@ -211,6 +222,13 @@
         .book:nth-child(4) { transform: rotate(6deg); margin-top: 15px; }
         .book:nth-child(5) { transform: rotate(-4deg); margin-top: 5px; }
         .book:hover { transform: scale(1.1) rotate(0deg) !important; z-index: 10; }
+        .book.open { 
+            transform: scale(1.2) rotate(0deg) !important; 
+            z-index: 20; 
+            box-shadow: 0 0 15px rgba(255,255,255,0.3);
+            border-color: #fff;
+            background-color: #5a3e2b;
+        }
 
         #clock-face {
             width: 200px; height: 200px;
@@ -457,6 +475,7 @@
         .floating-balloon {
             position: absolute; bottom: -100px; font-size: 3rem; cursor: pointer;
             animation: floatUp 8s linear forwards; user-select: none;
+            pointer-events: auto;
         }
         @keyframes floatUp {
             to { bottom: 110vh; }
@@ -473,49 +492,55 @@
 
     <nav id="topNav" class="nav-panel fixed top-0 left-0 right-0 z-[60] h-16 shadow-md flex items-center justify-center space-x-6 -translate-y-full poetic-nav-style">
         <a href="index.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Home</a>
-        <a href="Special.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Special</a>
-        <a href="letter.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Letter</a>
+        <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Special</a>
+        <a href="#" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Letter</a>
     </nav>
 
-    <nav id="bottomNav" class="nav-panel fixed bottom-0 left-0 right-0 z-[60] h-16 shadow-md flex items-center justify-center space-x-6 translate-y-full poetic-nav-style">
-        <a href="anatomy.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Anatomy</a>
-        <a href="chat.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Heaven</a>
-        <a href="you.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">You</a>
-    </nav>
+<nav id="topNav" class="nav-panel fixed top-0 left-0 right-0 z-[60] h-16 bg-white/80 backdrop-blur-sm text-[var(--ink)] shadow-md flex items-center justify-center space-x-6 -translate-y-full">
+    <a href="index.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-white transition-colors duration-200 festive-text">Home</a>
+    <a href="Special.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-white transition-colors duration-200 festive-text">Special</a>
+    <a href="letter.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-white transition-colors duration-200 festive-text">Letter</a>
+</nav>
 
-    <nav id="leftNav" class="nav-panel fixed left-0 top-0 bottom-0 z-[60] w-1/2 sm:w-40 shadow-md flex flex-col items-center space-y-6 -translate-x-full overflow-y-auto py-20 poetic-nav-style">
-        <a href="Diary.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Diary</a>
-        <a href="Universe.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Universe</a>
-        <a href="Box.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Box</a>
-        <a href="color.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Color</a>
-        <a href="Teacher.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Teacher</a>
-        <a href="The_River.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">River</a>
-        <a href="Mountain.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Mountain</a>
-        <a href="Paper_Star.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Paper Star</a>
-        <a href="Carttoon.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Cartoon</a>
-        <a href="Santa.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Santa</a>
-        <a href="Cloud.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Cloud</a>
-        <a href="Ink.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Paint</a>
-        <a href="Butterfly.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Butterfly</a>
-        <a href="Weather.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Weather</a>
-    </nav>
+<nav id="bottomNav" class="nav-panel fixed bottom-0 left-0 right-0 z-[60] h-16 bg-white/80 backdrop-blur-sm text-[var(--ink)] shadow-md flex items-center justify-center space-x-6 translate-y-full">
+    <a href="anatomy.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-white transition-colors duration-200 festive-text">Anatomy</a>
+    <a href="chat.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-white transition-colors duration-200 festive-text">Heaven</a>
+    <a href="you.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-white transition-colors duration-200 festive-text">You</a>
+</nav>
 
-    <nav id="rightNav" class="nav-panel fixed right-0 top-0 bottom-0 z-[60] w-1/2 sm:w-40 shadow-md flex flex-col items-center space-y-6 translate-x-full overflow-y-auto py-20 poetic-nav-style">
-        <a href="Skill.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Skill</a>
-        <a href="Msg.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Message</a>
-        <a href="21_Wish.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">21_Door</a>
-        <a href="Cake.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Cake</a>
-        <a href="Periodik_table.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Periodik_table</a>
-        <a href="Presence.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Presence</a>
-        <a href="Concept.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Concept</a>
-        <a href="Calender.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Calender</a>
-        <a href="Perspective.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Perspective</a>
-        <a href="Spotlight.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Spotlight</a>
-        <a href="Room.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Room</a>
-        <a href="Radio.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Radio</a>
-        <a href="Food.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Food</a>
-        <a href="Music.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Music</a>
-    </nav>
+<nav id="leftNav" class="nav-panel fixed left-0 top-0 bottom-0 z-[60] w-20 bg-white/90 backdrop-blur-sm text-[var(--ink)] shadow-md flex flex-col items-center space-y-6 -translate-x-full overflow-y-auto py-20">
+    <a href="Diary.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Diary</a>
+    <a href="Universe.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Universe</a>
+    <a href="Box.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Box</a>
+    <a href="color.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Color</a>
+    <a href="Teacher.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Teacher</a>
+    <a href="The_River.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">River</a>
+    <a href="Mountain.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Mountain</a>
+    <a href="Paper_Star.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Paper Star</a>
+    <a href="Carttoon.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Cartoon</a>
+    <a href="Santa.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Santa</a>
+    <a href="Cloud.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Cloud</a>
+    <a href="Ink.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Paint</a>
+    <a href="Butterfly.html" class="nav-link p-2 rounded-md text-sm font-medium bg-gray-200 font-bold transition-colors duration-200 festive-text">Butterfly</a>
+    <a href="Weather.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Weather</a>
+</nav>
+
+<nav id="rightNav" class="nav-panel fixed right-0 top-0 bottom-0 z-[60] w-20 bg-white/90 backdrop-blur-sm text-[var(--ink)] shadow-md flex flex-col items-center space-y-6 translate-x-full overflow-y-auto py-20">
+    <a href="Skill.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Skill</a>
+    <a href="Msg.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">message</a>
+    <a href="21_Wish.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">21_Door</a>
+    <a href="Cake.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Cake</a>
+    <a href="Periodik_table.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Periodik_table</a>
+    <a href="Presence.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Presence</a>
+    <a href="Concept.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Concept</a>
+    <a href="Calender.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Calender</a>
+    <a href="Perspective.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Perspective</a>
+    <a href="Spotlight.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Spotlight</a>
+    <a href="Room.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Room</a>
+    <a href="Radio.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Radio</a>
+    <a href="Food.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Food</a>
+    <a href="Music.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-gray-100 transition-colors duration-200 festive-text">Music</a>
+</nav>
 
     <canvas id="particle-canvas"></canvas>
 
@@ -549,7 +574,7 @@
             <div id="mirror" class="mt-8 poetic-text interactive-el" style="transition-delay: 0.8s;">
                 <div class="mirror-inner" style="width:100%; height:100%; border-radius:inherit; overflow:hidden; position:relative;">
                     <img id="mirror-img" 
-                        src="https://placehold.co/300x400/png?text=Reflection" 
+                        src="Main.jpg" 
                         onerror="this.src='https://placehold.co/250x350/cfdef3/304352?text=Looking+Back'"
                         alt="Mirror reflection" 
                         style="width:100%; height:100%; object-fit:cover; display:block;" /> 
@@ -562,16 +587,6 @@
             <div class="scroll-hint text-gray-600">Tap anywhere to continue</div>
         </section>
 
-        <section id="page-5" class="page">
-            <h2 class="font-display text-4xl md:text-5xl poetic-text">The Candle That Never Ends</h2>
-            <div class="text-7xl mt-8 poetic-text" style="transition-delay: 0.5s; text-shadow: 0 0 15px #f0e68c;">🕯️</div>
-            <div class="mt-4 poetic-text" style="transition-delay: 1s;">
-                <p id="candle-message" class="text-xl md:text-2xl h-8 text-white"></p>
-                <p id="candle-final" class="text-lg mt-4 text-white opacity-0 transition-opacity duration-1000" style="text-shadow: 0 0 10px rgba(255, 192, 203, 0.7);"></p>
-            </div>
-            <div class="scroll-hint">Tap anywhere to continue</div>
-        </section>
-        
         <section id="page-6" class="page">
             <h2 class="font-display text-4xl md:text-5xl poetic-text text-white">The Sky Writes Your Name</h2>
             <div class="mt-8 poetic-text" style="transition-delay: 0.5s;">
@@ -591,7 +606,8 @@
                 <div class="book interactive-el" style="animation-delay: 0.4s; background-color: #483D8B; border-color: #9370DB;"></div>
                 <div class="book interactive-el" style="animation-delay: 0.15s; background-color: #2F4F4F; border-color: #5F9EA0;"></div>
             </div>
-            <p id="book-quote" class="text-lg md:text-xl mt-4 h-20 px-4 transition-opacity duration-500 flex items-center justify-center"></p>
+            <!-- Removed the external quote paragraph as text now appears on the cards -->
+            <div class="h-20"></div> 
             <div class="scroll-hint">Tap anywhere to continue</div>
         </section>
 
@@ -609,19 +625,19 @@
             <p class="text-lg md:text-xl mt-4 poetic-text" style="transition-delay: 0.5s;">She has walked through seasons to bloom here.</p>
             
             <div class="relative w-full max-w-3xl mt-10 h-64 flex items-center justify-between px-4 md:px-12 poetic-text" style="transition-delay: 0.8s;">
-                <div class="bridge-stone interactive-el group relative flex flex-col items-center cursor-pointer" data-msg="Her laughter that heals the quietest moments.">
+                <div class="bridge-stone interactive-el group relative flex flex-col items-center cursor-pointer" data-msg="Your laughter that heals the quietest moments.">
                     <div class="w-16 h-16 rounded-full border-2 border-blue-300 flex items-center justify-center bg-blue-900/50 hover:bg-blue-300 transition-all transform hover:scale-110 shadow-[0_0_15px_rgba(147,197,253,0.5)]">🌱</div>
                     <span class="mt-4 text-sm font-body text-blue-200 opacity-70 group-hover:opacity-100 transition-opacity">The Roots</span>
                 </div>
                 <div class="h-0.5 flex-1 bg-gradient-to-r from-blue-300 via-purple-300 to-pink-300 mx-4 opacity-50"></div>
                 
-                <div class="bridge-stone interactive-el group relative flex flex-col items-center cursor-pointer" data-msg="Her strength that turns obstacles into paths.">
+                <div class="bridge-stone interactive-el group relative flex flex-col items-center cursor-pointer" data-msg="Your strength that turns obstacles into paths.">
                     <div class="w-16 h-16 rounded-full border-2 border-purple-300 flex items-center justify-center bg-purple-900/50 hover:bg-purple-700 transition-all transform hover:scale-110 shadow-[0_0_15px_rgba(216,180,254,0.5)]">🦋</div>
                     <span class="mt-4 text-sm font-body text-purple-200 opacity-70 group-hover:opacity-100 transition-opacity">The Journey</span>
                 </div>
                 <div class="h-0.5 flex-1 bg-gradient-to-r from-purple-300 to-pink-300 mx-4 opacity-50"></div>
 
-                <div class="bridge-stone interactive-el group relative flex flex-col items-center cursor-pointer" data-msg="The infinite light she carries within.">
+                <div class="bridge-stone interactive-el group relative flex flex-col items-center cursor-pointer" data-msg="The infinite light, you carries within.">
                     <div class="w-16 h-16 rounded-full border-2 border-pink-300 flex items-center justify-center bg-pink-900/50 hover:bg-pink-700 transition-all transform hover:scale-110 shadow-[0_0_15px_rgba(253,164,175,0.5)]">✨</div>
                     <span class="mt-4 text-sm font-body text-pink-200 opacity-70 group-hover:opacity-100 transition-opacity">The Now</span>
                 </div>
@@ -640,17 +656,17 @@
             
             <div class="rain-glass-panel relative w-full max-w-3xl mt-10 h-72 flex items-center justify-around px-4 md:px-12 poetic-text" style="transition-delay: 0.8s;">
                 
-                <div class="rain-drop interactive-el group relative flex flex-col items-center cursor-pointer" data-msg="Her tears that water the flowers of tomorrow.">
+                <div class="rain-drop interactive-el group relative flex flex-col items-center cursor-pointer" data-msg="Your sweat that water the flowers of tomorrow.">
                     <div class="liquid-orb w-20 h-20 flex items-center justify-center text-2xl text-blue-100">💧</div>
                     <span class="mt-4 text-sm font-body text-blue-200 opacity-70 group-hover:opacity-100 transition-opacity font-bold tracking-widest">EMPATHY</span>
                 </div>
                 
-                <div class="rain-drop interactive-el group relative flex flex-col items-center cursor-pointer" data-msg="Her depth that is as vast as the ocean.">
+                <div class="rain-drop interactive-el group relative flex flex-col items-center cursor-pointer" data-msg="Your depth that is as vast as the ocean.">
                     <div class="liquid-orb w-24 h-24 flex items-center justify-center text-3xl text-cyan-100" style="animation-delay: -2s;">🌊</div>
                     <span class="mt-4 text-sm font-body text-cyan-200 opacity-70 group-hover:opacity-100 transition-opacity font-bold tracking-widest">DEPTH</span>
                 </div>
 
-                <div class="rain-drop interactive-el group relative flex flex-col items-center cursor-pointer" data-msg="The way she turns the heavy grey into a spectrum of light.">
+                <div class="rain-drop interactive-el group relative flex flex-col items-center cursor-pointer" data-msg="The way you turns the heavy grey into a spectrum of light.">
                     <div class="liquid-orb w-20 h-20 flex items-center justify-center text-2xl text-sky-100" style="animation-delay: -5s;">🌈</div>
                     <span class="mt-4 text-sm font-body text-sky-200 opacity-70 group-hover:opacity-100 transition-opacity font-bold tracking-widest">ALCHEMY</span>
                 </div>
@@ -667,6 +683,9 @@
             <h2 class="font-display text-4xl md:text-5xl poetic-text">The Candle of Forever</h2>
             <div class="text-7xl mt-8 poetic-text" style="transition-delay: 0.5s; text-shadow: 0 0 15px #f0e68c; animation: pulse 3s infinite;">🕯️</div>
             <p class="text-lg md:text-xl mt-4 poetic-text" style="transition-delay: 1s;">A quiet light for the road ahead.</p>
+            <p class="text-lg md:text-xl mt-2 poetic-text" style="transition-delay: 1.5s;">Like dawn stitched into the dark,</p>
+            <p class="text-lg md:text-xl mt-2 poetic-text" style="transition-delay: 2s;">A small eternity of warmth</p>
+            <p class="text-lg md:text-xl mt-2 poetic-text" style="transition-delay: 2.5s;">A Carrying you gently toward your tomorrow.</p>
             <div class="scroll-hint">Tap anywhere to continue</div>
         </section>
 
@@ -690,7 +709,7 @@
                         </div>
                     </div>
                     <div class="planet-wrapper pos-3">
-                         <div class="planet-content cosmic-body interactive-el group cursor-pointer" data-msg="Your soul has gravity; it draws beautiful things close.">
+                         <div class="planet-content cosmic-body interactive-el group cursor-pointer" data-msg="Your soul has gravity, it draws beautiful things close.">
                             <div class="planet-orb w-16 h-16 rounded-full border-2 border-indigo-400 flex items-center justify-center bg-indigo-900/50 hover:bg-indigo-700 shadow-[0_0_20px_rgba(129,140,248,0.6)]">🪐</div>
                             <span class="mt-2 text-xs font-body text-indigo-300 opacity-70 group-hover:opacity-100 transition-opacity">Gravity</span>
                         </div>
@@ -744,19 +763,19 @@
             
             <div class="window-frame mt-8 poetic-text interactive-el" style="transition-delay: 0.8s;">
                 <div class="window-pane">
-                    <div class="pane-content text-2xl">RADIANCE</div>
+                    <div class="pane-content text-2xl">You brighten every tomorrow.</div>
                     <div class="window-fog">Hover/Touch</div>
                 </div>
                 <div class="window-pane">
-                    <div class="pane-content text-2xl">SONG</div>
+                    <div class="pane-content text-2xl">Your spirit writes tomorrow.</div>
                     <div class="window-fog">Hover/Touch</div>
                 </div>
                 <div class="window-pane">
-                    <div class="pane-content text-2xl">DREAMS</div>
+                    <div class="pane-content text-2xl">Your dreams bloom quietly.</div>
                     <div class="window-fog">Hover/Touch</div>
                 </div>
                 <div class="window-pane">
-                    <div class="pane-content text-2xl">HOPE</div>
+                    <div class="pane-content text-2xl">Your calm softens tomorrow.</div>
                     <div class="window-fog">Hover/Touch</div>
                 </div>
             </div>
@@ -775,7 +794,7 @@
                 <div class="envelope">
                     <div class="flap"></div>
                     <div class="letter-paper">
-                        <p class="text-center">"You are made of the same stardust that lights up the entire galaxy. Keep shining."</p>
+                        <p class="text-center">You have a light that never tries to shine,but somehow, it does.Your smile feels like a small piece of art warm, simple, deep.You stay playful yet thoughtful,and that mix makes you quietly unforgettable.</p>
                     </div>
                 </div>
             </div>
@@ -837,7 +856,7 @@
                     <div class="w-16 h-16 rounded-full border-2 border-blue-400 flex items-center justify-center bg-gray-800 hover:bg-gray-700 transition-all transform hover:scale-110 shadow-[0_0_15px_rgba(96,165,250,0.5)] text-blue-400 font-mono text-xl">#</div>
                     <span class="mt-4 text-sm font-body text-blue-400 opacity-70 group-hover:opacity-100 transition-opacity">File 02</span>
                 </div>
-                <div class="secret-code interactive-el group relative flex flex-col items-center cursor-pointer" data-decoded="I'M PROUD">
+                <div class="secret-code interactive-el group relative flex flex-col items-center cursor-pointer" data-decoded="Keep Smiling">
                     <div class="w-16 h-16 rounded-full border-2 border-purple-400 flex items-center justify-center bg-gray-800 hover:bg-gray-700 transition-all transform hover:scale-110 shadow-[0_0_15px_rgba(192,132,252,0.5)] text-purple-400 font-mono text-xl">!</div>
                     <span class="mt-4 text-sm font-body text-purple-400 opacity-70 group-hover:opacity-100 transition-opacity">File 03</span>
                 </div>
@@ -858,7 +877,7 @@
             <h2 class="font-display text-4xl md:text-5xl poetic-text">The Final Door</h2>
             <div id="final-door" class="mt-12 poetic-text interactive-el" style="transition-delay: 0.5s;"></div>
             <p class="text-xl md:text-2xl max-w-lg mx-auto mt-8 poetic-text text-white" style="transition-delay: 1s; text-shadow: 0 0 5px #f0e68c;">
-                "The greatest journey wasn't through these doors; it was the moment you stepped into the world. Now, unlock your future."
+                The greatest journey wasn't through these doors, it was the moment you stepped into the world. Now, unlock the last page."
             </p>
             <div class="scroll-hint">Tap to open the final door</div>
         </section>
@@ -866,7 +885,7 @@
         <section id="page-22" class="page">
             <h1 class="font-display text-6xl md:text-8xl poetic-text" style="text-shadow: 0 0 15px #f0e68c;">Happy 21st Birthday</h1>
             <p class="text-3xl mt-8 font-display poetic-text text-pink-300" style="transition-delay: 0.5s;">
-                You are my favorite star in this whole universe.
+                You are the main Charecter of your story, all spot light on you. So keep shining, keep dreaming, keep smiling  and never forget the magic you carry within.
             </p>
             <p class="text-3xl mt-8 poetic-text" style="transition-delay: 1s;">✨</p>
         </section>
@@ -875,8 +894,8 @@
 
     <div id="easter-egg-modal" class="">
         <div class="bg-white text-gray-800 p-8 rounded-lg shadow-2xl max-w-sm mx-4 text-center">
-            <p class="text-xl md:text-2xl font-display">"You found it."</p>
-            <p class="text-lg mt-4">"Even the smallest light always finds its way."</p>
+            <p class="text-xl md:text-2xl font-display">You found it.</p>
+            <p class="text-lg mt-4">Even the smallest light always finds its way.</p>
             <button id="close-modal-btn" class="mt-6 px-6 py-2 bg-indigo-500 text-white rounded-lg interactive-el hover:bg-indigo-600 transition-colors">Close</button>
         </div>
     </div>
@@ -900,7 +919,6 @@
             'page-2': 'linear-gradient(180deg, #0c0a18, #2a2a4e, #4a3a6a)',
             'page-3': 'linear-gradient(45deg, #a6c1ee, #f8cdda)',
             'page-4': 'linear-gradient(135deg, #e0eafc, #cfdef3)',
-            'page-5': 'linear-gradient(180deg, #1e1e2f, #3b3b58)',
             'page-6': 'linear-gradient(180deg, #a1c4fd, #c2e9fb)',
             'page-7': 'linear-gradient(45deg, #5a3e2b, #8a624a)',
             'page-8': 'linear-gradient(135deg, #304352, #d7d2cc)',
@@ -967,18 +985,6 @@
                 particles.push(new Particle(x, y, 0, 0, radius, 'white', Infinity));
             }
         }
-
-        function createSparks(count = 21) {
-            clearParticles();
-            const candleX = canvas.width / 2;
-            const candleY = canvas.height / 2;
-            for (let i = 0; i < count; i++) {
-                const vx = (Math.random() - 0.5) * 1;
-                const vy = -Math.random() * 2 - 1;
-                const color = `rgba(255, ${Math.floor(Math.random() * 100) + 150}, 0, 1)`;
-                particles.push(new Particle(candleX, candleY, vx, vy, Math.random() * 2, color, 100));
-            }
-        }
         
         function createRain(count = 100) {
             clearParticles();
@@ -1029,9 +1035,7 @@
                     p.y = -p.radius; p.x = Math.random() * canvas.width;
                 }
                 else if (pageId === 'page-13') { 
-                     
                 }
-                
                 if (p.life === 0) particles.splice(i, 1);
             }
             requestAnimationFrame(animateParticles);
@@ -1060,34 +1064,8 @@
         }
 
         
-        const candleMessages = [
-            "You are gentle.", "You are resilient.", "You are thoughtful.", "You are laughter.",
-            "You are entirely unique.", "You are the reason the sky is blue.", "You are the infinite glow."
-        ];
-        async function animateCandleText() {
-            const el = document.getElementById('candle-message');
-            const finalEl = document.getElementById('candle-final');
-            if (!el || !finalEl) return;
-            el.classList.add('typing-cursor');
-            
-            if(el.dataset.played === "true") return;
-            
-            for (let i = 0; i < 6; i++) {
-                await typeLine(el, candleMessages[i], 70);
-                await new Promise(r => setTimeout(r, 800)); 
-                await eraseLine(el, 40);
-                await new Promise(r => setTimeout(r, 300)); 
-            }
-            await typeLine(el, candleMessages[6], 70);
-            el.classList.remove('typing-cursor');
-            finalEl.textContent = "21 sparks, 21 wishes, one infinite glow.";
-            finalEl.style.opacity = 1;
-            el.dataset.played = "true";
-        }
-        
-        
         const skyMessages = [
-            "You are stardust.", "You are light.", "You are my favorite view.", "You are a beautiful chaos.",
+            "You are stardust.", "You are light.", "You are the favorite view.", "You are a beautiful sweet chaos.",
             "You are a new beginning.", "You are worth watching.", "You are the perfect answer."
         ];
         async function animateSkyText() {
@@ -1133,7 +1111,7 @@
                     balloon.textContent = '💥';
                     setTimeout(() => balloon.remove(), 200);
                     const msg = document.getElementById('balloon-text');
-                    if(msg) msg.textContent = ["Nice pop!", "Yay!", "Haha!", "Smile!"][Math.floor(Math.random()*4)];
+                    if(msg) msg.textContent = ["Joy", "Smile ", "Fun", "Laugh"][Math.floor(Math.random()*4)];
                 });
                 
                 container.appendChild(balloon);
@@ -1189,18 +1167,6 @@
                 case 'page-1': createStars(100); break;
                 case 'page-2': createMoonAndStars(); animateStarWhispers(); break;
                 case 'page-3': spawnWishes(); break;
-                case 'page-5':
-                    createSparks(21);
-                    const messageEl = document.getElementById('candle-message');
-                    if(messageEl) {
-                        
-                        if (messageEl.dataset.played !== "true") {
-                             messageEl.textContent = '';
-                             document.getElementById('candle-final').style.opacity = 0; 
-                             animateCandleText();
-                        }
-                    }
-                    break;
                 case 'page-6':
                     const skyMessageEl = document.getElementById('sky-message');
                     if(skyMessageEl) {
@@ -1239,7 +1205,7 @@
                 case 'page-15':
                     
                     const wText = document.getElementById('window-text');
-                    if(wText) wText.textContent = "Look closer...";
+                    if(wText) { wText.textContent = "Look closer..."; }
                     break;
                 case 'page-16':
                     
@@ -1261,7 +1227,6 @@
                 default: break;
             }
         }
-        
         
         document.getElementById('door-of-light').addEventListener('click', async () => {
             try {
@@ -1299,7 +1264,7 @@
             container.querySelectorAll('.text-wish').forEach(w => w.remove()); 
             const textWishes = [
                 "To climb a mountain", "To see the northern lights", "To become a professional shooter",
-                "To learn a new language", "To laugh until it hurts", "To find a quiet moment",
+                "To learn a new language", "To become the cure", "To find a quiet moment",
                 "To dance in the rain", "Read a life-changing book", "To feel true peace",
                 "To inspire someone", "World Tour", "To always be curious",
                 "To see the good in people", "To be brave", "To love deeply", "Eat Squid ",
@@ -1350,19 +1315,31 @@
         }
         
         
-        const bookQuote = document.getElementById('book-quote');
-        const quotes = [
-            "I followed my heart, and it led me to the fridge.", "Adulting is mostly just guessing.", "I'm not lazy, I'm just on energy saving mode.",
-            "Life is short. Smile while you still have teeth.", "Reality called, so I hung up.", "My bed is a magical place.",
-            "Don't grow up, it's a trap!", "Age is merely the number of years the world has been enjoying you."
+        const bookContents = [
+            "Your kindness isn't just polite, it is a warmth that heals everyone around you.",
+            "You carry a resilience that makes even the hardest mountains look like stepping stones.",
+            "Your mind is a garden where beautiful ideas are always blooming.",
+            "The way you listen makes people feel truly seen, heard, and understood.",
+            "Your spirit is a rare, beautiful mix of gentle compassion and fierce strength."
         ];
-        document.querySelectorAll('#page-7 .book').forEach((book) => {
+
+        document.querySelectorAll('#page-7 .book').forEach((book, index) => {
             book.addEventListener('click', (e) => {
                 e.stopPropagation(); 
-                if (bookQuote) {
-                    let newQuote = quotes[Math.floor(Math.random() * quotes.length)];
-                    bookQuote.style.opacity = 0;
-                    setTimeout(() => { bookQuote.textContent = newQuote; bookQuote.style.opacity = 1; }, 300);
+                
+                document.querySelectorAll('#page-7 .book').forEach(b => {
+                    if(b !== book) {
+                        b.textContent = '';
+                        b.classList.remove('open');
+                    }
+                });
+
+                if (!book.classList.contains('open')) {
+                    book.textContent = bookContents[index % bookContents.length];
+                    book.classList.add('open');
+                } else {
+                    book.textContent = '';
+                    book.classList.remove('open');
                 }
             });
         });
@@ -1371,13 +1348,18 @@
         const clockFace = document.getElementById('clock-face');
         const clockThought = document.getElementById('clock-thought');
         const jokes = [
-            "I'm reading a book on anti-gravity. It's impossible to put down!", 
-            "I told my wife she was drawing her eyebrows too high. She looked surprised.", 
-            "What do you call a fake noodle? An impasta!", "Why did the scarecrow win an award? He was outstanding in his field!", 
-            "Why don't skeletons fight each other? They don't have the guts.", "What do you call cheese that isn't yours? Nacho cheese.", 
-            "Why couldn't the bicycle stand up by itself? It was two tired.", "What do you call a bear with no teeth? A gummy bear.", 
-            "I used to play piano by ear, but now I use my hands.", "Why did the math book look sad? Because it had too many problems.", 
-            "What do you call a factory that makes okay products? A satisfactory.", "How does a penguin build its house? Igloos it together." 
+            "At one, the world is quiet, but her glow is still awake.", 
+            "At two, even the moon pauses, softened by her presence.", 
+            "At three, dreams borrow their colours from her calm.",
+            "At four, the early winds whisper her name like a blessing.", 
+            "At five, the first light rises slowly, as if learning from her grace",
+            "At five, the first light rises slowly, as if learning from her grace", 
+            "At five, the first light rises slowly, as if learning from her grace",
+            "At eight, the hours align, drawn toward her quiet strength.", 
+            "At nine, time itself seems softer, as if shaped by her smile.",
+            "At ten, the world steadies—because her presence feels like balance.", 
+            "At eleven, the day glows brighter, carrying traces of her light.",
+            "At twelve, even time pauses… as if she is the moment worth stopping for." 
         ];
         if (clockFace) {
             clockFace.innerHTML = '';
@@ -1429,7 +1411,6 @@
             });
         });
 
-        
         const rainText = document.getElementById('rain-text');
         document.querySelectorAll('.rain-drop').forEach(drop => {
             drop.addEventListener('click', (e) => {
@@ -1442,7 +1423,6 @@
                 }
             });
         });
-
         
         const universeText = document.getElementById('universe-text');
         document.querySelectorAll('.cosmic-body').forEach(body => {
@@ -1456,7 +1436,6 @@
                 }
             });
         });
-
         
         const flyingButterfly = document.getElementById('flying-butterfly');
         const butterflyMessages = ["Growth", "Grace", "Effect", "Transformation", "Freedom"];
@@ -1475,7 +1454,6 @@
             });
         }
 
-        
         const page13Next = document.getElementById('page-13-next');
         if(page13Next) {
             page13Next.addEventListener('click', (e) => {
@@ -1484,8 +1462,7 @@
             });
         }
         
-        
-        const silentPoemLines = ["In the quiet spaces between breaths,", "Where the world forgets to spin,", "Resides the magic of who you are,", "A whole universe tucked within."];
+        const silentPoemLines = ["You are, As pretty as a picture hanging from a fixture,", "Strong like a family, strong as evryone wanna be,", "Bright as day, as light as air,", "As hard as nails, as grand as a universe."];
         let poemIndex = 0;
         let isTypingPoem = false; 
         const quillBtn = document.getElementById('quill-btn');
@@ -1509,7 +1486,6 @@
             });
         }
         
-        
         const envelopeContainer = document.getElementById('letter-envelope');
         if(envelopeContainer) {
             envelopeContainer.addEventListener('click', (e) => {
@@ -1517,7 +1493,6 @@
                 document.querySelector('.envelope').classList.toggle('open');
             });
         }
-
         
         let currentCompassRotation = 0; 
         const compass = document.getElementById('compass');
@@ -1537,17 +1512,11 @@
                     currentCompassRotation += (90 - remainder);
                 }
                 
-                
-                
                 needle.style.transform = `translate(-50%, -50%) rotate(${currentCompassRotation}deg)`;
-                
                 
                 setTimeout(() => {
                     const normalized = currentCompassRotation % 360;
                     let direction = "";
-                    
-                    
-                    
                     
                     if (normalized === 0 || normalized === 360) direction = "North: Follow your own star.";
                     else if (normalized === 90) direction = "East: New beginnings await.";
@@ -1560,7 +1529,6 @@
             });
         }
 
-        
         const secretText = document.getElementById('secret-text');
         document.querySelectorAll('.secret-code').forEach(el => {
             el.addEventListener('click', (e) => {
@@ -1574,7 +1542,6 @@
             });
         });
 
-        
         const page10 = document.getElementById('page-10');
         if (page10) {
             page10.addEventListener('click', (e) => {
@@ -1590,7 +1557,6 @@
                 setTimeout(() => rainWord.remove(), 2000);
             });
         }
-        
         
         const giftBox = document.getElementById('gift-box');
         const giftQuote = document.getElementById('gift-quote');
@@ -1623,7 +1589,10 @@
 
         const finalDoor = document.getElementById('final-door');
         if (finalDoor) {
-            finalDoor.addEventListener('click', () => { goToPage(21); });
+            finalDoor.addEventListener('click', (e) => { 
+                e.stopPropagation();
+                goToPage(20); 
+            });
         }
 
         const heartBtn = document.getElementById('glowing-heart-btn');
@@ -1647,15 +1616,10 @@
                     return;
                 }
                 
-                
-                
-                
                 if (pages[currentPage].id === 'page-13') {
                     return; 
                 }
 
-                 
-                
                 if (pages[currentPage].id === 'page-18') {
                     return; 
                 }
@@ -1665,7 +1629,6 @@
                 }
             });
         }
-        
         
         const page18Next = document.getElementById('page-18-next');
         if(page18Next) {
