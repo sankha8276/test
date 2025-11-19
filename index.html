@@ -67,17 +67,20 @@
             opacity: 0;
             transform: translateX(100vw);
             background: transparent !important; 
+            pointer-events: none; 
         }
 
         .page-active {
             opacity: 1;
             transform: translateX(0);
             z-index: 2;
+            pointer-events: auto;
         }
         .page-previous {
             opacity: 0;
             transform: translateX(-100vw);
             z-index: 1;
+            pointer-events: none;
         }
 
         .poetic-text {
@@ -192,7 +195,6 @@
             color: #304352;
         }
         
-        /* MESSY SHELF LAYOUT (Page 7) */
         .book {
             width: 100px;
             height: 140px;
@@ -272,7 +274,6 @@
             z-index: 0; pointer-events: none;
         }
 
-        /* --- PAGE 10: ROOM OF RAIN --- */
         .rain-glass-panel {
             background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
@@ -307,7 +308,6 @@
             100% { background-position: 0% 100%; }
         }
 
-        /* --- PAGE 12: ORBIT --- */
         @keyframes orbit-rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         @keyframes orbit-counter-rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(-360deg); } }
         .orbit-system-container { position: relative; width: 300px; height: 300px; margin-top: 2rem; }
@@ -335,7 +335,6 @@
         .planet-orb { transition: all 0.3s ease; }
         .planet-wrapper:hover .planet-orb { transform: scale(1.2); filter: brightness(1.3); }
 
-        /* --- PAGE 13: BUTTERFLY FLIGHT --- */
         @keyframes flyAround {
             0% { left: 10%; top: 20%; transform: rotate(10deg) scale(1); }
             25% { left: 80%; top: 15%; transform: rotate(-10deg) scale(0.8); }
@@ -343,6 +342,9 @@
             75% { left: 20%; top: 60%; transform: rotate(-15deg) scale(0.9); }
             100% { left: 10%; top: 20%; transform: rotate(10deg) scale(1); }
         }
+        @keyframes sway { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
+        .animate-sway { animation: sway 3s ease-in-out infinite; transform-origin: bottom center; }
+
         .flying-butterfly {
             position: absolute;
             font-size: 4rem;
@@ -350,10 +352,10 @@
             animation: flyAround 12s linear infinite;
             transition: transform 0.2s;
             filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+            z-index: 50; 
         }
         .flying-butterfly:active { transform: scale(0.5); }
 
-        /* --- PAGE 15: FOGGY WINDOW --- */
         .window-frame {
             display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
             width: 300px; height: 300px; background: #4a3b2a;
@@ -377,7 +379,6 @@
         }
         .window-pane:hover .pane-content { opacity: 1; }
 
-        /* --- PAGE 16: ENVELOPE --- */
         .envelope-container {
             perspective: 1000px; width: 200px; height: 140px; position: relative; margin-top: 2rem; cursor: pointer;
         }
@@ -393,13 +394,18 @@
         .envelope.open .flap { transform: rotateX(180deg); z-index: 0; }
         .letter-paper {
             position: absolute; top: 10px; left: 10px; width: 180px; height: 120px;
-            background: white; transition: transform 0.5s 0.6s; z-index: 5;
+            background: white; transition: transform 0.5s 0.6s, opacity 0.2s 0.5s; z-index: 5;
             display: flex; align-items: center; justify-content: center; font-size: 0.6rem; color: #333; padding: 10px;
             box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+            
+            transform: translateY(20px) scale(0.9);
+            opacity: 0;
         }
-        .envelope.open .letter-paper { transform: translateY(-80px); }
+        .envelope.open .letter-paper { 
+            transform: translateY(-80px) scale(1);
+            opacity: 1;
+        }
 
-        /* --- PAGE 17: COMPASS --- */
         .compass-container {
             width: 200px; height: 200px; border: 8px solid #b8860b; border-radius: 50%;
             background: #222; position: relative; box-shadow: 0 0 20px rgba(184, 134, 11, 0.3);
@@ -410,12 +416,36 @@
             background: radial-gradient(circle, #333, #111);
         }
         .compass-needle {
-            position: absolute; top: 50%; left: 50%; width: 140px; height: 10px;
-            background: linear-gradient(to right, red 50%, white 50%);
+            position: absolute; top: 50%; left: 50%;
+            width: 16px; height: 140px; 
             transform: translate(-50%, -50%) rotate(0deg);
-            transition: transform 2s cubic-bezier(0.25, 0.1, 0.25, 1);
-            clip-path: polygon(0% 50%, 50% 0%, 100% 50%, 50% 100%);
+            transition: transform 2.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5)); 
+            z-index: 5;
         }
+        .needle-north {
+            position: absolute; top: 0; left: 0; width: 0; height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 70px solid #ff0000; 
+        }
+        .needle-south {
+            position: absolute; bottom: 0; left: 0; width: 0; height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 70px solid #f0f0f0; 
+        }
+        .compass-pivot {
+            position: absolute; top: 50%; left: 50%;
+            width: 14px; height: 14px;
+            background: #ffd700;
+            border: 2px solid #8b4513;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.6);
+        }
+
         .compass-label {
             position: absolute; color: #b8860b; font-weight: bold; font-size: 1.2rem;
         }
@@ -424,7 +454,6 @@
         .c-e { right: 10px; top: 50%; transform: translateY(-50%); }
         .c-w { left: 10px; top: 50%; transform: translateY(-50%); }
 
-        /* --- PAGE 18: FLOATING BALLOONS --- */
         .floating-balloon {
             position: absolute; bottom: -100px; font-size: 3rem; cursor: pointer;
             animation: floatUp 8s linear forwards; user-select: none;
@@ -520,7 +549,7 @@
             <div id="mirror" class="mt-8 poetic-text interactive-el" style="transition-delay: 0.8s;">
                 <div class="mirror-inner" style="width:100%; height:100%; border-radius:inherit; overflow:hidden; position:relative;">
                     <img id="mirror-img" 
-                        src="Main.jpg" 
+                        src="https://placehold.co/300x400/png?text=Reflection" 
                         onerror="this.src='https://placehold.co/250x350/cfdef3/304352?text=Looking+Back'"
                         alt="Mirror reflection" 
                         style="width:100%; height:100%; object-fit:cover; display:block;" /> 
@@ -672,20 +701,28 @@
             <div class="scroll-hint">Tap anywhere to continue</div>
         </section>
 
-        <!-- PAGE 13 REDESIGNED: FLIGHT (Catch the Butterfly) -->
         <section id="page-13" class="page">
-            <h2 class="font-display text-4xl md:text-5xl poetic-text text-gray-800">The Butterfly Flight</h2>
-            <p class="text-lg md:text-xl mt-4 poetic-text text-gray-700" style="transition-delay: 0.5s;">Catch the light to reveal the meaning.</p>
+            <div class="absolute bottom-0 left-0 w-full h-1/3 overflow-hidden pointer-events-none z-0">
+                <div class="w-[120%] h-full bg-green-300 rounded-[100%] translate-y-1/2 -translate-x-10 shadow-inner" style="background: linear-gradient(to bottom, #a8e063, #56ab2f);"></div>
+                <div class="absolute bottom-4 left-[10%] text-4xl animate-sway">🌻</div>
+                <div class="absolute bottom-8 left-[30%] text-3xl animate-sway" style="animation-delay: 1s">🌷</div>
+                <div class="absolute bottom-2 left-[60%] text-5xl animate-sway" style="animation-delay: 0.5s">🌼</div>
+                <div class="absolute bottom-6 left-[85%] text-4xl animate-sway" style="animation-delay: 1.5s">🌹</div>
+            </div>
+
+            <h2 class="font-display text-4xl md:text-5xl poetic-text text-gray-800 z-10 relative">The Butterfly Flight</h2>
+            <p class="text-lg md:text-xl mt-4 poetic-text text-gray-700 z-10 relative" style="transition-delay: 0.5s;">Catch the light to reveal the meaning.</p>
             
-            <!-- A single flying butterfly instead of 3 static ones -->
-            <div class="relative w-full h-64 mt-10 poetic-text" style="transition-delay: 0.8s;">
+            <div class="relative w-full h-64 mt-10 poetic-text z-10" style="transition-delay: 0.8s;">
                 <div id="flying-butterfly" class="flying-butterfly interactive-el" title="Catch me!">🦋</div>
             </div>
 
-            <p id="butterfly-text" class="text-xl md:text-2xl mt-8 h-16 text-gray-800 font-display transition-all duration-500 opacity-0 translate-y-4 px-4">
+            <p id="butterfly-text" class="text-xl md:text-2xl mt-8 h-16 text-gray-800 font-display transition-all duration-500 opacity-0 translate-y-4 px-4 z-10 relative">
             </p>
 
-            <div class="scroll-hint text-gray-600">Tap anywhere to continue</div>
+            <button id="page-13-next" class="mt-8 px-6 py-2 bg-white/40 hover:bg-white/60 rounded-full backdrop-blur-sm transition-all text-gray-800 font-medium interactive-el z-20 shadow-lg">
+                Continue Journey →
+            </button>
         </section>
 
         <section id="page-14" class="page">
@@ -701,7 +738,6 @@
             <div class="scroll-hint">Tap anywhere to continue</div>
         </section>
 
-        <!-- PAGE 15 REDESIGNED: FOGGY WINDOW (Wipe to Reveal) -->
         <section id="page-15" class="page">
             <h2 class="font-display text-4xl md:text-5xl poetic-text text-gray-800">The Window to Tomorrow</h2>
             <p class="text-lg md:text-xl mt-4 poetic-text text-gray-600" style="transition-delay: 0.5s;">Wipe the fog to see clearly.</p>
@@ -731,7 +767,6 @@
             <div class="scroll-hint text-gray-600">Tap anywhere to continue</div>
         </section>
 
-        <!-- PAGE 16 REDESIGNED: ENVELOPE (Open to Read) -->
         <section id="page-16" class="page">
             <h2 class="font-display text-4xl md:text-5xl poetic-text text-gray-800">The Stardust Letter</h2>
             <p class="text-lg md:text-xl mt-4 poetic-text text-gray-600" style="transition-delay: 0.5s;">A message sent from the origin.</p>
@@ -749,7 +784,6 @@
             <div class="scroll-hint text-gray-600">Tap anywhere to continue</div>
         </section>
 
-        <!-- PAGE 17 REDESIGNED: SPINNING COMPASS -->
         <section id="page-17" class="page">
             <h2 class="font-display text-4xl md:text-5xl poetic-text">The Compass of Heart</h2>
             <p class="text-lg md:text-xl mt-4 poetic-text" style="transition-delay: 0.5s;">Tap to spin the needle.</p>
@@ -760,7 +794,11 @@
                     <div class="compass-label c-s">S</div>
                     <div class="compass-label c-e">E</div>
                     <div class="compass-label c-w">W</div>
-                    <div class="compass-needle" id="compass-needle"></div>
+                    <div class="compass-needle" id="compass-needle">
+                        <div class="needle-north"></div>
+                        <div class="needle-south"></div>
+                    </div>
+                    <div class="compass-pivot"></div> 
                 </div>
             </div>
             
@@ -770,19 +808,20 @@
             <div class="scroll-hint">Tap anywhere to continue</div>
         </section>
 
-        <!-- PAGE 18 REDESIGNED: FLOATING BALLOONS GAME -->
         <section id="page-18" class="page">
             <h2 class="font-display text-4xl md:text-5xl poetic-text text-gray-800">The Floating Joy</h2>
             <p class="text-lg md:text-xl mt-4 poetic-text text-gray-700" style="transition-delay: 0.5s;">Pop the happiness as it flies!</p>
             
             <div id="balloon-container" class="absolute inset-0 overflow-hidden pointer-events-none">
-                <!-- Balloons will be injected here by JS -->
             </div>
             
             <p id="balloon-text" class="text-xl md:text-2xl mt-auto mb-20 h-16 text-gray-800 font-display transition-all duration-500 px-4 z-20">
                 Pop them!
             </p>
-            <div class="scroll-hint text-gray-600">Tap anywhere to continue</div>
+            
+            <button id="page-18-next" class="absolute bottom-10 left-1/2 transform -translate-x-1/2 px-6 py-2 bg-white/40 hover:bg-white/60 rounded-full backdrop-blur-sm transition-all text-gray-800 font-medium interactive-el z-30 shadow-lg">
+                Continue Journey →
+            </button>
         </section>
 
         <section id="page-19" class="page">
@@ -854,8 +893,7 @@
         let audioInitialized = false;
         let whisperTimeout; 
         
-        const bgMusic = new Audio('Heppi.mp3');
-        bgMusic.loop = true;
+        const bgMusic = new Audio(''); 
 
         const pageGradients = {
             'page-1': 'linear-gradient(135deg, #2c1e3a, #1a1a2e)',
@@ -903,7 +941,7 @@
                 if (this.initialLife === Infinity) {
                     ctx.globalAlpha = 1; 
                 } else {
-                    ctx.globalAlpha = this.life / this.initialLife;
+                    ctx.globalAlpha = Math.max(0, this.life / this.initialLife);
                 }
                 ctx.fill();
                 ctx.closePath();
@@ -991,7 +1029,7 @@
                     p.y = -p.radius; p.x = Math.random() * canvas.width;
                 }
                 else if (pageId === 'page-13') { 
-                     /* Handled by butterfly mechanic logic mostly */
+                     
                 }
                 
                 if (p.life === 0) particles.splice(i, 1);
@@ -1002,6 +1040,9 @@
         function typeLine(el, text, speed) {
             return new Promise(resolve => {
                 let i = 0;
+                
+                if(el.textContent === text) { resolve(); return; }
+                
                 const typing = setInterval(() => {
                     if (i < text.length) { el.textContent += text.charAt(i); i++; } 
                     else { clearInterval(typing); resolve(); }
@@ -1018,7 +1059,7 @@
             });
         }
 
-        /* Page 5 Candle Logic */
+        
         const candleMessages = [
             "You are gentle.", "You are resilient.", "You are thoughtful.", "You are laughter.",
             "You are entirely unique.", "You are the reason the sky is blue.", "You are the infinite glow."
@@ -1028,6 +1069,9 @@
             const finalEl = document.getElementById('candle-final');
             if (!el || !finalEl) return;
             el.classList.add('typing-cursor');
+            
+            if(el.dataset.played === "true") return;
+            
             for (let i = 0; i < 6; i++) {
                 await typeLine(el, candleMessages[i], 70);
                 await new Promise(r => setTimeout(r, 800)); 
@@ -1038,9 +1082,10 @@
             el.classList.remove('typing-cursor');
             finalEl.textContent = "21 sparks, 21 wishes, one infinite glow.";
             finalEl.style.opacity = 1;
+            el.dataset.played = "true";
         }
         
-        /* Page 6 Sky Logic */
+        
         const skyMessages = [
             "You are stardust.", "You are light.", "You are my favorite view.", "You are a beautiful chaos.",
             "You are a new beginning.", "You are worth watching.", "You are the perfect answer."
@@ -1049,6 +1094,8 @@
             const el = document.getElementById('sky-message');
             const finalEl = document.getElementById('sky-final');
             if (!el || !finalEl) return;
+            if(el.dataset.played === "true") return;
+
             el.classList.add('typing-cursor');
             for (let i = 0; i < 6; i++) {
                 await typeLine(el, skyMessages[i], 70);
@@ -1060,16 +1107,17 @@
             el.classList.remove('typing-cursor');
             finalEl.textContent = "Written on the wind, just for a moment.";
             finalEl.style.opacity = 1;
+            el.dataset.played = "true";
         }
 
-        /* --- PAGE 18 BALLOON LOGIC --- */
+        
         let balloonInterval;
         function startBalloonGame() {
             const container = document.getElementById('balloon-container');
             if(!container) return;
             
             clearInterval(balloonInterval);
-            container.innerHTML = ''; // Clear old
+            container.innerHTML = ''; 
             
             const emojis = ['🎈', '🎉', '✨', '🎁'];
             
@@ -1090,7 +1138,7 @@
                 
                 container.appendChild(balloon);
                 
-                // Cleanup
+                
                 setTimeout(() => {
                     if(balloon.parentNode) balloon.remove();
                 }, 8000);
@@ -1104,14 +1152,14 @@
             if(container) container.innerHTML = '';
         }
 
-        /* --- PAGE LOGIC ROUTER --- */
+        
         function goToPage(newPageIndex) {
             if (newPageIndex < 0 || newPageIndex >= pages.length) return;
             const oldPageIndex = currentPage;
             if (newPageIndex === oldPageIndex) return; 
             if (whisperTimeout) clearTimeout(whisperTimeout);
             
-            // Stop balloon game if leaving page 18
+            
             if(pages[oldPageIndex].id === 'page-18') stopBalloonGame();
 
             currentPage = newPageIndex;
@@ -1145,17 +1193,22 @@
                     createSparks(21);
                     const messageEl = document.getElementById('candle-message');
                     if(messageEl) {
-                        messageEl.textContent = '';
-                        document.getElementById('candle-final').style.opacity = 0; 
-                        animateCandleText();
+                        
+                        if (messageEl.dataset.played !== "true") {
+                             messageEl.textContent = '';
+                             document.getElementById('candle-final').style.opacity = 0; 
+                             animateCandleText();
+                        }
                     }
                     break;
                 case 'page-6':
                     const skyMessageEl = document.getElementById('sky-message');
                     if(skyMessageEl) {
-                        skyMessageEl.textContent = '';
-                        document.getElementById('sky-final').style.opacity = 0; 
-                        animateSkyText();
+                        if(skyMessageEl.dataset.played !== "true") {
+                            skyMessageEl.textContent = '';
+                            document.getElementById('sky-final').style.opacity = 0; 
+                            animateSkyText();
+                        }
                     }
                     break;
                 case 'page-9':
@@ -1173,7 +1226,7 @@
                     if(universeText) { universeText.style.opacity = 0; universeText.textContent = ''; }
                     break;
                 case 'page-13':
-                    // Butterfly flight page
+                    
                     createStars(50);
                     const bfText = document.getElementById('butterfly-text');
                     if(bfText) { bfText.textContent = ''; }
@@ -1184,17 +1237,17 @@
                     poemIndex = 0; 
                     break;
                 case 'page-15':
-                    // Window page - just clear text
+                    
                     const wText = document.getElementById('window-text');
                     if(wText) wText.textContent = "Look closer...";
                     break;
                 case 'page-16':
-                    // Envelope - reset state
+                    
                     const env = document.querySelector('.envelope');
                     if(env) env.classList.remove('open');
                     break;
                 case 'page-17':
-                    // Compass
+                    
                     break;
                  case 'page-18':
                     startBalloonGame();
@@ -1209,15 +1262,18 @@
             }
         }
         
-        /* Event Listeners */
+        
         document.getElementById('door-of-light').addEventListener('click', async () => {
-            bgMusic.play().catch(e => console.log("Audio play failed:", e));
+            try {
+                if(bgMusic.src) await bgMusic.play();
+            } catch(e) { console.log("Audio play failed or no source:", e); }
+            
             const page1 = document.getElementById('page-1');
             page1.classList.add('page-zooming-out');
             setTimeout(() => { goToPage(1); page1.classList.remove('page-zooming-out'); }, 1200); 
         });
         
-        // Whispers
+        
         const starWhisper = document.getElementById('star-whisper');
         const whispers = ["A whisper of magic...", "A new chapter.", "A universe of possibility.", "A story just beginning.", "The universe aligns."];
         let whisperIndex = 0;
@@ -1235,7 +1291,7 @@
         }
         function createMoonAndStars() { createStars(20); if(starWhisper) starWhisper.textContent = whispers[0]; }
         
-        // Page 3 Wishes
+        
         function spawnWishes() { 
             const container = document.getElementById('page-3');
             if (!container) return; 
@@ -1278,7 +1334,7 @@
             }
         }
         
-        // Page 4 Mirror
+        
         const mirrorText = document.getElementById('mirror-text');
         const reflections = ["Kindness", "Strength", "Wonder", "A universe within.", "You."];
         let reflectionIndex = 0;
@@ -1293,7 +1349,7 @@
             });
         }
         
-        // Page 7 Books
+        
         const bookQuote = document.getElementById('book-quote');
         const quotes = [
             "I followed my heart, and it led me to the fridge.", "Adulting is mostly just guessing.", "I'm not lazy, I'm just on energy saving mode.",
@@ -1311,7 +1367,7 @@
             });
         });
         
-        // Page 8 Clock
+        
         const clockFace = document.getElementById('clock-face');
         const clockThought = document.getElementById('clock-thought');
         const jokes = [
@@ -1333,7 +1389,6 @@
             handH.style.height = '50px'; handH.style.transform = 'translateX(-50%) translateY(-100%) rotate(140deg)';
             clockFace.appendChild(handH);
             const handM = document.createElement('div');
-            // Increased width from w-0.5 to w-1 and added shadow for visibility
             handM.className = 'absolute top-1/2 left-1/2 w-1 bg-white origin-bottom rounded pointer-events-none shadow-sm';
             handM.style.height = '75px'; handM.style.animation = 'handRotate 60s linear infinite'; 
             clockFace.appendChild(handM);
@@ -1360,7 +1415,7 @@
             }
         }
         
-        // Page 9 Bridge
+        
         const bridgeText = document.getElementById('bridge-text');
         document.querySelectorAll('.bridge-stone').forEach(stone => {
             stone.addEventListener('click', (e) => {
@@ -1374,7 +1429,7 @@
             });
         });
 
-        // Page 10 Rain Drops
+        
         const rainText = document.getElementById('rain-text');
         document.querySelectorAll('.rain-drop').forEach(drop => {
             drop.addEventListener('click', (e) => {
@@ -1388,7 +1443,7 @@
             });
         });
 
-        // Page 12 Cosmic Bodies
+        
         const universeText = document.getElementById('universe-text');
         document.querySelectorAll('.cosmic-body').forEach(body => {
             body.addEventListener('click', (e) => {
@@ -1402,7 +1457,7 @@
             });
         });
 
-        // PAGE 13: Butterfly Catch
+        
         const flyingButterfly = document.getElementById('flying-butterfly');
         const butterflyMessages = ["Growth", "Grace", "Effect", "Transformation", "Freedom"];
         if(flyingButterfly) {
@@ -1412,14 +1467,24 @@
                 if(bfText) {
                     const msg = butterflyMessages[Math.floor(Math.random() * butterflyMessages.length)];
                     bfText.textContent = msg;
-                    // Speed up for fun
+                    bfText.style.opacity = 1;
+                    
                     const currentDuration = parseFloat(getComputedStyle(flyingButterfly).animationDuration);
                     if(currentDuration > 2) flyingButterfly.style.animationDuration = (currentDuration - 2) + 's';
                 }
             });
         }
+
         
-        // PAGE 14: Poem
+        const page13Next = document.getElementById('page-13-next');
+        if(page13Next) {
+            page13Next.addEventListener('click', (e) => {
+                e.stopPropagation();
+                goToPage(currentPage + 1);
+            });
+        }
+        
+        
         const silentPoemLines = ["In the quiet spaces between breaths,", "Where the world forgets to spin,", "Resides the magic of who you are,", "A whole universe tucked within."];
         let poemIndex = 0;
         let isTypingPoem = false; 
@@ -1444,7 +1509,7 @@
             });
         }
         
-        // PAGE 16: Envelope
+        
         const envelopeContainer = document.getElementById('letter-envelope');
         if(envelopeContainer) {
             envelopeContainer.addEventListener('click', (e) => {
@@ -1453,31 +1518,49 @@
             });
         }
 
-        // PAGE 17: Compass
+        
+        let currentCompassRotation = 0; 
         const compass = document.getElementById('compass');
         if(compass) {
             compass.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const needle = document.getElementById('compass-needle');
                 const mapText = document.getElementById('map-text');
-                const rotation = Math.floor(Math.random() * 720 + 360); // Spin at least once
-                needle.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
                 
-                // Determine direction based on rotation
+                
+                const randomSpin = Math.floor(Math.random() * 720 + 360);
+                currentCompassRotation += randomSpin;
+                
+                
+                const remainder = currentCompassRotation % 90;
+                if(remainder !== 0) {
+                    currentCompassRotation += (90 - remainder);
+                }
+                
+                
+                
+                needle.style.transform = `translate(-50%, -50%) rotate(${currentCompassRotation}deg)`;
+                
+                
                 setTimeout(() => {
-                    const normalized = rotation % 360;
+                    const normalized = currentCompassRotation % 360;
                     let direction = "";
-                    if (normalized > 315 || normalized <= 45) direction = "North: Follow your own star.";
-                    else if (normalized > 45 && normalized <= 135) direction = "East: New beginnings await.";
-                    else if (normalized > 135 && normalized <= 225) direction = "South: Warmth and passion.";
-                    else direction = "West: Rest and reflection.";
+                    
+                    
+                    
+                    
+                    if (normalized === 0 || normalized === 360) direction = "North: Follow your own star.";
+                    else if (normalized === 90) direction = "East: New beginnings await.";
+                    else if (normalized === 180) direction = "South: Warmth and passion.";
+                    else if (normalized === 270) direction = "West: Rest and reflection.";
+                    else direction = "North: Follow your own star."; 
                     
                     if(mapText) mapText.textContent = direction;
-                }, 2000);
+                }, 2500); 
             });
         }
 
-        // Page 19 Secret
+        
         const secretText = document.getElementById('secret-text');
         document.querySelectorAll('.secret-code').forEach(el => {
             el.addEventListener('click', (e) => {
@@ -1491,7 +1574,7 @@
             });
         });
 
-        // Page 10 Rain Word
+        
         const page10 = document.getElementById('page-10');
         if (page10) {
             page10.addEventListener('click', (e) => {
@@ -1508,7 +1591,7 @@
             });
         }
         
-        // Gift Box
+        
         const giftBox = document.getElementById('gift-box');
         const giftQuote = document.getElementById('gift-quote');
         const bouquet = document.getElementById('bouquet');
@@ -1545,11 +1628,17 @@
 
         const heartBtn = document.getElementById('glowing-heart-btn');
         if (heartBtn) {
-            heartBtn.addEventListener('click', () => { if(easterEggModal) easterEggModal.classList.add('visible'); });
+            heartBtn.addEventListener('click', (e) => { 
+                e.stopPropagation();
+                if(easterEggModal) easterEggModal.classList.add('visible'); 
+            });
         }
         const closeBtn = document.getElementById('close-modal-btn');
         if (closeBtn) {
-            closeBtn.addEventListener('click', () => { if(easterEggModal) easterEggModal.classList.remove('visible'); });
+            closeBtn.addEventListener('click', (e) => { 
+                e.stopPropagation();
+                if(easterEggModal) easterEggModal.classList.remove('visible'); 
+            });
         }
 
         if (mainContentEl) { 
@@ -1557,9 +1646,32 @@
                 if (e.target.closest('.interactive-el') || e.target.closest('#navToggle') || e.target.closest('.nav-panel')) {
                     return;
                 }
+                
+                
+                
+                
+                if (pages[currentPage].id === 'page-13') {
+                    return; 
+                }
+
+                 
+                
+                if (pages[currentPage].id === 'page-18') {
+                    return; 
+                }
+
                 if (currentPage < pages.length - 1) {
                     goToPage(currentPage + 1);
                 }
+            });
+        }
+        
+        
+        const page18Next = document.getElementById('page-18-next');
+        if(page18Next) {
+            page18Next.addEventListener('click', (e) => {
+                e.stopPropagation();
+                goToPage(currentPage + 1);
             });
         }
 
