@@ -2,988 +2,569 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elegant Menu</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Birthday Soundtrack: The Vinyl Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Inter:wght@400;500;700;800&family=Pacifico&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Outfit:wght@300;400;500;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
+    
     <style>
-      :root{
-        --bg: #f9f7f0;
-        --card: #ffffff;
-        --ink: #2c2c2c;
-        --ink-dim: #5a5a5a;
-        --line: #b3a58d;
-        --accent: #a52a2a;
-        --accent2: #cc9900;
-        --accent3: #ffe27a;
-        --danger:#ff8f8f;
-
-        --radius: 4px;
-        --shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-
-        --speed:.35s cubic-bezier(.22,.61,.36,1);
-      }
-
-      @media (prefers-reduced-motion: reduce){
-        *{ animation:none !important; transition:none !important; }
-      }
-
-      html,body{
-        margin:0; padding:0; height:100%;
-        background: var(--bg);
-        color: var(--ink);
-        font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-        -webkit-font-smoothing: antialiased;
-        text-rendering: optimizeLegibility;
-      }
-
-      .wrap{
-        min-height:100dvh;
-        display:flex; flex-direction:column;
-      }
-
-      main{
-        background: var(--card);
-        border: 5px solid var(--ink);
-        box-shadow: var(--shadow);
-        padding: 30px 40px 60px;
-        max-width: 550px; 
-        width: 100%;
-        margin: 50px auto 50px;
-        border-radius: var(--radius);
-      }
-      
-      .main-title-wrapper {
-          text-align: center;
-          margin-bottom: 30px;
-          border-bottom: 2px solid var(--accent);
-          padding-bottom: 10px;
-      }
-
-      .subtitle-the {
-          font-family: 'Playfair Display', serif;
-          font-size: 1.25rem;
-          color: var(--ink-dim);
-          text-transform: uppercase;
-          letter-spacing: 5px;
-          margin: 0;
-      }
-      
-      h1{
-        font-family: 'Playfair Display', serif; 
-        font-size: 3.5rem; 
-        color: var(--accent);
-        margin: 0;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-      }
-      
-      .menu-section-title {
-          font-family: 'Playfair Display', serif;
-          font-size: 1.8rem;
-          color: var(--ink);
-          margin-top: 40px;
-          margin-bottom: 10px;
-          border-bottom: 1px dashed var(--line);
-          padding-bottom: 5px;
-          text-align: left;
-          font-weight: 700;
-          text-transform: uppercase;
-      }
-
-      .menu-list{
-        display:flex;
-        flex-direction:column;
-        gap: 25px; 
-        margin-top: 20px;
-      }
-
-      .menu-item{
-        background: transparent;
-        border: none;
-        padding: 0;
-        cursor:pointer;
-        transition: color .2s ease;
-        display: block;
-        position: relative;
-        overflow: hidden;
-      }
-      .menu-item:hover{
-        transform: none;
-        color: var(--accent);
-        background: transparent;
-      }
-      .menu-item:hover .dish-name {
-          text-decoration: underline;
-          text-decoration-color: var(--accent);
-      }
-
-      .menu-item::after {
-          content: "";
-          position: absolute;
-          top: 0.8rem;
-          left: 0;
-          right: 0;
-          height: 0;
-          border-bottom: 1px dotted var(--ink-dim);
-          z-index: 1;
-          pointer-events: none;
-      }
-
-      .menu-content-wrapper {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          position: relative;
-          z-index: 2;
-      }
-      
-      .dish-name{
-        font-family: 'Playfair Display', serif;
-        font-size: 1.15rem;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-        margin:0;
-        display: inline-block;
-        background: var(--card);
-        padding-right: 10px;
-        cursor: pointer;
-        line-height: 1.6;
-      }
-      
-      .indicator {
-        font-size: 1.15rem;
-        color: var(--ink);
-        font-family: 'Playfair Display', serif;
-        font-weight: 500;
-        background: var(--card);
-        padding-left: 10px;
-        margin-left: auto;
-        display: block;
-        line-height: 1.6;
-      }
-
-      .dish-tags{
-        font-size: 0.8rem;
-        color: var(--ink-dim);
-        margin-top: 4px;
-        font-style: italic;
-        display: block;
-      }
-      .tag-label {
-        background: transparent;
-        color: var(--ink-dim);
-        padding: 0;
-        margin-left: 0;
-      }
-
-      .modal-overlay {
-        background-color: rgba(0, 0, 0, 0.75);
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 100;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease;
-      }
-
-      .modal-overlay.open {
-        opacity: 1;
-        visibility: visible;
-      }
-
-      .modal-content {
-        background: var(--card);
-        border: 3px solid var(--accent);
-        border-radius: var(--radius);
-        padding: 30px;
-        max-width: 90%;
-        width: 450px;
-        box-shadow: 0 10px 40px rgba(165, 42, 42, 0.4);
-        transform: scale(0.9);
-        transition: transform 0.3s cubic-bezier(.22,.61,.36,1);
-        position: relative;
-      }
-      .modal-overlay.open .modal-content {
-        transform: scale(1);
-      }
-      
-      .modal-title {
-        font-family: 'Playfair Display', serif;
-        font-size: 2.5rem;
-        color: var(--accent);
-        text-align: center;
-        text-shadow: none;
-        margin-bottom: 1.5rem;
-      }
-      
-      /* Joke Styling */
-      .modal-joke {
-        font-family: 'Gochi Hand', cursive;
-        font-size: 1.4rem;
-        line-height: 1.6;
-        color: var(--ink);
-        text-align: center;
-        margin-bottom: 0.5rem;
-        font-weight: 700;
-      }
-      
-      /* Specialty Styling */
-      .modal-specialty {
-        font-family: 'Inter', sans-serif;
-        font-size: 1rem;
-        font-style: italic;
-        line-height: 1.5;
-        color: var(--ink-dim);
-        text-align: center;
-        margin-top: 1rem;
-      }
-
-      .modal-divider {
-        border: 0;
-        border-top: 1px dashed var(--line);
-        margin: 1.5rem auto;
-        width: 50%;
-      }
-      
-      .close-btn {
-        position: absolute;
-        top: 10px; right: 10px;
-        background: transparent;
-        border: none;
-        color: var(--accent);
-        font-size: 1.5rem;
-        cursor: pointer;
-        transition: color 0.2s ease;
-      }
-      .close-btn:hover {
-        color: var(--accent2);
-      }
-
         .nav-panel, #mainContent, #navToggleIcon, #navToggleX {
-            transition: all 0.3s ease-in-out;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .nav-panel {
-            -ms-overflow-style: none; 
-            scrollbar-width: none; 
-        }
-        #mainContent::-webkit-scrollbar,
+        
         .nav-panel::-webkit-scrollbar {
-            display: none; 
+            width: 2px;
         }
-        .festive-text {
-            font-family: 'Gochi Hand', cursive;
-            font-size: 1.1rem;
-            letter-spacing: 0.5px;
-            color: var(--ink);
+        .nav-panel::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.02);
         }
-        
-        .nav-panel h1, .nav-panel h2, .nav-panel h3 {
-            font-family: 'Pacifico', cursive;
-        }
-
-        #navToggle {
-            user-select: none;
-            background-color: var(--accent);
-            color: white;
-            z-index: 101;
+        .nav-panel::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.15);
+            border-radius: 10px;
         }
         
-        #mainContent {
-            position: absolute;
-            inset: 0;
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+        
+        .festive-text { font-family: 'Gochi Hand', cursive; }
+        .heading-text { font-family: 'Pacifico', cursive; }
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #0f0c29; 
+            background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
+            color: #fff;
             min-height: 100vh;
-            overflow-y: auto; 
-            padding-top: 5rem;
+            overflow: hidden;
         }
 
-        .nav-panel {
-            background: rgba(255,255,255,.95);
-            color: var(--ink);
-            border-color: rgba(0,0,0,.15);
+        .blob {
+            position: absolute;
+            filter: blur(80px);
+            z-index: 0;
+            opacity: 0.6;
+            animation: float 20s infinite;
         }
-        .nav-link {
-            color: var(--ink);
+        .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #ff6b81; animation-delay: 0s; }
+        .blob-2 { bottom: -10%; right: -10%; width: 600px; height: 600px; background: #7bed9f; animation-delay: -5s; }
+        .blob-3 { top: 40%; left: 40%; width: 400px; height: 400px; background: #70a1ff; animation-delay: -10s; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(30px, -50px) rotate(10deg); }
+            66% { transform: translate(-20px, 20px) rotate(-5deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
         }
-        .nav-link:hover {
-            background-color: var(--accent) !important;
-            color: white !important;
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
+
+        .vinyl-wrapper {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1/1;
+            margin: 0 auto;
+        }
+
+        .vinyl-disk {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: repeating-radial-gradient(#111 0, #111 2px, #222 3px, #222 4px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .vinyl-label {
+            width: 35%;
+            height: 35%;
+            border-radius: 50%;
+            background: url('https://images.unsplash.com/photo-1493225255756-d9584f8606e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80') center/cover;
+            position: relative;
+            border: 4px solid rgba(255,255,255,0.2);
+        }
+        
+        .vinyl-shine {
+            position: absolute; inset: 0; border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.05) 100%);
+            pointer-events: none;
+        }
+
+        .tone-arm {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 120px;
+            height: 300px;
+            z-index: 20;
+            transform-origin: 90px 40px;
+            transform: rotate(-35deg);
+            transition: transform 1s ease-in-out;
+            pointer-events: none;
+        }
+        
+        @media (max-width: 768px) {
+            .tone-arm {
+                transform: rotate(-35deg) scale(0.7);
+                right: -30px;
+                top: -30px;
+            }
+            .tone-arm.playing {
+                transform: rotate(15deg) scale(0.7);
+            }
+        }
+        
+        @media (min-width: 769px) {
+            .tone-arm.playing { transform: rotate(15deg); }
+        }
+
+        .arm-body { width: 10px; height: 220px; background: #d1d5db; position: absolute; top: 40px; left: 85px; transform: rotate(15deg); border-radius: 5px; box-shadow: 2px 2px 5px rgba(0,0,0,0.5); }
+        .arm-head { width: 25px; height: 40px; background: #4b5563; position: absolute; bottom: 20px; left: 45px; transform: rotate(25deg); border-radius: 4px; }
+        .arm-pivot { width: 60px; height: 60px; background: #374151; border-radius: 50%; position: absolute; top: 10px; right: 10px; border: 4px solid #1f2937; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        .is-spinning { animation: spin 6s linear infinite; }
+        .is-paused { animation-play-state: paused; }
+
+        .visualizer { display: flex; align-items: flex-end; gap: 3px; height: 40px; margin-bottom: 0; }
+        .bar { width: 6px; background: #ff6b81; border-radius: 4px; animation: bounce 0.5s infinite ease-in-out; animation-play-state: paused; }
+        .bar:nth-child(even) { background: #70a1ff; }
+        .playing .bar { animation-play-state: running; }
+        
+        @keyframes bounce {
+            0%, 100% { height: 10%; }
+            50% { height: 100%; }
+        }
+        .bar:nth-child(1) { animation-duration: 0.6s; }
+        .bar:nth-child(2) { animation-duration: 0.8s; }
+        .bar:nth-child(3) { animation-duration: 0.5s; }
+        .bar:nth-child(4) { animation-duration: 0.7s; }
+        .bar:nth-child(5) { animation-duration: 0.6s; }
+        .bar:nth-child(6) { animation-duration: 0.9s; }
+
+        .track-item {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        .track-item:hover { background: rgba(255,255,255,0.1); }
+        
+        .track-item.active { 
+            background: linear-gradient(180deg, rgba(244, 63, 94, 0.15) 0%, rgba(0,0,0,0.2) 100%);
+            border-color: rgba(244, 63, 94, 0.4);
+            border-left: 4px solid #ff6b81;
+        }
+        
+        .track-description {
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.5s cubic-bezier(0, 1, 0, 1), opacity 0.4s ease;
+        }
+        
+        .track-item.active .track-description {
+            max-height: 200px;
+            opacity: 1;
+            transition: max-height 0.5s ease-in-out, opacity 0.4s ease-in 0.1s;
+        }
+
+        .nav-link::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px;
+            background: #ff6b81; transform: scaleX(0); transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+        .nav-link:hover::after { transform: scaleX(1); transform-origin: left; }
 
     </style>
 </head>
-<body class="antialiased">
+<body class="overflow-hidden selection:bg-rose-500 selection:text-white">
 
-    <button id="navToggle" class="fixed top-4 left-4 z-[70] p-2 rounded-full shadow-lg transition-all bg-[var(--accent)] text-white hover:bg-[var(--accent)] hover:opacity-80                                    focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2 focus:ring-offset-[var(--bg)]">
-        <svg xmlns="http://www.w3.org/2000/svg" id="navToggleIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-8 6h8"/></svg>
-        <svg xmlns="http://www.w3.org/2000/svg" id="navToggleX" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <button id="navToggle" class="fixed top-4 left-4 md:top-6 md:left-6 z-[70] group">
+        <div class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full shadow-lg group-hover:bg-rose-500 transition-all duration-300">
+            <svg id="navToggleIcon" class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            <svg id="navToggleX" class="w-5 h-5 md:w-6 md:h-6 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </div>
     </button>
 
-    <nav id="topNav" class="nav-panel fixed top-0 left-0 right-0 z-[60] h-14 shadow-md flex items-center justify-center space-x-6 -translate-y-full bg-white text-[var(--ink)] border-b border-[var(--line)]">
-        <a href="index.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Home</a>
-        <a href="Special.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Special</a>
-        <a href="letter.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Letter</a>
+    <nav id="topNav" class="nav-panel fixed top-0 inset-x-0 z-[62] h-20 md:h-24 bg-black/80 backdrop-blur-xl border-b border-white/10 flex items-center justify-center space-x-6 md:space-x-10 -translate-y-full">
+        <a href="index.html" class="nav-link relative text-white/90 font-medium festive-text text-lg md:text-xl tracking-wide">Home</a>
+        <a href="Special.html" class="nav-link relative text-white/90 font-medium festive-text text-lg md:text-xl tracking-wide">Special</a>
+        <a href="letter.html" class="nav-link relative text-white/90 font-medium festive-text text-lg md:text-xl tracking-wide">Letter</a>
     </nav>
 
-    <nav id="bottomNav" class="nav-panel fixed bottom-0 left-0 right-0 z-[60] h-14 shadow-md flex items-center justify-center space-x-6 translate-y-full bg-white text-[var(--ink)] border-t border-[var(--line)]">
-        <a href="anatomy.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Anatomy</a>
-        <a href="chat.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Heaven</a>
-        <a href="you.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">You</a>
+    <nav id="bottomNav" class="nav-panel fixed bottom-0 inset-x-0 z-[62] h-20 md:h-24 bg-black/80 backdrop-blur-xl border-t border-white/10 flex items-center justify-center space-x-6 md:space-x-10 translate-y-full">
+        <a href="anatomy.html" class="nav-link relative text-white/90 font-medium festive-text text-lg md:text-xl tracking-wide">Anatomy</a>
+        <a href="chat.html" class="nav-link relative text-white/90 font-medium festive-text text-lg md:text-xl tracking-wide">Heaven</a>
+        <a href="you.html" class="nav-link relative text-white/90 font-medium festive-text text-lg md:text-xl tracking-wide">You</a>
     </nav>
 
-    <nav id="leftNav" class="nav-panel fixed left-0 top-0 bottom-0 z-[60] w-24 shadow-md flex flex-col items-center space-y-6 -translate-x-full overflow-y-auto py-20
-                                     bg-white text-[var(--ink)] border-r border-[var(--line)]">
-        <a href="Diary.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Diary</a>
-        <a href="Universe.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Universe</a>
-        <a href="color.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Color</a>
-        <a href="Teacher.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Teacher</a>
-        <a href="The_River.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">River</a>
-        <a href="Mountain.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Mountain</a>
-        <a href="Paper_Star.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Paper Star</a>
-        <a href="Carttoon.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Cartoon</a>
-        <a href="Santa.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Santa</a>
-        <a href="Cloud.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Cloud</a>
-        <a href="Ink.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Paint</a>
-        <a href="Butterfly.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Butterfly</a>
-        <a href="Weather.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Weather</a>
+    <nav id="leftNav" class="nav-panel fixed left-0 top-28 bottom-28 md:top-32 md:bottom-32 z-[61] w-1/2 md:w-40 bg-black/90 md:bg-black/80 backdrop-blur-xl border-r border-white/10 flex flex-col items-center justify-start py-6 space-y-3 md:space-y-4 overflow-y-auto -translate-x-full rounded-r-xl">
+        <a href="Diary.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Diary</a>
+        <a href="Universe.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Universe</a>
+        <a href="Box.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Box</a>
+        <a href="color.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Color</a>
+        <a href="Teacher.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Teacher</a>
+        <a href="The_River.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">River</a>
+        <a href="Mountain.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Mountain</a>
+        <a href="Paper_Star.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Paper Star</a>
+        <a href="Carttoon.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Cartoon</a>
+        <a href="Santa.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Santa</a>
+        <a href="Cloud.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Cloud</a>
+        <a href="Ink.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Paint</a>
+        <a href="Butterfly.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Butterfly</a>
+        <a href="Weather.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Weather</a>
     </nav>
 
-    <nav id="rightNav" class="nav-panel fixed right-0 top-0 bottom-0 z-[60] w-24 shadow-md flex flex-col items-center space-y-6 translate-x-full overflow-y-auto py-20 bg-white text-[var(--ink)] border-l border-[var(--line)]">
-        <a href="Skill.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Skill</a>
-        <a href="Msg.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Massege</a>
-        <a href="21_Wish.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">21_Door</a>
-        <a href="Cake.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Cake</a>
-        <a href="Periodik_table.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Periodik_table</a>
-        <a href="Presence.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Presence</a>
-        <a href="Concept.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Concept</a>
-        <a href="Calender.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Calender</a>
-        <a href="Perspective.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Perspective</a>
-        <a href="Spotlight.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Spotlight</a>
-        <a href="Room.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Room</a>
-        <a href="Radio.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Radio</a>
-        <a href="Food.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Food</a>
-        <a href="Music.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Music</a>
+    <nav id="rightNav" class="nav-panel fixed right-0 top-28 bottom-28 md:top-32 md:bottom-32 z-[61] w-1/2 md:w-40 bg-black/90 md:bg-black/80 backdrop-blur-xl border-l border-white/10 flex flex-col items-center justify-start py-6 space-y-3 md:space-y-4 overflow-y-auto translate-x-full rounded-l-xl">
+        <a href="Skill.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Skill</a>
+        <a href="Msg.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Massege</a>
+        <a href="21_Wish.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">21_Door</a>
+        <a href="Cake.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Cake</a>
+        <a href="Periodik_table.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Table</a>
+        <a href="Presence.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Presence</a>
+        <a href="Concept.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Concept</a>
+        <a href="Calender.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Calender</a>
+        <a href="Perspective.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Perspective</a>
+        <a href="Spotlight.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Spotlight</a>
+        <a href="Room.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Room</a>
+        <a href="Radio.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Radio</a>
+        <a href="Food.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Food</a>
+        <a href="Music.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Music</a>
     </nav>
 
-    <div id="mainContent">
-      <div class="wrap">
-        <main>
-          <div class="main-title-wrapper">
-              <p class="subtitle-the">THE INDIAN</p>
-              <h1>MENU</h1>
-          </div>
-          <section class="menu-list" id="menuList" aria-live="polite"></section>
-        </main>
-      </div>
+    <div id="mainContent" class="relative w-full h-[100dvh] flex items-center justify-center p-2 md:p-8 z-10">
 
-    </div>
-    
-    <div id="descriptionModal" class="modal-overlay" onclick="closeDescription()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <button class="close-btn" onclick="closeDescription()">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-            <h2 id="modalTitle" class="modal-title"></h2>
+        <div id="main-container" class="glass-panel w-full max-w-5xl h-full md:h-auto md:max-h-[85vh] rounded-xl md:rounded-3xl transition-all duration-700 transform flex flex-col md:flex-row overflow-hidden">
             
-            <p id="modalJoke" class="modal-joke"></p>
-            <hr class="modal-divider"/>
-            <p id="modalSpecialty" class="modal-specialty"></p>
+            <div class="w-full md:w-1/2 bg-white/5 p-4 pt-12 md:p-12 flex-shrink-0 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-white/10 relative">
+                <div id="vinyl-section" class="vinyl-wrapper w-48 md:w-full md:max-w-[320px] opacity-100 transition-opacity duration-500">
+                    <div id="tone-arm" class="tone-arm">
+                        <div class="arm-pivot"></div>
+                        <div class="arm-body"></div>
+                        <div class="arm-head"></div>
+                    </div>
+                    <div id="vinyl" class="vinyl-disk">
+                        <div class="vinyl-label"></div>
+                        <div class="vinyl-shine"></div>
+                    </div>
+                </div>
+                <div id="now-playing-title" class="mt-4 md:mt-8 text-center opacity-0 transition-opacity duration-500">
+                    <h2 class="text-xl md:text-2xl font-bold tracking-tight text-white">Happy Birthday</h2>
+                    <p class="text-rose-400 text-xs md:text-sm font-medium tracking-widest uppercase mt-1">Original Mix</p>
+                </div>
+            </div>
 
-            <p class="text-center text-xs text-[var(--ink-dim)]">Tap outside or press <span class="font-bold">X</span> to close.</p>
+            <div class="w-full md:w-1/2 p-4 md:p-10 flex flex-col flex-grow relative overflow-y-auto custom-scrollbar">
+                <div class="flex justify-between items-center mb-4 md:mb-6 flex-shrink-0">
+                    <div>
+                        <h1 class="heading-text text-2xl md:text-3xl text-rose-400">Soundtrack</h1>
+                        <p class="text-white/50 text-[10px] md:text-xs uppercase tracking-widest">Birthday. 21 • Juhi Edition</p>
+                    </div>
+                    <div id="visualizer" class="visualizer scale-75 md:scale-100 origin-right">
+                        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
+                    </div>
+                </div>
+
+                <div id="initial-state" class="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-sm z-20 transition-opacity duration-500">
+                    <button id="play-button" class="group relative px-8 py-4 bg-rose-500 hover:bg-rose-600 text-white rounded-full font-bold text-lg shadow-[0_0_30px_rgba(244,63,94,0.4)] transition-all transform hover:scale-105">
+                        <span class="relative z-10 flex items-center">
+                            <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            START
+                        </span>
+                    </button>
+                </div>
+
+                <div id="reveal-state" class="flex-grow flex flex-col opacity-0 transition-opacity duration-1000">
+                    
+                    <div class="flex-grow overflow-y-auto pr-1 md:pr-2 mb-4 custom-scrollbar space-y-2">
+                        
+                        <div data-audio-id="violin" class="track-item rounded-xl cursor-pointer group">
+                            <div class="p-3 md:p-4 flex items-center">
+                                <div class="w-8 h-8 rounded bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs mr-3 md:mr-4 group-hover:bg-emerald-500 group-hover:text-white transition-colors">01</div>
+                                <div class="flex-grow">
+                                    <h3 class="font-bold text-white text-sm group-hover:text-emerald-300 transition-colors">Violin Rhapsody</h3>
+                                    <p class="text-xs text-white/40">Elegance & Emotion</p>
+                                </div>
+                                <div class="playing-indicator text-emerald-500"></div>
+                            </div>
+                            <div class="track-description bg-black/20">
+                                <p class="p-4 text-sm text-emerald-200/90 italic leading-relaxed border-t border-white/5"></p>
+                            </div>
+                        </div>
+
+                        <div data-audio-id="drum" class="track-item rounded-xl cursor-pointer group">
+                            <div class="p-3 md:p-4 flex items-center">
+                                <div class="w-8 h-8 rounded bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-xs mr-3 md:mr-4 group-hover:bg-purple-500 group-hover:text-white transition-colors">02</div>
+                                <div class="flex-grow">
+                                    <h3 class="font-bold text-white text-sm group-hover:text-purple-300 transition-colors">Drumline</h3>
+                                    <p class="text-xs text-white/40">Momentum & Drive</p>
+                                </div>
+                                <div class="playing-indicator text-purple-500"></div>
+                            </div>
+                            <div class="track-description bg-black/20">
+                                <p class="p-4 text-sm text-purple-200/90 italic leading-relaxed border-t border-white/5"></p>
+                            </div>
+                        </div>
+
+                        <div data-audio-id="harmonica" class="track-item rounded-xl cursor-pointer group">
+                            <div class="p-3 md:p-4 flex items-center">
+                                <div class="w-8 h-8 rounded bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs mr-3 md:mr-4 group-hover:bg-amber-500 group-hover:text-white transition-colors">03</div>
+                                <div class="flex-grow">
+                                    <h3 class="font-bold text-white text-sm group-hover:text-amber-300 transition-colors">Harmonica Soul</h3>
+                                    <p class="text-xs text-white/40">Simple Pleasures</p>
+                                </div>
+                                <div class="playing-indicator text-amber-500"></div>
+                            </div>
+                            <div class="track-description bg-black/20">
+                                <p class="p-4 text-sm text-amber-200/90 italic leading-relaxed border-t border-white/5"></p>
+                            </div>
+                        </div>
+                        
+                        <div data-audio-id="flute" class="track-item rounded-xl cursor-pointer group">
+                            <div class="p-3 md:p-4 flex items-center">
+                                <div class="w-8 h-8 rounded bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-xs mr-3 md:mr-4 group-hover:bg-cyan-500 group-hover:text-white transition-colors">04</div>
+                                <div class="flex-grow">
+                                    <h3 class="font-bold text-white text-sm group-hover:text-cyan-300 transition-colors">Flute Melody</h3>
+                                    <p class="text-xs text-white/40">Airy & Joyful</p>
+                                </div>
+                                <div class="playing-indicator text-cyan-500"></div>
+                            </div>
+                            <div class="track-description bg-black/20">
+                                <p class="p-4 text-sm text-cyan-200/90 italic leading-relaxed border-t border-white/5"></p>
+                            </div>
+                        </div>
+
+                        <div data-audio-id="guitar" class="track-item rounded-xl cursor-pointer group">
+                            <div class="p-3 md:p-4 flex items-center">
+                                <div class="w-8 h-8 rounded bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold text-xs mr-3 md:mr-4 group-hover:bg-rose-500 group-hover:text-white transition-colors">05</div>
+                                <div class="flex-grow">
+                                    <h3 class="font-bold text-white text-sm group-hover:text-rose-300 transition-colors">Guitar Riff</h3>
+                                    <p class="text-xs text-white/40">Foundation & Strength</p>
+                                </div>
+                                <div class="playing-indicator text-rose-500"></div>
+                            </div>
+                            <div class="track-description bg-black/20">
+                                <p class="p-4 text-sm text-rose-200/90 italic leading-relaxed border-t border-white/5"></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-3 md:pt-4 border-t border-white/10 flex justify-between items-center text-white/50 text-[10px] md:text-xs flex-shrink-0">
+                        <span>0:00</span>
+                        <div class="w-1/2 h-1 bg-white/10 rounded-full mx-4 relative overflow-hidden">
+                            <div id="progress-bar" class="absolute top-0 left-0 h-full bg-rose-500 w-0 transition-all duration-1000"></div>
+                        </div>
+                        <span>♾️</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    
-    <script>
+    <div class="audio-container hidden">
+        <audio id="audio-flute" src="Krishna Flute Ringtone Download Pagalworld (1).mp3"></audio>
+        <audio id="audio-harmonica" src="Harmonica (Yea dosti).mp3"></audio>
+        <audio id="audio-drum" src="Drum.mp3"></audio>
+        <audio id="audio-violin" src="Violin.mp3"></audio>
+        <audio id="audio-guitar" src="Guitar.mp3"></audio>
+    </div>
 
-const MENU_STRUCTURE = [
-  { title: "Aarambh (Beginnings)", tags: ["Aarambh"] },
-  { title: "Mukhyo Vyanjan (Main Course)", tags: ["Mukhyo Vyanjan"] },
-  { title: "Mishti (Sweets)", tags: ["Mishti aur Roti"] },
-  { title: "Pey (Beverages)", tags: ["Pey"] }
-];
-
-const DISHES = [
-  {
-    id:"pakora",
-    name:"Vegetable Pakora",
-    tags:["Aarambh","Spicy","Vegan"],
-    line:"Crispy, golden-fried vegetables seasoned just right—a perfect start.",
-    joke:"Just like pakoras, you bring a little crunch and a lot of warmth wherever you go.",
-    compliment:"You have a natural brightness that makes moments feel lighter."
-  },
-  {
-    id:"samosa",
-    name:"Punjabi Samosa",
-    tags:["Aarambh","Comfort","Vegan"],
-    line:"Flaky pastry filled with spiced potatoes and peas.",
-    joke:"Just like samosas, you seem strong on the outside but have a soft, kind heart inside.",
-    compliment:"Your calm nature makes people feel at ease around you."
-  },
-  {
-    id:"kebab",
-    name:"Chicken Tikka Kebab",
-    tags:["Aarambh","Poultry","Spicy"],
-    line:"Smoky, marinated chicken grilled to perfection.",
-    joke:"Just like kebabs, you’re warm, bold, and surprisingly unforgettable.",
-    compliment:"You leave a gentle, memorable impression without trying."
-  },
-  {
-    id:"bhel",
-    name:"Bhel Puri",
-    tags:["Aarambh","Bright","Vegan"],
-    line:"A tangy, crunchy street-food mix of puffed rice and chutneys.",
-    joke:"Just like bhel puri, you add colour, freshness, and a spark of fun to every moment.",
-    compliment:"Your presence naturally brings positivity to the atmosphere."
-  },
-  {
-    id:"papad",
-    name:"Masala Papad",
-    tags:["Aarambh","Bright","Vegan"],
-    line:"Crispy lentil wafers topped with fresh toppings.",
-    joke:"Just like masala papad, your smile can lighten a whole room without even trying.",
-    compliment:"You have an uplifting charm that people genuinely enjoy."
-  },
-  {
-    id:"paneer-pakora",
-    name:"Paneer Pakora",
-    tags:["Aarambh","Comfort"],
-    line:"Soft paneer coated and fried to golden crispiness.",
-    joke:"Just like paneer pakora, you’re soft at heart and always comforting.",
-    compliment:"Your kindness shows in small, thoughtful ways."
-  },
-  {
-    id:"corn-chaat",
-    name:"Corn Chaat",
-    tags:["Aarambh","Bright","Vegan"],
-    line:"Sweet, tangy, and spicy corn tossed fresh.",
-    joke:"Just like corn chaat, you’re sweet, bright, and full of cheerful energy.",
-    compliment:"You bring a refreshing vibe that makes conversations feel easy."
-  },
-  {
-    id:"hara-bhara",
-    name:"Hara Bhara Kebab",
-    tags:["Aarambh","Vegetarian"],
-    line:"Healthy and flavourful spinach & pea patties.",
-    joke:"Just like hara bhara kebab, you’re refreshing, vibrant, and full of life.",
-    compliment:"Your energy feels naturally positive and lively."
-  },
-  {
-    id:"spring-roll",
-    name:"Veg Spring Roll",
-    tags:["Aarambh","Bright","Crispy"],
-    line:"Crispy rolls stuffed with seasoned vegetables.",
-    joke:"Just like spring rolls, you’re crisp, bright, and always make things better.",
-    compliment:"You bring a fresh, happy energy wherever you go."
-  },
-  {
-    id:"dahi-kebab",
-    name:"Dahi Kebab",
-    tags:["Aarambh","Comfort","Vegetarian"],
-    line:"Soft yogurt-based kebabs that melt in the mouth.",
-    joke:"Just like dahi kebab, you’re soft, gentle, and unforgettable.",
-    compliment:"There’s something soothing and kind about you."
-  },
-  {
-    id:"fish-finger",
-    name:"Fish Finger",
-    tags:["Aarambh","Seafood","Crispy"],
-    line:"Crispy, golden-fried fish strips.",
-    joke:"Just like fish fingers, you’re crisp, fun, and instantly likeable.",
-    compliment:"You have an easy, pleasant charm that feels natural."
-  },
-
-  {
-    id:"butter-chicken",
-    name:"Butter Chicken",
-    tags:["Mukhyo Vyanjan","Poultry","Comfort"],
-    line:"Rich, creamy tomato gravy with tender chicken.",
-    joke:"Just like butter chicken, you’re comforting, warm, and make people feel safe.",
-    compliment:"You have a gentle warmth that people appreciate instantly."
-  },
-  {
-    id:"rogan-josh",
-    name:"Kashmiri Rogan Josh",
-    tags:["Mukhyo Vyanjan","Red Meat","Spicy"],
-    line:"Aromatic mutton curry with rich spices.",
-    joke:"Just like rogan josh, you have depth and a strong, graceful charm.",
-    compliment:"Your confidence feels natural and graceful."
-  },
-  {
-    id:"paneer-tikka",
-    name:"Paneer Tikka Masala",
-    tags:["Mukhyo Vyanjan","Vegetarian"],
-    line:"Smoky paneer in a spicy gravy.",
-    joke:"Just like paneer tikka, you’re soft, steady, and quietly impressive.",
-    compliment:"You carry yourself with a soft confidence that feels genuine."
-  },
-  {
-    id:"dal-makhani",
-    name:"Dal Makhani",
-    tags:["Mukhyo Vyanjan","Vegetarian"],
-    line:"Creamy black lentils simmered overnight.",
-    joke:"Just like dal makhani, you bring calm and make everything feel better.",
-    compliment:"Your presence has a comforting, peaceful effect on people."
-  },
-  {
-    id:"aloo-gobi",
-    name:"Aloo Gobi",
-    tags:["Mukhyo Vyanjan","Vegetarian","Vegan"],
-    line:"Classic potatoes and cauliflower with spices.",
-    joke:"Just like aloo gobi, you’re simple in the best way—pure and genuinely good.",
-    compliment:"You have a very genuine and sincere nature."
-  },
-  {
-    id:"prawn-malai",
-    name:"Prawn Malai Curry",
-    tags:["Mukhyo Vyanjan","Seafood"],
-    line:"Coastal-style curry cooked in coconut milk.",
-    joke:"Just like prawn malai curry, you carry a gentle elegance that’s memorable.",
-    compliment:"There’s something softness in you that feels very thoughtful."
-  },
-  {
-    id:"chole-bhature",
-    name:"Chole Bhature",
-    tags:["Mukhyo Vyanjan","Comfort"],
-    line:"Spicy chickpeas with fluffy bhature.",
-    joke:"Just like chole bhature, you bring excitement and comfort together perfectly.",
-    compliment:"You balance fun and calmness really beautifully."
-  },
-  {
-    id:"palak-paneer",
-    name:"Palak Paneer",
-    tags:["Mukhyo Vyanjan","Vegetarian"],
-    line:"Paneer cooked in smooth spinach gravy.",
-    joke:"Just like palak paneer, you’re warm, nourishing, and quietly strong.",
-    compliment:"You seem strong in a steady, composed way."
-  },
-  {
-    id:"veg-biryani",
-    name:"Veg Biryani",
-    tags:["Mukhyo Vyanjan","Vegetarian"],
-    line:"Flavoured rice layered with vegetables and spices.",
-    joke:"Just like biryani, you’re layered, thoughtful, and wonderful with every new thing someone discovers about you.",
-    compliment:"You have thoughtful depth that makes people want to know you more."
-  },
-  {
-    id:"malai-kofta",
-    name:"Malai Kofta",
-    tags:["Mukhyo Vyanjan","Vegetarian","Comfort"],
-    line:"Creamy curry with soft kofta dumplings.",
-    joke:"Just like malai kofta, you’re soft, kind, and truly delightful.",
-    compliment:"Your kindness shows in subtle, meaningful ways."
-  },
-  {
-    id:"kadhai-paneer",
-    name:"Kadhai Paneer",
-    tags:["Mukhyo Vyanjan","Vegetarian","Spicy"],
-    line:"Spicy paneer cooked with capsicum and tomatoes.",
-    joke:"Just like kadhai paneer, you’re bold, colourful, and full of lively spirit.",
-    compliment:"You add a lively, positive vibe wherever you go."
-  },
-  {
-    id:"squid",
-    name:"Squid",
-    tags:["Mukhyo Vyanjan","Seafood"],
-    line:"Tender squid cooked with spices.",
-    joke:"Just like squid, you’re unique, graceful, and more fascinating than you let people see at first.",
-    compliment:"There’s something calm and intriguing about you."
-  },
-  {
-    id:"mutton-korma",
-    name:"Mutton Korma",
-    tags:["Mukhyo Vyanjan","Red Meat","Comfort"],
-    line:"Tender mutton pieces cooked in a rich, creamy gravy.",
-    joke:"Just like mutton korma, you’re rich in warmth and always comforting.",
-    compliment:"Your presence feels steady and reassuring."
-  },
-  {
-    id:"chicken-rezala",
-    name:"Chicken Rezala",
-    tags:["Mukhyo Vyanjan","Poultry","Aromatic"],
-    line:"A fragrant Mughlai chicken dish with white gravy.",
-    joke:"Just like rezala, you’re graceful, subtle, and beautifully balanced.",
-    compliment:"You carry yourself with gentle elegance."
-  },
-  {
-    id:"veg-handi",
-    name:"Vegetable Handi",
-    tags:["Mukhyo Vyanjan","Vegetarian","Comfort"],
-    line:"Mixed vegetables cooked in a creamy, aromatic gravy.",
-    joke:"Just like veg handi, you’re warm, colourful, and full of goodness.",
-    compliment:"You have a naturally kind and caring vibe."
-  },
-
-  {
-    id:"rasgulla",
-    name:"Rasgulla",
-    tags:["Mishti aur Roti","Dessert"],
-    line:"Soft cottage cheese balls in syrup.",
-    joke:"Just like a rasgulla, you’re soft, sweet, and impossible not to smile at.",
-    compliment:"Your sweetness feels natural and effortless."
-  },
-  {
-    id:"gulab-jamun",
-    name:"Gulab Jamun",
-    tags:["Mishti aur Roti","Dessert"],
-    line:"Milk-solid dumplings soaked in sugar syrup.",
-    joke:"Just like gulab jamun, you’re warm, comforting, and a little too sweet.",
-    compliment:"You have a comforting warmth that stays with people."
-  },
-  {
-    id:"sandesh",
-    name:"Sandesh",
-    tags:["Mishti aur Roti","Dessert"],
-    line:"A Bengali delight made from chhena.",
-    joke:"Just like sandesh, you’re soft, elegant, and effortlessly sweet.",
-    compliment:"There’s an elegance in the way you carry yourself."
-  },
-  {
-    id:"kheer",
-    name:"Kheer",
-    tags:["Mishti aur Roti","Dessert"],
-    line:"Traditional rice pudding with nuts.",
-    joke:"Just like kheer, you’re gentle, warm, and make moments special.",
-    compliment:"Your gentle behaviour makes people feel comfortable."
-  },
-  {
-    id:"jalebi",
-    name:"Jalebi",
-    tags:["Mishti aur Roti","Dessert"],
-    line:"Crispy spirals soaked in syrup.",
-    joke:"Just like jalebi, you’re sweet, unique, and a little too adorable.",
-    compliment:"You have a naturally adorable charm."
-  },
-  {
-    id:"mishti-doi",
-    name:"Mishti Doi",
-    tags:["Mishti aur Roti","Dessert"],
-    line:"Caramelised sweet yogurt.",
-    joke:"Just like mishti doi, you’re calming and sweet in a natural way.",
-    compliment:"Your sweetness feels peaceful and sincere."
-  },
-  {
-    id:"naan",
-    name:"Garlic Naan",
-    tags:["Mukhyo Vyanjan","Comfort"],
-    line:"Soft flatbread brushed with garlic butter.",
-    joke:"Just like garlic naan, you make everything feel warmer and better.",
-    compliment:"You bring a sense of warmth to the people around you."
-  },
-  {
-    id:"roti",
-    name:"Tandoori Roti",
-    tags:["Mukhyo Vyanjan"],
-    line:"Whole wheat roti cooked in a tandoor.",
-    joke:"Just like tandoori roti, you’re simple, real, and always appreciated.",
-    compliment:"Your authenticity is one of your nicest qualities."
-  },
-  {
-    id:"pulao",
-    name:"Peas Pulao",
-    tags:["Mukhyo Vyanjan","Vegetarian"],
-    line:"Fragrant rice with peas.",
-    joke:"Just like peas pulao, you quietly make days better just by being there.",
-    compliment:"Your presence has a quiet, soothing effect."
-  },
-  {
-    id:"paratha",
-    name:"Laccha Paratha",
-    tags:["Mukhyo Vyanjan","Comfort"],
-    line:"Layered flaky flatbread.",
-    joke:"Just like laccha paratha, you have layers—each one lovelier than the last.",
-    compliment:"You’re someone who becomes even more likeable the more one knows you."
-  },
-  {
-    id:"jeera-rice",
-    name:"Jeera Rice",
-    tags:["Mukhyo Vyanjan","Comfort"],
-    line:"Rice tempered with cumin.",
-    joke:"Just like jeera rice, you’re simple, comforting, and easy to love.",
-    compliment:"You have a calm simplicity that feels very genuine."
-  },
-  {
-    id:"poori",
-    name:"Poori",
-    tags:["Mukhyo Vyanjan","Comfort"],
-    line:"Deep-fried puffed bread.",
-    joke:"Just like poori, you make moments feel joyful and full of warmth.",
-    compliment:"Your cheerful nature makes people enjoy your company."
-  },
-  {
-    id:"rabri",
-    name:"Rabri",
-    tags:["Mishti aur Roti","Dessert"],
-    line:"Thickened sweetened milk with nuts.",
-    joke:"Just like rabri, you’re rich, sweet, and truly special.",
-    compliment:"Your sweetness feels genuine and heartfelt."
-  },
-  {
-    id:"brownie",
-    name:"Chocolate Brownie",
-    tags:["Mishti aur Roti","Dessert","Comfort"],
-    line:"Warm chocolate brownie with a fudgy center.",
-    joke:"Just like a brownie, you’re warm, soft, and easy to love.",
-    compliment:"You have a comforting nature that people enjoy being around."
-  },
-  {
-    id:"roomali-roti",
-    name:"Roomali Roti",
-    tags:["Mukhyo Vyanjan","Bread"],
-    line:"Ultra-soft, thin roti folded like a handkerchief.",
-    joke:"Just like roomali roti, you’re soft, delicate, and truly impressive.",
-    compliment:"Your gentle side is one of your most beautiful qualities."
-  },
-
-  {
-    id:"lassi",
-    name:"Sweet Lassi",
-    tags:["Pey","Drink"],
-    line:"A cooling sweet yogurt drink.",
-    joke:"Just like lassi, you bring a calm that cools even the busiest day.",
-    compliment:"You naturally make things feel more peaceful."
-  },
-  {
-    id:"chai",
-    name:"Masala Chai",
-    tags:["Pey","Drink"],
-    line:"Hot spiced tea brewed with milk.",
-    joke:"Just like masala chai, you’re warm, comforting, and easy to look forward to.",
-    compliment:"Talking to you feels warm and comforting."
-  },
-  {
-    id:"lemonade",
-    name:"Fresh Lemonade",
-    tags:["Pey","Drink","Vegan"],
-    line:"Refreshing Indian lemon drink.",
-    joke:"Just like lemonade, you’re refreshing, bright, and always able to lighten the mood.",
-    compliment:"Your cheerful nature makes things feel fresh and positive."
-  },
-  {
-    id:"cold-coffee",
-    name:"Cold Coffee",
-    tags:["Pey","Drink","Comfort"],
-    line:"Chilled coffee blended with milk.",
-    joke:"Just like cold coffee, you’re cool, refreshing, and surprisingly addictive.",
-    compliment:"You have a naturally cool and pleasant vibe."
-  },
-  {
-    id:"hot-chocolate",
-    name:"Hot Chocolate",
-    tags:["Pey","Drink","Comfort"],
-    line:"Warm cocoa drink topped with cream.",
-    joke:"Just like hot chocolate, you’re warm, sweet, and the definition of comfort.",
-    compliment:"You bring a gentle warmth to every interaction."
-  },
-  {
-    id:"mango-shake",
-    name:"Mango Shake",
-    tags:["Pey","Drink","Comfort"],
-    line:"Thick shake made with ripe mangoes.",
-    joke:"Just like a mango shake, you’re fun, cheerful, and naturally sweet.",
-    compliment:"Your cheerful vibes make people feel lighter."
-  },
-  {
-    id:"coconut-water",
-    name:"Coconut Water",
-    tags:["Pey","Drink","Vegan"],
-    line:"Pure water from fresh coconuts.",
-    joke:"Just like coconut water, you’re refreshing, pure, and full of calm.",
-    compliment:"You have a calming presence that feels very pure-hearted."
-  },
-  {
-    id:"watermelon-juice",
-    name:"Watermelon Juice",
-    tags:["Pey","Drink","Bright"],
-    line:"Refreshing juice made from fresh watermelon.",
-    joke:"Just like watermelon juice, you’re refreshing, sweet, and full of good vibes.",
-    compliment:"You bring a bright, cool energy with you."
-  },
-  {
-    id:"blue-lagoon",
-    name:"Blue Lagoon",
-    tags:["Pey","Drink","Bright"],
-    line:"A citrusy mocktail with a cool blue tint.",
-    joke:"Just like a blue lagoon, you’re calm, cool, and beautifully refreshing.",
-    compliment:"You have a peaceful, pleasant aura that stands out."
-  }
-];
-
-      const STORAGE_KEY = "menuPlannerLines.v2";
-      let lines = loadLines();
-      
-      const menuList = document.getElementById('menuList');
-      const modal = document.getElementById('descriptionModal');
-      const modalTitle = document.getElementById('modalTitle');
-      const modalJoke = document.getElementById('modalJoke');
-      const modalSpecialty = document.getElementById('modalSpecialty');
-      
-      function loadLines(){
-        try{
-          const raw = localStorage.getItem(STORAGE_KEY);
-          return raw ? JSON.parse(raw) : {};
-        }catch(e){ return {}; }
-      }
-      
-      function escapeHtml(s){
-        if (typeof s !== 'string') s = String(s);
-        return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-      }
-
-      function render(){
-        menuList.innerHTML = "";
-        
-        MENU_STRUCTURE.forEach(section => {
-            const sectionItems = DISHES.filter(d => 
-                d.tags.some(tag => section.tags.includes(tag))
-            );
-
-            if (sectionItems.length > 0) {
-                const titleElement = document.createElement('h2');
-                titleElement.className = 'menu-section-title';
-                titleElement.textContent = section.title;
-                menuList.appendChild(titleElement);
-
-                sectionItems.forEach(d => {
-                  const item = document.createElement('div');
-                  item.className = 'menu-item';
-                  item.setAttribute('data-id', d.id);
-                  item.onclick = () => openDescription(d.id);
-                  
-                  item.innerHTML = `
-                    <div class="menu-content-wrapper">
-                        <h2 class="dish-name">${d.name}</h2>
-                        <div class="indicator"></div>
-                    </div>
-                    <div class="dish-tags">
-                        ${d.tags.map(t => `<span class="tag-label">${t}</span>`).join(' | ')}
-                    </div>
-                  `;
-                  menuList.appendChild(item);
-                });
-            }
-        });
-      }
-
-      function openDescription(id) {
-        const dish = DISHES.find(d => d.id === id);
-        if (!dish) return;
-
-        const specialtyText = lines[id] ?? dish.line;
-        const jokeText = dish.joke;
-
-        modalTitle.textContent = dish.name;
-        modalJoke.textContent = jokeText;
-        modalSpecialty.innerHTML = `**Specialty:** ${specialtyText}`; 
-        
-        modal.classList.add('open');
-      }
-
-      function closeDescription() {
-        modal.classList.remove('open');
-      }
-
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('open')) {
-          closeDescription();
-        }
-      });
-
-      render();
-    </script>
-    
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            
             const navLinks = document.querySelectorAll('.nav-panel .nav-link');
             const mainContent = document.getElementById('mainContent');
-            const topNav = document.getElementById('topNav');
-            const bottomNav = document.getElementById('bottomNav');
-            const leftNav = document.getElementById('leftNav');
-            const rightNav = document.getElementById('rightNav');
+            const panels = {
+                top: document.getElementById('topNav'),
+                bottom: document.getElementById('bottomNav'),
+                left: document.getElementById('leftNav'),
+                right: document.getElementById('rightNav')
+            };
             const navToggle = document.getElementById('navToggle');
             const navToggleIcon = document.getElementById('navToggleIcon');
             const navToggleX = document.getElementById('navToggleX');
             let areNavsOpen = false;
 
-            function openAllNavs() {
-                if(topNav) topNav.classList.remove('-translate-y-full');
-                if(bottomNav) bottomNav.classList.remove('translate-y-full');
-                if(leftNav) leftNav.classList.remove('-translate-x-full');
-                if(rightNav) rightNav.classList.remove('translate-x-full');
-                if(mainContent) {
-                    mainContent.classList.remove('pt-20');
-                    mainContent.classList.add('pt-14', 'pb-14', 'pl-24', 'pr-24');
-                }
-                if(navToggleIcon) navToggleIcon.classList.add('hidden');
-                if(navToggleX) navToggleX.classList.remove('hidden');
-                areNavsOpen = true;
-            }
-
-            function closeAllNavs() {
-                if(topNav) topNav.classList.add('-translate-y-full');
-                if(bottomNav) bottomNav.classList.add('translate-y-full');
-                if(leftNav) leftNav.classList.add('-translate-x-full');
-                if(rightNav) rightNav.classList.add('translate-x-full');
-                if(mainContent) {
-                    mainContent.classList.remove('pt-14', 'pb-14', 'pl-24', 'pr-24');
-                    mainContent.classList.add('pt-20');
-                }
-                if(navToggleIcon) navToggleIcon.classList.remove('hidden');
-                if(navToggleX) navToggleX.classList.add('hidden');
-                areNavsOpen = false;
-            }
-
-            function toggleAllNavs() {
-                if (areNavsOpen) {
-                    closeAllNavs();
+            function toggleNavs() {
+                areNavsOpen = !areNavsOpen;
+                const method = areNavsOpen ? 'remove' : 'add';
+                
+                panels.top.classList[method]('-translate-y-full');
+                panels.bottom.classList[method]('translate-y-full');
+                panels.left.classList[method]('-translate-x-full');
+                panels.right.classList[method]('translate-x-full');
+                
+                if(areNavsOpen) {
+                    navToggleIcon.classList.add('hidden');
+                    navToggleX.classList.remove('hidden');
+                    mainContent.style.transform = 'scale(0.92)';
+                    mainContent.style.opacity = '0.4';
+                    mainContent.style.pointerEvents = 'none';
                 } else {
-                    openAllNavs();
+                    navToggleIcon.classList.remove('hidden');
+                    navToggleX.classList.add('hidden');
+                    mainContent.style.transform = 'scale(1)';
+                    mainContent.style.opacity = '1';
+                    mainContent.style.pointerEvents = 'auto';
                 }
             }
-            
-            if(navToggle) {
-                navToggle.addEventListener('click', (e) => {
-                    e.stopPropagation(); 
-                    toggleAllNavs();
-                });
-            }
-            
-            if(mainContent) {
-                mainContent.addEventListener('click', () => {
-                    if (areNavsOpen) {
-                        closeAllNavs();
-                    }
-                });
-            }
-            
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    const targetHref = e.currentTarget.getAttribute('href');
-                    
-                    if (targetHref && targetHref.startsWith('#')) {
-                        e.preventDefault(); 
-                    }
 
-                    if (areNavsOpen) {
-                        setTimeout(closeAllNavs, 100); 
-                    }
-                });
+            navToggle.addEventListener('click', (e) => { e.stopPropagation(); toggleNavs(); });
+            document.body.addEventListener('click', (e) => { 
+                if (areNavsOpen && !e.target.closest('.nav-panel')) toggleNavs(); 
             });
 
-            if (!topNav || !bottomNav || !leftNav || !rightNav || !mainContent || !navToggleIcon || !navToggleX) {
-                console.warn("One or more navigation elements are missing from the DOM.");
-            }
+            const playButton = document.getElementById('play-button');
+            const initialState = document.getElementById('initial-state');
+            const revealState = document.getElementById('reveal-state');
+            const vinyl = document.getElementById('vinyl');
+            const toneArm = document.getElementById('tone-arm');
+            const visualizer = document.getElementById('visualizer');
+            const nowPlayingTitle = document.getElementById('now-playing-title');
+            const progressBar = document.getElementById('progress-bar');
             
+            const audioElements = document.querySelectorAll('audio');
+            const trackItems = document.querySelectorAll('.track-item');
+
+            const data = {
+                guitar: { 
+                    msg: "Even the guitar becomes shy around you, like it’s thinking, “Bro, behave. She’s watching.” You somehow make an instrument look nervous… and prettier 🎸",
+                    title: "Guitar Riff (Original Mix)"
+                },
+                flute: { 
+                    msg: "The flute would probably behave like it’s honoured to be in your hands if he gets a chance. Even without playing a note, you’d still make the whole moment look sweet and effortless. 🌬️",
+                    title: "Flute Melody (Airy Cut)"
+                },
+                harmonica: { 
+                    msg: "You’d probably make the harmonica feel important just by touching it, the same way your presence quietly brightens any moment you’re in. 🤠",
+                    title: "Harmonica Blues"
+                },
+                drum: { 
+                    msg: "The heartbeat of the A drum carries rhythm, but you carry presence , the kind that makes a moment feel balanced and bright. You’d make the whole scene feel naturally warm. 🥁",
+                    title: "Drumline Percussion"
+                },
+                violin: { 
+                    msg: "If you ever held a violin, it would look like it was made to match your softness. There’s a quiet elegance in you that fits beautifully with anything delicate.🎻",
+                    title: "Violin Concerto No. 5"
+                }
+            };
+
+            playButton.addEventListener('click', () => {
+                initialState.classList.add('opacity-0', 'pointer-events-none');
+                setTimeout(() => {
+                    initialState.classList.add('hidden');
+                    revealState.classList.remove('opacity-0');
+                    nowPlayingTitle.classList.remove('opacity-0');
+                }, 500);
+            });
+
+            function stopAll() {
+                 vinyl.classList.add('is-paused');
+                 vinyl.classList.remove('is-spinning');
+                 toneArm.classList.remove('playing');
+                 visualizer.classList.remove('playing');
+                 trackItems.forEach(t => {
+                    t.classList.remove('active');
+                    t.querySelector('.playing-indicator').innerHTML = '';
+                 });
+                 progressBar.style.width = '0%';
+            }
+
+            function playTrack(trackId, element) {
+                audioElements.forEach(a => { a.pause(); a.currentTime = 0; });
+                trackItems.forEach(t => {
+                    if (t !== element) {
+                        t.classList.remove('active');
+                        t.querySelector('.playing-indicator').innerHTML = '';
+                    }
+                });
+
+                element.classList.add('active');
+                
+                const descBox = element.querySelector('.track-description p');
+                if(data[trackId] && descBox) {
+                    descBox.innerHTML = data[trackId].msg;
+                }
+
+                element.querySelector('.playing-indicator').innerHTML = `
+                    <div class="flex space-x-0.5 h-3 items-end">
+                        <div class="w-0.5 bg-current animate-[bounce_1s_infinite]"></div>
+                        <div class="w-0.5 bg-current animate-[bounce_1.2s_infinite]"></div>
+                        <div class="w-0.5 bg-current animate-[bounce_0.8s_infinite]"></div>
+                    </div>
+                `;
+
+                vinyl.classList.add('is-spinning');
+                vinyl.classList.remove('is-paused');
+                toneArm.classList.add('playing');
+                visualizer.classList.add('playing');
+                progressBar.style.width = '10%';
+
+                if(data[trackId]) {
+                    nowPlayingTitle.style.opacity = 0;
+                    setTimeout(() => {
+                        nowPlayingTitle.querySelector('h2').textContent = data[trackId].title;
+                        nowPlayingTitle.style.opacity = 1;
+                    }, 300);
+                }
+                
+                setTimeout(() => { progressBar.style.width = '40%'; }, 300);
+
+                const audio = document.getElementById(`audio-${trackId}`);
+                if(audio) {
+                    const playPromise = audio.play();
+                    
+                    if (playPromise !== undefined) {
+                        playPromise.then(_ => {
+                            console.log("Playing: " + trackId);
+                        })
+                        .catch(error => {
+                            console.log("Playback failed (likely missing file): " + error);
+                            setTimeout(() => {
+                                console.warn("Audio file missing. Stopping animation.");
+                                stopAll();
+                                alert(`Music file for ${trackId} not found. Please ensure the MP3 file is in the same folder.`);
+                            }, 500);
+                        });
+                    }
+                    
+                    audio.onended = () => {
+                        stopAll();
+                        progressBar.style.width = '100%';
+                        setTimeout(() => { progressBar.style.width = '0%'; }, 500);
+                    };
+                }
+            }
+
+            trackItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const id = item.getAttribute('data-audio-id');
+                    playTrack(id, item);
+                });
+            });
         });
     </script>
 </body>
