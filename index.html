@@ -2,570 +2,1177 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Birthday Soundtrack: The Vinyl Edition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Outfit:wght@300;400;500;600;700;800&family=Pacifico&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Inter:wght@300;400;500;700&family=Pacifico&display=swap" rel="stylesheet">
+
     <style>
         .nav-panel, #mainContent, #navToggleIcon, #navToggleX {
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease-in-out;
         }
         
+        #mainContent, .nav-panel {
+            -ms-overflow-style: none;  
+            scrollbar-width: none;  
+        }
+        #mainContent::-webkit-scrollbar,
         .nav-panel::-webkit-scrollbar {
-            width: 2px;
+            display: none; 
         }
-        .nav-panel::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.02);
+        
+        .festive-text {
+            font-family: 'Gochi Hand', cursive; 
         }
-        .nav-panel::-webkit-scrollbar-thumb {
-            background: rgba(255,255,255,0.15);
+        
+        #navToggle {
+            transition: all 0.3s ease-in-out;
+        }
+        
+        h1, h2, h3 {
+             font-family: 'Pacifico', cursive;
+        }
+
+        :root {
+            --cake-body: #fdfdfd;
+            --frosting: #6b8dff; 
+            --eye: #333;
+            --flame: #f9a825; 
+            --sprinkle1: #fd6a9e; 
+            --sprinkle2: #fece5a; 
+            --sprinkle3: #96e05d; 
+            --sprinkle4: #54c1e0; 
+            
+            --brick-pink-light: #fec5d9;
+            --brick-pink-dark: #fca7c6;
+            --mortar: #fdfdfd;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(-45deg, #f8cdda, #f6a1d1, #e973b2, #d8509b);
+            background-size: 400% 400%;
+            animation: gradient-flow 15s ease infinite;
+            transition: background-color 1s ease-in-out;
+            display: block; 
+        }
+        
+        @keyframes gradient-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        #mainContent {
+            display: grid;
+            place-items: center;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            inset: 0;
+            overflow: hidden; 
+            padding: 0; 
+            transition: all 0.3s ease-in-out;
+        }
+
+        #brick-wall {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--brick-pink-light);
+            background-image:
+                linear-gradient(335deg, var(--brick-pink-dark) 23px, transparent 23px),
+                linear-gradient(155deg, var(--brick-pink-dark) 23px, transparent 23px),
+                linear-gradient(335deg, var(--brick-pink-dark) 23px, transparent 23px),
+                linear-gradient(155deg, var(--brick-pink-dark) 23px, transparent 23px);
+            background-size: 58px 58px;
+            background-position: 0px 2px, 4px 35px, 29px 31px, 34px 6px;
+            border: 2px solid var(--mortar);
+            z-index: 10; 
+            opacity: 1; 
+            transition: opacity 1.5s ease;
+        }
+        
+        #banner {
+            position: fixed;
+            top: 5%;
+            left: 5%; 
+            width: 90%; 
+            transform: none; 
+            display: flex;
+            flex-wrap: wrap; 
+            justify-content: center; 
+            gap: 5px;
+            z-index: 14; 
+            opacity: 0; 
+            transition: opacity 1s ease 0.5s; 
+        }
+        #banner .line { 
+            display: flex;
+            justify-content: center;
+            width: 100%; 
+            margin-bottom: 5px; 
+        }
+        #banner span {
+            font-family: 'Pacifico', cursive; 
+            font-size: 1.25rem; 
+            padding: 8px 4px; 
+            background: white;
+            color: var(--frosting);
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transform: rotate(-5deg);
+        }
+        #banner span:nth-child(even) {
+            transform: rotate(5deg);
+            background: var(--sprinkle1);
+            color: white;
+        }
+        #banner span:nth-child(3n) {
+            transform: rotate(2deg);
+            background: var(--sprinkle2);
+            color: white;
+        }
+        #banner span.space {
+            background: transparent;
+            box-shadow: none;
+            padding: 0 2px;
+        }
+
+        .cake-container {
+            position: relative;
+            width: 200px;
+            height: 120px;
+            transition: opacity 1s ease-in-out;
+            transform: scale(0.8);
+            opacity: 0; 
+            z-index: 15; 
+        }
+        @media (min-width: 400px) {
+            .cake-container { transform: scale(1); }
+        }
+
+        .frosting {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: var(--frosting);
+            border-radius: 20px 20px 10px 10px;
+        }
+        .frosting::before, .frosting::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            background: var(--frosting);
+            width: 20px;
+            height: 55px; 
             border-radius: 10px;
         }
-        
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 4px;
+        .frosting::before { left: 30px; }
+        .frosting::after { right: 30px; }
+
+        .cake-body {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            background: var(--cake-body);
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 4px;
-        }
         
-        .festive-text { font-family: 'Gochi Hand', cursive; }
-        .heading-text { font-family: 'Pacifico', cursive; }
-        
-        body {
-            font-family: 'Outfit', sans-serif;
-            background: #0f0c29; 
-            background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
-            color: #fff;
-            min-height: 100vh;
+        .face { position: absolute; width: 100%; height: 100%; }
+        .eye { position: absolute; top: 15px; width: 12px; height: 12px; }
+        .eye-left { left: 35%; }
+        .eye-right { right: 35%; }
+
+        .eye-open {
+            width: 12px; height: 12px; background: var(--eye); border-radius: 50%; opacity: 0;
+            transform: translateX(-20px); transition: opacity 0.2s ease, transform 0.3s ease;
+        }
+        .eye-closed {
+            position: absolute; top: 0; width: 12px; height: 8px;
+            border-bottom: 3px solid var(--eye); border-radius: 0 0 12px 12px;
+            opacity: 0; transition: opacity 0.2s ease;
+        }
+
+        .mouth {
+            position: absolute; top: 35px; left: 50%;
+            transform: translateX(-50%) translateX(-20px);
+            width: 30px; height: 15px;
+            border: 3px solid var(--eye); border-top-color: transparent;
+            border-radius: 0 0 15px 15px; opacity: 0;
+            transition: opacity 0.3s ease 0.1s, transform 0.4s ease 0.1s;
+        }
+
+        .sprinkles {
+            position: absolute; bottom: 10px; width: 100%; height: 10px;
+            text-align: center; opacity: 0;
+            transform: translateX(-20px); transition: opacity 0.3s ease 0.2s, transform 0.4s ease 0.2s;
+        }
+        .sprinkles span {
+            display: inline-block; width: 3px; height: 8px; border-radius: 2px; margin: 0 2px;
+            transform: rotate(20deg);
+        }
+        .sprinkles span:nth-child(4n+1) { background: var(--sprinkle1); }
+        .sprinkles span:nth-child(4n+2) { background: var(--sprinkle2); }
+        .sprinkles span:nth-child(4n+3) { background: var(--sprinkle3); }
+        .sprinkles span:nth-child(4n+4) { background: var(--sprinkle4); }
+        .sprinkles span:nth-child(odd) { transform: rotate(-20deg); }
+
+        .candles-container {
+            position: absolute; top: -30px; width: 100%; display: flex;
+            justify-content: center; gap: 20px; z-index: -1; 
+        }
+        .candle {
+            position: relative; width: 12px; height: 35px; background: white; border-radius: 5px 5px 0 0;
+            transform: translateY(100%); transition: transform 0.5s ease-in-out, opacity 0.3s ease;
+        }
+        .flame {
+            position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+            width: 10px; height: 14px; background: var(--flame);
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; opacity: 0;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 0 10px var(--flame), 0 0 15px var(--flame);
+        }
+
+        .card-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: grid; place-items: center;
+            opacity: 0; pointer-events: none; 
+            transition: opacity 1.5s ease-in-out 0.5s;
+            z-index: 100;
+            overflow: hidden;
+            background: #020617; 
+        }
+
+        .aurora-bg {
+            position: absolute; inset: 0; z-index: -2;
+            background: #020617;
             overflow: hidden;
         }
 
-        .blob {
+        .aurora-curtain {
             position: absolute;
-            filter: blur(80px);
-            z-index: 0;
+            top: -20%;
+            left: -50%;
+            width: 200%;
+            height: 150%; 
+            filter: blur(25px);
             opacity: 0.6;
-            animation: float 20s infinite;
-        }
-        .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #ff6b81; animation-delay: 0s; }
-        .blob-2 { bottom: -10%; right: -10%; width: 600px; height: 600px; background: #7bed9f; animation-delay: -5s; }
-        .blob-3 { top: 40%; left: 40%; width: 400px; height: 400px; background: #70a1ff; animation-delay: -10s; }
-
-        @keyframes float {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(30px, -50px) rotate(10deg); }
-            66% { transform: translate(-20px, 20px) rotate(-5deg); }
-            100% { transform: translate(0, 0) rotate(0deg); }
+            mix-blend-mode: screen;
+            transform-origin: center;
         }
 
-        .glass-panel {
+        .curtain-1 {
+            background: repeating-linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(0, 255, 136, 0.0) 5%,
+                rgba(0, 255, 136, 0.5) 10%,
+                rgba(0, 255, 136, 0.0) 15%,
+                transparent 20%
+            );
+            animation: drift-cross-1 20s linear infinite alternate;
+            opacity: 0.8;
+        }
+
+        .curtain-2 {
+            background: repeating-linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(157, 0, 255, 0.0) 8%,
+                rgba(180, 50, 255, 0.4) 12%,
+                rgba(157, 0, 255, 0.0) 16%,
+                transparent 24%
+            );
+            animation: drift-cross-2 25s ease-in-out infinite alternate-reverse;
+            top: -10%;
+            opacity: 0.7;
+        }
+
+        .curtain-3 {
+            background: repeating-linear-gradient(
+                90deg,
+                transparent 0%,
+                rgba(0, 162, 255, 0.0) 12%,
+                rgba(0, 162, 255, 0.3) 16%,
+                rgba(0, 162, 255, 0.0) 20%,
+                transparent 30%
+            );
+            animation: drift-cross-3 30s linear infinite alternate;
+            top: 0%;
+            opacity: 0.5;
+        }
+        
+        .aurora-curtain::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, #020617 0%, transparent 20%, transparent 80%, #020617 100%);
+        }
+
+        @keyframes drift-cross-1 {
+            0% { transform: rotate(-25deg) translateX(-10%); }
+            100% { transform: rotate(-15deg) translateX(10%); }
+        }
+        @keyframes drift-cross-2 {
+            0% { transform: rotate(25deg) translateX(10%); }
+            100% { transform: rotate(15deg) translateX(-10%); }
+        }
+        @keyframes drift-cross-3 {
+            0% { transform: rotate(0deg) scale(1.1) translateX(-5%); }
+            100% { transform: rotate(0deg) scale(1.2) translateX(5%); }
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: twinkle var(--duration) ease-in-out infinite;
+            animation-delay: var(--delay);
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.2; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 4px white; }
+        }
+
+        .shooting-star {
+            position: absolute;
+            width: 100px; height: 2px;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%);
+            transform: rotate(-45deg) translateX(-200px);
+            opacity: 0;
+            animation: shoot 4s ease-in-out infinite;
+        }
+        @keyframes shoot {
+            0% { transform: rotate(-45deg) translateX(-200px); opacity: 0; }
+            10% { opacity: 1; }
+            20% { transform: rotate(-45deg) translateX(calc(100vw + 200px)); opacity: 0; }
+            100% { transform: rotate(-45deg) translateX(calc(100vw + 200px)); opacity: 0; }
+        }
+
+        .moon {
+            position: absolute;
+            top: 8%;
+            right: 10%;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle at 35% 35%, #fffdf5, #fffdca 20%, #f0f0f0 100%);
+            border-radius: 50%;
+            box-shadow: 
+                0 0 30px 5px rgba(255, 253, 202, 0.4),
+                0 0 80px 20px rgba(255, 255, 255, 0.1);
+            z-index: -1;
+            animation: moon-pulse 6s ease-in-out infinite alternate;
+        }
+        
+        .moon::before {
+            content: '';
+            position: absolute;
+            top: 20%; left: 30%;
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background: rgba(200, 200, 200, 0.1);
+            box-shadow: 
+                35px 10px 0 -5px rgba(200, 200, 200, 0.1), 
+                10px 35px 0 -2px rgba(200, 200, 200, 0.1);
+        }
+
+        @keyframes moon-pulse {
+            0% { transform: scale(1); box-shadow: 0 0 30px 5px rgba(255, 253, 202, 0.4), 0 0 80px 20px rgba(255, 255, 255, 0.1); }
+            100% { transform: scale(1.02); box-shadow: 0 0 40px 10px rgba(255, 253, 202, 0.5), 0 0 100px 30px rgba(255, 255, 255, 0.2); }
+        }
+
+        .card-message {
+            position: relative;
+            width: 90%; 
+            max-width: 700px;
+            padding: 35px 40px; 
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 24px;
+            text-align: left; 
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        }
-
-        .vinyl-wrapper {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 1/1;
-            margin: 0 auto;
-        }
-
-        .vinyl-disk {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            background: repeating-radial-gradient(#111 0, #111 2px, #222 3px, #222 4px);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .vinyl-label {
-            width: 35%;
-            height: 35%;
-            border-radius: 50%;
-            background: url('https://images.unsplash.com/photo-1493225255756-d9584f8606e9?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80') center/cover;
-            position: relative;
-            border: 4px solid rgba(255,255,255,0.2);
-        }
-        
-        .vinyl-shine {
-            position: absolute; inset: 0; border-radius: 50%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.05) 100%);
-            pointer-events: none;
-        }
-
-        .tone-arm {
-            position: absolute;
-            top: -20px;
-            right: -20px;
-            width: 120px;
-            height: 300px;
-            z-index: 20;
-            transform-origin: 90px 40px;
-            transform: rotate(-35deg);
-            transition: transform 1s ease-in-out;
-            pointer-events: none;
-        }
-        
-        @media (max-width: 768px) {
-            .tone-arm {
-                transform: rotate(-35deg) scale(0.7);
-                right: -30px;
-                top: -30px;
-            }
-            .tone-arm.playing {
-                transform: rotate(15deg) scale(0.7);
-            }
-        }
-        
-        @media (min-width: 769px) {
-            .tone-arm.playing { transform: rotate(15deg); }
-        }
-
-        .arm-body { width: 10px; height: 220px; background: #d1d5db; position: absolute; top: 40px; left: 85px; transform: rotate(15deg); border-radius: 5px; box-shadow: 2px 2px 5px rgba(0,0,0,0.5); }
-        .arm-head { width: 25px; height: 40px; background: #4b5563; position: absolute; bottom: 20px; left: 45px; transform: rotate(25deg); border-radius: 4px; }
-        .arm-pivot { width: 60px; height: 60px; background: #374151; border-radius: 50%; position: absolute; top: 10px; right: 10px; border: 4px solid #1f2937; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); }
-
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-        .is-spinning { animation: spin 6s linear infinite; }
-        .is-paused { animation-play-state: paused; }
-
-        .visualizer { display: flex; align-items: flex-end; gap: 3px; height: 40px; margin-bottom: 0; }
-        .bar { width: 6px; background: #ff6b81; border-radius: 4px; animation: bounce 0.5s infinite ease-in-out; animation-play-state: paused; }
-        .bar:nth-child(even) { background: #70a1ff; }
-        .playing .bar { animation-play-state: running; }
-        
-        @keyframes bounce {
-            0%, 100% { height: 10%; }
-            50% { height: 100%; }
-        }
-        .bar:nth-child(1) { animation-duration: 0.6s; }
-        .bar:nth-child(2) { animation-duration: 0.8s; }
-        .bar:nth-child(3) { animation-duration: 0.5s; }
-        .bar:nth-child(4) { animation-duration: 0.7s; }
-        .bar:nth-child(5) { animation-duration: 0.6s; }
-        .bar:nth-child(6) { animation-duration: 0.9s; }
-
-        .track-item {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: all 0.3s ease;
-            overflow: hidden;
-        }
-        .track-item:hover { background: rgba(255,255,255,0.1); }
-        
-        .track-item.active { 
-            background: linear-gradient(180deg, rgba(244, 63, 94, 0.15) 0%, rgba(0,0,0,0.2) 100%);
-            border-color: rgba(244, 63, 94, 0.4);
-            border-left: 4px solid #ff6b81;
-        }
-        
-        .track-description {
-            max-height: 0;
+            color: white;
+            
+            transform: scale(0.9) translateY(30px);
             opacity: 0;
-            transition: max-height 0.5s cubic-bezier(0, 1, 0, 1), opacity 0.4s ease;
+            transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1) 1.2s, opacity 1s ease-out 1.2s;
+            max-height: 80vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.3) transparent;
         }
         
-        .track-item.active .track-description {
-            max-height: 200px;
+        .card-message::-webkit-scrollbar { width: 6px; }
+        .card-message::-webkit-scrollbar-thumb { background-color: rgba(255,255,255,0.3); border-radius: 3px; }
+        .card-message::-webkit-scrollbar-track { background: transparent; }
+        
+        .card-overlay.visible .card-message {
+            transform: scale(1) translateY(0);
             opacity: 1;
-            transition: max-height 0.5s ease-in-out, opacity 0.4s ease-in 0.1s;
+        }
+        
+        .card-message h1 {
+            font-family: 'Pacifico', cursive;
+            font-size: 2.8rem;
+            margin-bottom: 0.25rem;
+            text-align: center; 
+            background: linear-gradient(to right, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent; 
+            filter: drop-shadow(0 0 10px rgba(255,105,180,0.5));
+        }
+        
+        .subtitle {
+            text-align: center;
+            display: block;
+            margin-bottom: 2.5rem;
+            color: #ffd700;
+            font-style: italic;
+            font-size: 1rem;
+        }
+        
+        .message-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
         }
 
-        .nav-link::after {
-            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px;
-            background: #ff6b81; transform: scaleX(0); transform-origin: right;
-            transition: transform 0.3s ease;
+        .message-line {
+            display: flex;
+            align-items: flex-start; 
+            gap: 15px; 
         }
-        .nav-link:hover::after { transform: scaleX(1); transform-origin: left; }
+
+        .message-line .icon {
+            font-size: 1.2rem;
+            line-height: 1.6; 
+            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.6));
+        }
+
+        .message-line p {
+            font-family: 'Inter', sans-serif;
+            color: rgba(255, 255, 255, 0.95);
+            line-height: 1.6;
+            font-size: 1.05rem;
+            font-weight: 300;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            margin: 0;
+            flex: 1; 
+        }
+
+        #button-container {
+            position: absolute;
+            bottom: 50px; 
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column; 
+            gap: 15px;
+            z-index: 16; 
+        }
+        #button-container.on-wall { z-index: 201; }
+        
+        .action-button {
+            padding: 12px 28px;
+            background-color: var(--frosting);
+            color: white;
+            font-size: 1.125rem; 
+            font-weight: 600; 
+            border: none;
+            border-radius: 9999px; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            white-space: nowrap;
+        }
+        
+        #lets-decorate-button {
+            background-color: #f8f9fa;
+            color: #d63384;
+            font-family: 'Pacifico', cursive;
+            font-size: 1.3rem;
+        }
+
+        .action-button.visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+            animation: pulse 2s infinite ease-in-out;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 5px 15px rgba(0,0,0,0.1); transform: scale(1); }
+            50% { box-shadow: 0 8px 25px rgba(0,0,0,0.15); transform: scale(1.05); }
+            100% { box-shadow: 0 5px 15px rgba(0,0,0,0.1); transform: scale(1); }
+        }
+        
+        .action-button:hover, .action-button.clicked { animation: none; }
+
+        #slice {
+            position: absolute; top: 50%; left: 50%; width: 4px; height: 150px; 
+            background: white; border-radius: 2px; box-shadow: 0 0 10px white, 0 0 20px white;
+            transform: translate(-100px, -200px) rotate(30deg) scaleY(0);
+            transform-origin: top center; transition: transform 0.4s ease-in-out, opacity 0.4s ease;
+            opacity: 0; z-index: 99;
+        }
+        
+        #confetti-container, #balloon-container, #heart-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            overflow: hidden; pointer-events: none; opacity: 0; transition: opacity 1s ease;
+        }
+        #confetti-container { z-index: 11; }
+        #balloon-container { z-index: 12; }
+        #heart-container { z-index: 13; }
+
+        .confetti {
+            position: absolute; top: -20px; width: 8px; height: 15px;
+            border-radius: 2px; opacity: 0.8; animation: fall 10s linear infinite;
+        }
+        @keyframes fall {
+            from { transform: translateY(-20px) rotate(0deg); }
+            to { transform: translateY(105vh) rotate(720deg); opacity: 0; }
+        }
+        
+        .emoji-heart {
+            position: absolute; bottom: -150px; font-size: 50px; 
+            animation: float 15s linear infinite;
+        }
+        @keyframes float {
+            from { transform: translateY(0) translateX(0) rotate(0deg); opacity: 1; }
+            to { transform: translateY(-120vh) translateX(100px) rotate(360deg); opacity: 0; }
+        }
+
+        .heart {
+            position: absolute; bottom: -50px; width: 20px; height: 20px;
+            transform: rotate(-45deg); animation: float-heart 20s linear infinite; opacity: 0.1; 
+        }
+        .heart::before, .heart::after {
+            content: ""; position: absolute; width: 20px; height: 20px; border-radius: 50%;
+        }
+        .heart::before { top: -10px; left: 0; }
+        .heart::after { top: 0; left: 10px; }
+        
+        .heart.pink { background-color: #ff69b4; }
+        .heart.pink::before, .heart.pink::after { background-color: #ff69b4; }
+        .heart.red { background-color: #e01b1b; }
+        .heart.red::before, .heart.red::after { background-color: #e01b1b; }
+        .heart.white { background-color: #ffffff; }
+        .heart.white::before, .heart.white::after { background-color: #ffffff; }
+
+        @keyframes float-heart {
+            from { transform: translateY(0) translateX(var(--sway-start, 0px)) rotate(-45deg); opacity: 0.7; }
+            50% { transform: translateY(-60vh) translateX(var(--sway-mid, 40px)) rotate(-45deg); }
+            to { transform: translateY(-120vh) translateX(var(--sway-end, 0px)) rotate(-45deg); opacity: 0; }
+        }
 
     </style>
 </head>
-<body class="overflow-hidden selection:bg-rose-500 selection:text-white">
-
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
-
-    <button id="navToggle" class="fixed top-4 left-4 md:top-6 md:left-6 z-[70] group">
-        <div class="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-white/10 backdrop-blur-md border border-white/20 text-white rounded-full shadow-lg group-hover:bg-rose-500 transition-all duration-300">
-            <svg id="navToggleIcon" class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
-            <svg id="navToggleX" class="w-5 h-5 md:w-6 md:h-6 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path></svg>
-        </div>
+<body class="font-sans overflow-hidden">
+    
+    <button id="navToggle" class="fixed top-6 left-6 z-[110] p-2 bg-purple-600 text-white rounded-full shadow-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+        <svg id="navToggleIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-8 6h8"></path></svg>
+        <svg id="navToggleX" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
     </button>
 
-    <nav id="topNav" class="nav-panel fixed top-0 inset-x-0 z-[62] h-20 md:h-24 bg-black/80 backdrop-blur-xl border-b border-white/10 flex items-center justify-center space-x-6 md:space-x-10 -translate-y-full">
-        <a href="index.html" class="nav-link relative text-white/90 font-medium festive-text text-lg md:text-xl tracking-wide">Home</a>
-        <a href="Special.html" class="nav-link relative text-white/90 font-medium festive-text text-lg md:text-xl tracking-wide">Special</a>
-        <a href="letter.html" class="nav-link relative text-white/90 font-medium festive-text text-lg md:text-xl tracking-wide">Letter</a>
-    </nav>
+        <nav id="topNav" class="nav-panel fixed top-0 left-0 right-0 z-[105] h-16 bg-purple-600 text-yellow-100 shadow-md flex items-center justify-center space-x-6 -translate-y-full">
+            <a href="index.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Home</a>
+            <a href="Special.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Special</a>
+            <a href="letter.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Letter</a>
+        </nav>
 
-    <nav id="bottomNav" class="nav-panel fixed bottom-0 inset-x-0 z-[62] h-20 md:h-24 bg-black/80 backdrop-blur-xl border-t border-white/10 flex items-center justify-center space-x-6 md:space-x-10 translate-y-full">
-        <a href="anatomy.html" class="nav-link relative text-white/90 font-medium festive-text text-lg md:text-xl tracking-wide">Anatomy</a>
-        <a href="chat.html" class="nav-link relative text-white/90 font-medium festive-text text-lg md:text-xl tracking-wide">Heaven</a>
-        <a href="you.html" class="nav-link relative text-white/90 font-medium festive-text text-lg md:text-xl tracking-wide">You</a>
-    </nav>
+        <nav id="bottomNav" class="nav-panel fixed bottom-0 left-0 right-0 z-[105] h-16 bg-purple-600 text-yellow-100 shadow-md flex items-center justify-center space-x-6 translate-y-full">
+            <a href="anatomy.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Anatomy</a>
+            <a href="chat.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Heaven</a>
+            <a href="you.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">You</a>
+        </nav>
 
-    <nav id="leftNav" class="nav-panel fixed left-0 top-28 bottom-28 md:top-32 md:bottom-32 z-[61] w-1/2 md:w-40 bg-black/90 md:bg-black/80 backdrop-blur-xl border-r border-white/10 flex flex-col items-center justify-start py-6 space-y-3 md:space-y-4 overflow-y-auto -translate-x-full rounded-r-xl">
-        <a href="Diary.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Diary</a>
-        <a href="Universe.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Universe</a>
-        <a href="Box.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Box</a>
-        <a href="color.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Color</a>
-        <a href="Teacher.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Teacher</a>
-        <a href="The_River.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">River</a>
-        <a href="Mountain.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Mountain</a>
-        <a href="Paper_Star.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Paper Star</a>
-        <a href="Carttoon.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Cartoon</a>
-        <a href="Santa.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Santa</a>
-        <a href="Cloud.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Cloud</a>
-        <a href="Ink.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Paint</a>
-        <a href="Butterfly.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Butterfly</a>
-        <a href="Weather.html" class="nav-link relative text-cyan-400 font-medium festive-text text-base md:text-lg">Weather</a>
-    </nav>
+        <nav id="leftNav" class="nav-panel fixed left-0 top-0 bottom-0 z-[105] w-20 bg-purple-800 text-yellow-100 shadow-md flex flex-col items-center space-y-6 -translate-x-full overflow-y-auto py-20">
+            <a href="Diary.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Diary</a>
+            <a href="Universe.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Universe</a>
+            <a href="Box.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Box</a>
+            <a href="color.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Color</a>
+            <a href="Teacher.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Teacher</a>
+            <a href="The_River.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">River</a>
+            <a href="Mountain.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Mountain</a>
+            <a href="Paper_Star.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Paper Star</a>
+            <a href="Carttoon.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Cartoon</a>
+            <a href="Santa.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Santa</a>
+            <a href="Cloud.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Cloud</a>
+            <a href="Ink.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Paint</a>
+            <a href="Butterfly.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Butterfly</a>
+            <a href="Weather.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Weather</a>
+        </nav>
 
-    <nav id="rightNav" class="nav-panel fixed right-0 top-28 bottom-28 md:top-32 md:bottom-32 z-[61] w-1/2 md:w-40 bg-black/90 md:bg-black/80 backdrop-blur-xl border-l border-white/10 flex flex-col items-center justify-start py-6 space-y-3 md:space-y-4 overflow-y-auto translate-x-full rounded-l-xl">
-        <a href="Skill.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Skill</a>
-        <a href="Msg.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Massege</a>
-        <a href="21_Wish.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">21_Door</a>
-        <a href="Cake.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Cake</a>
-        <a href="Periodik_table.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Table</a>
-        <a href="Presence.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Presence</a>
-        <a href="Concept.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Concept</a>
-        <a href="Calender.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Calender</a>
-        <a href="Perspective.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Perspective</a>
-        <a href="Spotlight.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Spotlight</a>
-        <a href="Room.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Room</a>
-        <a href="Radio.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Radio</a>
-        <a href="Food.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Food</a>
-        <a href="Music.html" class="nav-link relative text-rose-400 font-medium festive-text text-base md:text-lg">Music</a>
-    </nav>
+        <nav id="rightNav" class="nav-panel fixed right-0 top-0 bottom-0 z-[105] w-20 bg-purple-800 text-yellow-100 shadow-md flex flex-col items-center space-y-6 translate-x-full overflow-y-auto py-20">
+            <a href="Skill.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Skill</a>
+            <a href="Msg.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Massege</a>
+            <a href="21_Wish.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">21_Door</a>
+            <a href="Cake.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Cake</a>
+            <a href="Periodik_table.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Periodik_table</a>
+            <a href="Presence.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Presence</a>
+            <a href="Concept.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Concept</a>
+            <a href="Calender.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Calender</a>
+            <a href="Perspective.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Perspective</a>
+            <a href="Spotlight.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Spotlight</a>
+            <a href="Room.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Room</a>
+            <a href="Radio.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Radio</a>
+            <a href="Food.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Food</a>
+            <a href="Music.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Music</a>
+        </nav>
 
-    <div id="mainContent" class="relative w-full h-[100dvh] flex items-center justify-center p-2 md:p-8 z-10">
+        <main id="mainContent">
 
-        <div id="main-container" class="glass-panel w-full max-w-5xl h-full md:h-auto md:max-h-[85vh] rounded-xl md:rounded-3xl transition-all duration-700 transform flex flex-col md:flex-row overflow-hidden">
-            
-            <div class="w-full md:w-1/2 bg-white/5 p-4 pt-12 md:p-12 flex-shrink-0 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-white/10 relative">
-                <div id="vinyl-section" class="vinyl-wrapper w-48 md:w-full md:max-w-[320px] opacity-100 transition-opacity duration-500">
-                    <div id="tone-arm" class="tone-arm">
-                        <div class="arm-pivot"></div>
-                        <div class="arm-body"></div>
-                        <div class="arm-head"></div>
-                    </div>
-                    <div id="vinyl" class="vinyl-disk">
-                        <div class="vinyl-label"></div>
-                        <div class="vinyl-shine"></div>
-                    </div>
-                </div>
-                <div id="now-playing-title" class="mt-4 md:mt-8 text-center opacity-0 transition-opacity duration-500">
-                    <h2 class="text-xl md:text-2xl font-bold tracking-tight text-white">Happy Birthday</h2>
-                    <p class="text-rose-400 text-xs md:text-sm font-medium tracking-widest uppercase mt-1">Original Mix</p>
-                </div>
+        <div id="brick-wall"></div>
+        <div id="confetti-container"></div>
+        <div id="balloon-container"></div>
+        <div id="heart-container"></div>
+        
+        <div id="banner">
+            <div class="line">
+                <span>H</span><span>A</span><span>P</span><span>P</span><span>Y</span>
+                <span class="space"></span>
+                <span>B</span><span>I</span><span>R</span><span>T</span><span>H</span><span>D</span><span>A</span><span>Y</span>
             </div>
-
-            <div class="w-full md:w-1/2 p-4 md:p-10 flex flex-col flex-grow relative overflow-y-auto custom-scrollbar">
-                <div class="flex justify-between items-center mb-4 md:mb-6 flex-shrink-0">
-                    <div>
-                        <h1 class="heading-text text-2xl md:text-3xl text-rose-400">Soundtrack</h1>
-                        <p class="text-white/50 text-[10px] md:text-xs uppercase tracking-widest">Birthday. 21 • Juhi Edition</p>
-                    </div>
-                    <div id="visualizer" class="visualizer scale-75 md:scale-100 origin-right">
-                        <div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div>
-                    </div>
-                </div>
-
-                <div id="initial-state" class="absolute inset-0 flex flex-col items-center justify-center bg-black/40 backdrop-blur-sm z-20 transition-opacity duration-500">
-                    <button id="play-button" class="group relative px-8 py-4 bg-rose-500 hover:bg-rose-600 text-white rounded-full font-bold text-lg shadow-[0_0_30px_rgba(244,63,94,0.4)] transition-all transform hover:scale-105">
-                        <span class="relative z-10 flex items-center">
-                            <svg class="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
-                            START
-                        </span>
-                    </button>
-                </div>
-
-                <div id="reveal-state" class="flex-grow flex flex-col opacity-0 transition-opacity duration-1000">
-                    
-                    <div class="flex-grow overflow-y-auto pr-1 md:pr-2 mb-4 custom-scrollbar space-y-2">
-                        
-                        <div data-audio-id="violin" class="track-item rounded-xl cursor-pointer group">
-                            <div class="p-3 md:p-4 flex items-center">
-                                <div class="w-8 h-8 rounded bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs mr-3 md:mr-4 group-hover:bg-emerald-500 group-hover:text-white transition-colors">01</div>
-                                <div class="flex-grow">
-                                    <h3 class="font-bold text-white text-sm group-hover:text-emerald-300 transition-colors">Violin Rhapsody</h3>
-                                    <p class="text-xs text-white/40">Elegance & Emotion</p>
-                                </div>
-                                <div class="playing-indicator text-emerald-500"></div>
-                            </div>
-                            <div class="track-description bg-black/20">
-                                <p class="p-4 text-sm text-emerald-200/90 italic leading-relaxed border-t border-white/5"></p>
-                            </div>
-                        </div>
-
-                        <div data-audio-id="drum" class="track-item rounded-xl cursor-pointer group">
-                            <div class="p-3 md:p-4 flex items-center">
-                                <div class="w-8 h-8 rounded bg-purple-500/20 text-purple-400 flex items-center justify-center font-bold text-xs mr-3 md:mr-4 group-hover:bg-purple-500 group-hover:text-white transition-colors">02</div>
-                                <div class="flex-grow">
-                                    <h3 class="font-bold text-white text-sm group-hover:text-purple-300 transition-colors">Drumline</h3>
-                                    <p class="text-xs text-white/40">Momentum & Drive</p>
-                                </div>
-                                <div class="playing-indicator text-purple-500"></div>
-                            </div>
-                            <div class="track-description bg-black/20">
-                                <p class="p-4 text-sm text-purple-200/90 italic leading-relaxed border-t border-white/5"></p>
-                            </div>
-                        </div>
-
-                        <div data-audio-id="harmonica" class="track-item rounded-xl cursor-pointer group">
-                            <div class="p-3 md:p-4 flex items-center">
-                                <div class="w-8 h-8 rounded bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs mr-3 md:mr-4 group-hover:bg-amber-500 group-hover:text-white transition-colors">03</div>
-                                <div class="flex-grow">
-                                    <h3 class="font-bold text-white text-sm group-hover:text-amber-300 transition-colors">Harmonica Soul</h3>
-                                    <p class="text-xs text-white/40">Simple Pleasures</p>
-                                </div>
-                                <div class="playing-indicator text-amber-500"></div>
-                            </div>
-                            <div class="track-description bg-black/20">
-                                <p class="p-4 text-sm text-amber-200/90 italic leading-relaxed border-t border-white/5"></p>
-                            </div>
-                        </div>
-                        
-                        <div data-audio-id="flute" class="track-item rounded-xl cursor-pointer group">
-                            <div class="p-3 md:p-4 flex items-center">
-                                <div class="w-8 h-8 rounded bg-cyan-500/20 text-cyan-400 flex items-center justify-center font-bold text-xs mr-3 md:mr-4 group-hover:bg-cyan-500 group-hover:text-white transition-colors">04</div>
-                                <div class="flex-grow">
-                                    <h3 class="font-bold text-white text-sm group-hover:text-cyan-300 transition-colors">Flute Melody</h3>
-                                    <p class="text-xs text-white/40">Airy & Joyful</p>
-                                </div>
-                                <div class="playing-indicator text-cyan-500"></div>
-                            </div>
-                            <div class="track-description bg-black/20">
-                                <p class="p-4 text-sm text-cyan-200/90 italic leading-relaxed border-t border-white/5"></p>
-                            </div>
-                        </div>
-
-                        <div data-audio-id="guitar" class="track-item rounded-xl cursor-pointer group">
-                            <div class="p-3 md:p-4 flex items-center">
-                                <div class="w-8 h-8 rounded bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold text-xs mr-3 md:mr-4 group-hover:bg-rose-500 group-hover:text-white transition-colors">05</div>
-                                <div class="flex-grow">
-                                    <h3 class="font-bold text-white text-sm group-hover:text-rose-300 transition-colors">Guitar Riff</h3>
-                                    <p class="text-xs text-white/40">Foundation & Strength</p>
-                                </div>
-                                <div class="playing-indicator text-rose-500"></div>
-                            </div>
-                            <div class="track-description bg-black/20">
-                                <p class="p-4 text-sm text-rose-200/90 italic leading-relaxed border-t border-white/5"></p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="pt-3 md:pt-4 border-t border-white/10 flex justify-between items-center text-white/50 text-[10px] md:text-xs flex-shrink-0">
-                        <span>0:00</span>
-                        <div class="w-1/2 h-1 bg-white/10 rounded-full mx-4 relative overflow-hidden">
-                            <div id="progress-bar" class="absolute top-0 left-0 h-full bg-rose-500 w-0 transition-all duration-1000"></div>
-                        </div>
-                        <span>♾️</span>
-                    </div>
-                </div>
+            <div class="line">
+                <span>M</span><span>I</span><span>S</span><span>S</span>
+                <span class="space"></span>
+                <span>J</span><span>U</span><span>N</span><span>E</span><span>!</span>
             </div>
         </div>
-    </div>
+    
+        <div id="cake" class="cake-container">
+            <div class="frosting"></div>
+            <div class="cake-body">
+                <div class="face">
+                    <div class="eye eye-left">
+                        <div class="eye-open"></div>
+                        <div class="eye-closed"></div>
+                    </div>
+                    <div class="eye eye-right">
+                        <div class="eye-open"></div>
+                        <div class="eye-closed"></div>
+                    </div>
+                    <div id="mouth" class="mouth"></div>
+                    <div id="sprinkles" class="sprinkles">
+                        <span></span><span></span><span></span><span></span><span></span>
+                        <span></span><span></span><span></span><span></span><span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="candles-container">
+                <div class="candle" id="candle1"><div class="flame"></div></div>
+                <div class="candle" id="candle2"><div class="flame"></div></div>
+                <div class="candle" id="candle3"><div class="flame"></div></div>
+            </div>
+        </div>
+    
+        <div id="button-container" class="on-wall">
+            <button id="lets-decorate-button" class="action-button visible">Let's Decorate</button>
+            <button id="cake-button" class="action-button">Where is my cake?</button>
+            <button id="light-button" class="action-button">Light me up!</button>
+            <button id="cut-button" class="action-button">Cut the Cake</button>
+        </div>
+    
+        <div id="slice"></div>
+    
+        <div id="card" class="card-overlay">
+            <div class="aurora-bg">
+                <div class="aurora-curtain curtain-1"></div>
+                <div class="aurora-curtain curtain-2"></div>
+                <div class="aurora-curtain curtain-3"></div>
+            </div>
+            
+            <div id="star-container" class="absolute inset-0 w-full h-full z-[-1]"></div>
+            <div class="shooting-star"></div>
+            
+            <div class="moon"></div>
 
-    <div class="audio-container hidden">
-        <audio id="audio-flute" src="Krishna Flute Ringtone Download Pagalworld (1).mp3"></audio>
-        <audio id="audio-harmonica" src="Harmonica (Yea dosti).mp3"></audio>
-        <audio id="audio-drum" src="Drum.mp3"></audio>
-        <audio id="audio-violin" src="Violin.mp3"></audio>
-        <audio id="audio-guitar" src="Guitar.mp3"></audio>
-    </div>
+            <div class="card-message">
+                <h1>Happy Birthday</h1>
+                <span class="subtitle">✨ To the magical Miss June ✨</span>
+                
+                <div class="message-content">
+                    <div class="message-line">
+                        <span class="icon">✨</span>
+                        <p>Happy birthday to the girl who treats small things with such care that it makes you rethink what “important” really means.</p>
+                    </div>
+                    <div class="message-line">
+                        <span class="icon">✨</span>
+                        <p>Happy birthday to the girl who can turn a simple “hi” into a memory that stays for days.</p>
+                    </div>
+                    <div class="message-line">
+                        <span class="icon">✨</span>
+                        <p>Happy birthday to the girl who laughs in a way that makes you wonder how such a sound exists in real life.</p>
+                    </div>
+                    <div class="message-line">
+                        <span class="icon">✨</span>
+                        <p>Happy birthday to the girl who never shows off, yet everything about her feels effortlessly impressive.</p>
+                    </div>
+                    <div class="message-line">
+                        <span class="icon">✨</span>
+                        <p>Happy birthday to the girl who has a smile that looks like it was handcrafted for good days.</p>
+                    </div>
+                    <div class="message-line">
+                        <span class="icon">✨</span>
+                        <p>Happy birthday to the girl who never realizes how inspiring she actually is to others.</p>
+                    </div>
+                    <div class="message-line">
+                        <span class="icon">✨</span>
+                        <p>Happy birthday to the girl who can turn any moment into a memory without even trying.</p>
+                    </div>
+                    <div class="message-line">
+                        <span class="icon">✨</span>
+                        <p>Happy birthday to the girl who makes people feel lucky just by having crossed paths with her once.</p>
+                    </div>
+                    <div class="message-line">
+                        <span class="icon">✨</span>
+                        <p>Happy birthday to the girl who doesn’t chase attention, but somehow becomes the part we remember the most.</p>
+                    </div>
+                    <div class="message-line">
+                        <span class="icon">✨</span>
+                        <p>Happy birthday to the girl who deserves a birthday so good (not just thik thak 😅) that she replays it in her head for weeks.</p>
+                    </div>
+                </div>
+
+                <p class="mt-6 text-center font-bold" style="color: #ff69b4;">
+                    - From your secret admirer 
+                </p>
+                
+            </div>
+        </div>
+
+    </main> 
 
     <script>
+        
+        let areNavsOpen = false;
+
+        function openAllNavs() {
+            const mainContent = document.getElementById('mainContent');
+            const topNav = document.getElementById('topNav');
+            const bottomNav = document.getElementById('bottomNav');
+            const leftNav = document.getElementById('leftNav');
+            const rightNav = document.getElementById('rightNav');
+            const navToggleIcon = document.getElementById('navToggleIcon');
+            const navToggleX = document.getElementById('navToggleX');
+            const card = document.getElementById('card'); 
+
+            if (!topNav || !mainContent) return; 
+
+            if(topNav) topNav.classList.remove('-translate-y-full');
+            if(bottomNav) bottomNav.classList.remove('translate-y-full');
+            if(leftNav) leftNav.classList.remove('-translate-x-full');
+            if(rightNav) rightNav.classList.remove('translate-x-full');
+            
+            if (card && card.style.opacity !== '1') {
+                mainContent.classList.add('pt-16', 'pb-16', 'pl-24', 'pr-24');
+            }
+            
+            mainContent.style.padding = ''; 
+            
+            if(navToggleIcon) navToggleIcon.classList.add('hidden');
+            if(navToggleX) navToggleX.classList.remove('hidden');
+            
+            areNavsOpen = true;
+        }
+
+        function closeAllNavs() {
+            const mainContent = document.getElementById('mainContent');
+            const topNav = document.getElementById('topNav');
+            const bottomNav = document.getElementById('bottomNav');
+            const leftNav = document.getElementById('leftNav');
+            const rightNav = document.getElementById('rightNav');
+            const navToggleIcon = document.getElementById('navToggleIcon');
+            const navToggleX = document.getElementById('navToggleX');
+
+            if (!topNav || !mainContent) return; 
+
+            if(topNav) topNav.classList.add('-translate-y-full');
+            if(bottomNav) bottomNav.classList.add('translate-y-full');
+            if(leftNav) leftNav.classList.add('-translate-x-full');
+            if(rightNav) rightNav.classList.add('translate-x-full');
+            
+            mainContent.classList.remove('pt-16', 'pb-16', 'pl-24', 'pr-24');
+            mainContent.style.padding = '0'; 
+            
+            if(navToggleIcon) navToggleIcon.classList.remove('hidden');
+            if(navToggleX) navToggleX.classList.add('hidden');
+            
+            areNavsOpen = false;
+        }
+
+        function toggleAllNavs() {
+            if (areNavsOpen) {
+                closeAllNavs();
+            } else {
+                openAllNavs();
+            }
+        }
+        
+        window.onload = function() {
+            
+            const body = document.body;
+            const brickWall = document.getElementById('brick-wall');
+            const buttonContainer = document.getElementById('button-container');
+            const cake = document.getElementById('cake');
+            const banner = document.getElementById('banner'); 
+            const confetti = document.getElementById('confetti-container');
+            const balloons = document.getElementById('balloon-container');
+            const hearts = document.getElementById('heart-container');
+            const navToggle = document.getElementById('navToggle');
+            const topNav = document.getElementById('topNav');
+            const bottomNav = document.getElementById('bottomNav');
+            const leftNav = document.getElementById('leftNav');
+            const rightNav = document.getElementById('rightNav');
+            const eyeLeftOpen = document.querySelector('.eye-left .eye-open');
+            const eyeRightOpen = document.querySelector('.eye-right .eye-open');
+            const eyesClosed = document.querySelectorAll('.eye-closed');
+            const mouth = document.getElementById('mouth');
+            const sprinkles = document.getElementById('sprinkles');
+            const candles = document.querySelectorAll('.candle');
+            const flames = document.querySelectorAll('.flame');
+            const card = document.getElementById('card');
+            const slice = document.getElementById('slice'); 
+            const letsDecorateButton = document.getElementById('lets-decorate-button');
+            const cakeButton = document.getElementById('cake-button');
+            const lightButton = document.getElementById('light-button');
+            const cutButton = document.getElementById('cut-button');
+
+            letsDecorateButton.addEventListener('click', () => {
+                
+                letsDecorateButton.classList.remove('visible');
+                letsDecorateButton.classList.add('clicked'); 
+                buttonContainer.classList.remove('on-wall');
+                banner.style.opacity = '1';
+                confetti.style.opacity = '1';
+                balloons.style.opacity = '1';
+                hearts.style.opacity = '1';
+                createConfetti();
+                createEmojiHearts();
+                createHearts();
+                setTimeout(() => {
+                    cakeButton.classList.add('visible');
+                }, 1500);
+            });
+            
+            cakeButton.addEventListener('click', () => {
+                
+                cakeButton.classList.remove('visible');
+                cakeButton.classList.add('clicked');
+
+                cake.style.opacity = '1';
+                setTimeout(() => {
+                    eyeLeftOpen.style.opacity = '1';
+                    eyeLeftOpen.style.transform = 'translateX(0)';
+                }, 500); 
+
+                setTimeout(() => {
+                    eyeRightOpen.style.opacity = '1';
+                    eyeRightOpen.style.transform = 'translateX(0)';
+                    mouth.style.opacity = '1';
+                    mouth.style.transform = 'translateX(-50%) translateX(0)';
+                    sprinkles.style.opacity = '1';
+                    sprinkles.style.transform = 'translateX(0)';
+                }, 800); 
+
+                setTimeout(() => {
+                    eyeLeftOpen.style.opacity = '0';
+                    eyeRightOpen.style.opacity = '0';
+                    eyesClosed.forEach(e => e.style.opacity = '1');
+                }, 1800); 
+                
+                setTimeout(() => {
+                    eyeLeftOpen.style.opacity = '1';
+                    eyeRightOpen.style.opacity = '1';
+                    eyesClosed.forEach(e => e.style.opacity = '0');
+                }, 2100); 
+                
+                setTimeout(() => {
+                    lightButton.classList.add('visible');
+                }, 2500);
+            });
+
+            lightButton.addEventListener('click', () => {
+                
+                lightButton.classList.remove('visible');
+                lightButton.classList.add('clicked');
+                setTimeout(() => {
+                    candles.forEach(c => c.style.transform = 'translateY(0)');
+                }, 500); 
+
+                setTimeout(() => {
+                    flames.forEach(f => f.style.opacity = '1');
+                }, 1500); 
+
+                
+                setTimeout(() => {
+                    cutButton.classList.add('visible');
+                }, 2300); 
+            });
+
+            cutButton.addEventListener('click', () => {
+                
+                cutButton.classList.remove('visible');
+                cutButton.classList.add('clicked'); 
+
+                
+                flames.forEach(f => f.style.opacity = '0');
+
+                
+                setTimeout(() => {
+                    slice.style.opacity = '1';
+                    slice.style.transform = 'translate(-20px, -80px) rotate(30deg) scaleY(1)';
+                }, 200);
+
+                
+                setTimeout(() => {
+                    slice.style.transform = 'translate(40px, 50px) rotate(30deg) scaleY(1)';
+                }, 600);
+
+                
+                setTimeout(() => {
+                    slice.style.opacity = '0';
+                }, 800);
+
+                
+                setTimeout(() => {
+                    body.style.background = '#1a0b1a'; 
+                    
+                    brickWall.style.opacity = '0';
+                    confetti.style.opacity = '0';
+                    balloons.style.opacity = '0';
+                    hearts.style.opacity = '0';
+                    banner.style.opacity = '0';
+
+                    buttonContainer.style.opacity = '0';
+                    buttonContainer.style.pointerEvents = 'none';
+
+                    navToggle.style.opacity = '1';
+                    navToggle.style.pointerEvents = 'auto';
+                    
+                    closeAllNavs(); 
+
+                    const purpleNavs = document.querySelectorAll('.bg-purple-600');
+                    purpleNavs.forEach(nav => {
+                        nav.classList.remove('bg-purple-600');
+                        nav.classList.add('bg-slate-900'); 
+                    });
+
+                    const darkPurpleNavs = document.querySelectorAll('.bg-purple-800');
+                    darkPurpleNavs.forEach(nav => {
+                        nav.classList.remove('bg-purple-800');
+                        nav.classList.add('bg-slate-950');
+                    });
+                    
+                    const navLinks = document.querySelectorAll('.nav-link');
+                    navLinks.forEach(link => {
+                        link.classList.remove('hover:bg-purple-700');
+                        link.classList.add('hover:bg-slate-700');
+                    });
+                    
+                    navToggle.classList.remove('hover:bg-purple-700', 'focus:ring-purple-500');
+                    navToggle.classList.add('hover:bg-slate-700', 'focus:ring-slate-500');
+
+                }, 1500); 
+
+                setTimeout(() => {
+                    cake.style.opacity = '0';
+                    createStarryNight(); 
+                }, 2500); 
+
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.pointerEvents = 'auto';
+                    card.classList.add('visible'); 
+                }, 3500);
+            });
+
+            function createStarryNight() {
+                const container = document.getElementById('star-container');
+                for (let i = 0; i < 100; i++) {
+                    const star = document.createElement('div');
+                    star.classList.add('star');
+                    const x = Math.random() * 100;
+                    const y = Math.random() * 100;
+                    const size = Math.random() * 2 + 1;
+                    const delay = Math.random() * 5;
+                    const duration = Math.random() * 3 + 2;
+
+                    star.style.left = `${x}%`;
+                    star.style.top = `${y}%`;
+                    star.style.width = `${size}px`;
+                    star.style.height = `${size}px`;
+                    star.style.setProperty('--delay', `${delay}s`);
+                    star.style.setProperty('--duration', `${duration}s`);
+
+                    container.appendChild(star);
+                }
+            }
+
+            function createConfetti() {
+                const confettiContainer = document.getElementById('confetti-container');
+                const colors = ['var(--sprinkle1)', 'var(--sprinkle2)', 'var(--sprinkle3)', 'var(--sprinkle4)', 'var(--frosting)'];
+                
+                setInterval(() => {
+                    if (confettiContainer.style.opacity !== '1') return; 
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+                    
+                    confetti.style.left = `${Math.random() * 100}vw`;
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDuration = `${Math.random() * 5 + 8}s`; 
+                    confetti.style.animationDelay = `${Math.random() * 3}s`; 
+
+                    confettiContainer.appendChild(confetti);
+
+                    setTimeout(() => {
+                        confetti.remove();
+                    }, 13000); 
+
+                }, 200);
+            }
+
+            function createEmojiHearts() {
+                const balloonContainer = document.getElementById('balloon-container');
+
+                function createSingleEmojiHeart() {
+                    if (balloonContainer.style.opacity !== '1') return; 
+                    const balloon = document.createElement('div');
+                    balloon.classList.add('emoji-heart');
+                    balloon.innerHTML = '❤️'; 
+                    
+                    balloon.style.left = `${Math.random() * 80 + 10}vw`; 
+                    balloon.style.animationDuration = `${Math.random() * 10 + 15}s`; 
+                    balloon.style.animationDelay = `${Math.random() * 5}s`;
+
+                    const sway = (Math.random() - 0.5) * 200;
+                    balloon.style.setProperty('--sway-amount', `${sway}px`);
+                    
+                    balloonContainer.appendChild(balloon);
+
+                    setTimeout(() => {
+                        balloon.remove();
+                    }, 25000); 
+                }
+
+                for (let i = 0; i < 3; i++) {
+                    createSingleEmojiHeart();
+                }
+                setInterval(createSingleEmojiHeart, 8000);
+            }
+
+            function createHearts() {
+                const heartContainer = document.getElementById('heart-container');
+                const colors = ['pink', 'red', 'white'];
+
+                function createSingleHeart() {
+                    if (heartContainer.style.opacity !== '1') return; 
+                    const heart = document.createElement('div');
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+                    heart.classList.add('heart', color);
+                    
+                    heart.style.left = `${Math.random() * 90 + 5}vw`; 
+                    heart.style.animationDuration = `${Math.random() * 10 + 15}s`;
+                    heart.style.animationDelay = `${Math.random() * 7}s`;
+
+                    const swayStart = (Math.random() - 0.5) * 40; 
+                    const swayMid = (Math.random() - 0.5) * 120;
+                    const swayEnd = (Math.random() - 0.5) * 40; 
+                    
+                    heart.style.setProperty('--sway-start', `${swayStart}px`);
+                    heart.style.setProperty('--sway-mid', `${swayMid}px`);
+                    heart.style.setProperty('--sway-end', `${swayEnd}px`);
+
+                    heartContainer.appendChild(heart);
+
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 25000);
+                }
+
+                for (let i = 0; i < 3; i++) {
+                    createSingleHeart();
+                }
+                setInterval(createSingleHeart, 6000);
+            }
+        };
+
+        
         document.addEventListener('DOMContentLoaded', () => {
+            
             const navLinks = document.querySelectorAll('.nav-panel .nav-link');
             const mainContent = document.getElementById('mainContent');
-            const panels = {
-                top: document.getElementById('topNav'),
-                bottom: document.getElementById('bottomNav'),
-                left: document.getElementById('leftNav'),
-                right: document.getElementById('rightNav')
-            };
+            const topNav = document.getElementById('topNav');
+            const bottomNav = document.getElementById('bottomNav');
+            const leftNav = document.getElementById('leftNav');
+            const rightNav = document.getElementById('rightNav');
             const navToggle = document.getElementById('navToggle');
             const navToggleIcon = document.getElementById('navToggleIcon');
             const navToggleX = document.getElementById('navToggleX');
-            let areNavsOpen = false;
-
-            function toggleNavs() {
-                areNavsOpen = !areNavsOpen;
-                const method = areNavsOpen ? 'remove' : 'add';
-                
-                panels.top.classList[method]('-translate-y-full');
-                panels.bottom.classList[method]('translate-y-full');
-                panels.left.classList[method]('-translate-x-full');
-                panels.right.classList[method]('translate-x-full');
-                
-                if(areNavsOpen) {
-                    navToggleIcon.classList.add('hidden');
-                    navToggleX.classList.remove('hidden');
-                    mainContent.style.transform = 'scale(0.92)';
-                    mainContent.style.opacity = '0.4';
-                    mainContent.style.pointerEvents = 'none';
-                } else {
-                    navToggleIcon.classList.remove('hidden');
-                    navToggleX.classList.add('hidden');
-                    mainContent.style.transform = 'scale(1)';
-                    mainContent.style.opacity = '1';
-                    mainContent.style.pointerEvents = 'auto';
-                }
-            }
-
-            navToggle.addEventListener('click', (e) => { e.stopPropagation(); toggleNavs(); });
-            document.body.addEventListener('click', (e) => { 
-                if (areNavsOpen && !e.target.closest('.nav-panel')) toggleNavs(); 
-            });
-
-            const playButton = document.getElementById('play-button');
-            const initialState = document.getElementById('initial-state');
-            const revealState = document.getElementById('reveal-state');
-            const vinyl = document.getElementById('vinyl');
-            const toneArm = document.getElementById('tone-arm');
-            const visualizer = document.getElementById('visualizer');
-            const nowPlayingTitle = document.getElementById('now-playing-title');
-            const progressBar = document.getElementById('progress-bar');
             
-            const audioElements = document.querySelectorAll('audio');
-            const trackItems = document.querySelectorAll('.track-item');
-
-            const data = {
-                guitar: { 
-                    msg: "Even the guitar becomes shy around you, like it’s thinking, “Bro, behave. She’s watching.” You somehow make an instrument look nervous… and prettier 🎸",
-                    title: "Guitar Riff (Original Mix)"
-                },
-                flute: { 
-                    msg: "The flute would probably behave like it’s honoured to be in your hands if he gets a chance. Even without playing a note, you’d still make the whole moment look sweet and effortless. 🌬️",
-                    title: "Flute Melody (Airy Cut)"
-                },
-                harmonica: { 
-                    msg: "You’d probably make the harmonica feel important just by touching it, the same way your presence quietly brightens any moment you’re in. 🤠",
-                    title: "Harmonica Blues"
-                },
-                drum: { 
-                    msg: "The heartbeat of the A drum carries rhythm, but you carry presence , the kind that makes a moment feel balanced and bright. You’d make the whole scene feel naturally warm. 🥁",
-                    title: "Drumline Percussion"
-                },
-                violin: { 
-                    msg: "If you ever held a violin, it would look like it was made to match your softness. There’s a quiet elegance in you that fits beautifully with anything delicate.🎻",
-                    title: "Violin Concerto No. 5"
-                }
-            };
-
-            playButton.addEventListener('click', () => {
-                initialState.classList.add('opacity-0', 'pointer-events-none');
-                setTimeout(() => {
-                    initialState.classList.add('hidden');
-                    revealState.classList.remove('opacity-0');
-                    nowPlayingTitle.classList.remove('opacity-0');
-                }, 500);
+            navToggle.addEventListener('click', (e) => {
+                e.stopPropagation(); 
+                toggleAllNavs();
             });
-
-            function stopAll() {
-                 vinyl.classList.add('is-paused');
-                 vinyl.classList.remove('is-spinning');
-                 toneArm.classList.remove('playing');
-                 visualizer.classList.remove('playing');
-                 trackItems.forEach(t => {
-                    t.classList.remove('active');
-                    t.querySelector('.playing-indicator').innerHTML = '';
-                 });
-                 progressBar.style.width = '0%';
-            }
-
-            function playTrack(trackId, element) {
-                audioElements.forEach(a => { a.pause(); a.currentTime = 0; });
-                trackItems.forEach(t => {
-                    if (t !== element) {
-                        t.classList.remove('active');
-                        t.querySelector('.playing-indicator').innerHTML = '';
-                    }
-                });
-
-                element.classList.add('active');
+            
+            mainContent.addEventListener('click', (e) => {
                 
-                const descBox = element.querySelector('.track-description p');
-                if(data[trackId] && descBox) {
-                    descBox.innerHTML = data[trackId].msg;
-                }
-
-                element.querySelector('.playing-indicator').innerHTML = `
-                    <div class="flex space-x-0.5 h-3 items-end">
-                        <div class="w-0.5 bg-current animate-[bounce_1s_infinite]"></div>
-                        <div class="w-0.5 bg-current animate-[bounce_1.2s_infinite]"></div>
-                        <div class="w-0.5 bg-current animate-[bounce_0.8s_infinite]"></div>
-                    </div>
-                `;
-
-                vinyl.classList.add('is-spinning');
-                vinyl.classList.remove('is-paused');
-                toneArm.classList.add('playing');
-                visualizer.classList.add('playing');
-                progressBar.style.width = '10%';
-
-                if(data[trackId]) {
-                    nowPlayingTitle.style.opacity = 0;
-                    setTimeout(() => {
-                        nowPlayingTitle.querySelector('h2').textContent = data[trackId].title;
-                        nowPlayingTitle.style.opacity = 1;
-                    }, 300);
+                if (e.target.closest('button')) {
+                    return;
                 }
                 
-                setTimeout(() => { progressBar.style.width = '40%'; }, 300);
-
-                const audio = document.getElementById(`audio-${trackId}`);
-                if(audio) {
-                    const playPromise = audio.play();
+                if (areNavsOpen) {
+                    closeAllNavs();
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const targetHash = e.currentTarget.getAttribute('href');
                     
-                    if (playPromise !== undefined) {
-                        playPromise.then(_ => {
-                            console.log("Playing: " + trackId);
-                        })
-                        .catch(error => {
-                            console.log("Playback failed (likely missing file): " + error);
-                            setTimeout(() => {
-                                console.warn("Audio file missing. Stopping animation.");
-                                stopAll();
-                                alert(`Music file for ${trackId} not found. Please ensure the MP3 file is in the same folder.`);
-                            }, 500);
-                        });
+                    if (targetHash.startsWith('#')) {
+                        e.preventDefault(); 
+                        if (areNavsOpen) {
+                            closeAllNavs();
+                        }
                     }
                     
-                    audio.onended = () => {
-                        stopAll();
-                        progressBar.style.width = '100%';
-                        setTimeout(() => { progressBar.style.width = '0%'; }, 500);
-                    };
-                }
-            }
-
-            trackItems.forEach(item => {
-                item.addEventListener('click', () => {
-                    const id = item.getAttribute('data-audio-id');
-                    playTrack(id, item);
+                    if (areNavsOpen) {
+                        closeAllNavs();
+                    }
                 });
             });
+            
+            closeAllNavs();
         });
     </script>
+
 </body>
 </html>
