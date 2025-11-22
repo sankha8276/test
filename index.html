@@ -2,1177 +2,681 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Happy Birthday Radhika</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Inter:wght@300;400;500;700&family=Pacifico&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    
     <style>
-        .nav-panel, #mainContent, #navToggleIcon, #navToggleX {
-            transition: all 0.3s ease-in-out;
-        }
-        
-        #mainContent, .nav-panel {
-            -ms-overflow-style: none;  
-            scrollbar-width: none;  
-        }
-        #mainContent::-webkit-scrollbar,
-        .nav-panel::-webkit-scrollbar {
-            display: none; 
-        }
-        
-        .festive-text {
-            font-family: 'Gochi Hand', cursive; 
-        }
-        
-        #navToggle {
-            transition: all 0.3s ease-in-out;
-        }
-        
-        h1, h2, h3 {
-             font-family: 'Pacifico', cursive;
-        }
-
         :root {
-            --cake-body: #fdfdfd;
-            --frosting: #6b8dff; 
-            --eye: #333;
-            --flame: #f9a825; 
-            --sprinkle1: #fd6a9e; 
-            --sprinkle2: #fece5a; 
-            --sprinkle3: #96e05d; 
-            --sprinkle4: #54c1e0; 
-            
-            --brick-pink-light: #fec5d9;
-            --brick-pink-dark: #fca7c6;
-            --mortar: #fdfdfd;
-        }
-
-        html, body {
-            width: 100%;
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            font-family: 'Inter', sans-serif;
+            --royal-blue: #1e3a8a;
+            --midnight: #020617;
+            --gold: #FFD700;
+            --gold-glow: rgba(255, 215, 0, 0.5);
+            --glass-bg: rgba(255, 255, 255, 0.05);
         }
 
         body {
-            background: linear-gradient(-45deg, #f8cdda, #f6a1d1, #e973b2, #d8509b);
-            background-size: 400% 400%;
-            animation: gradient-flow 15s ease infinite;
-            transition: background-color 1s ease-in-out;
-            display: block; 
+            background: radial-gradient(circle at 50% 120%, #172554, #020617);
+            font-family: 'Lato', sans-serif;
+            color: white;
+            overflow: hidden;
+            margin: 0;
+            height: 100dvh;
+            transition: background 1s ease;
         }
         
-        @keyframes gradient-flow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        body.dimmed {
+            background: #000 !important;
         }
 
-        #mainContent {
-            display: grid;
-            place-items: center;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            inset: 0;
-            overflow: hidden; 
-            padding: 0; 
-            transition: all 0.3s ease-in-out;
+        #balloon-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; pointer-events: none;
+            transition: opacity 1s;
+        }
+        body.dimmed #balloon-canvas { opacity: 0.1; }
+
+        .font-royal { font-family: 'Cinzel', serif; }
+        .font-script { font-family: 'Great Vibes', cursive; }
+        
+        .gold-text {
+            background: linear-gradient(to bottom, #FFF, #FFD700);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.3));
         }
 
-        #brick-wall {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--brick-pink-light);
-            background-image:
-                linear-gradient(335deg, var(--brick-pink-dark) 23px, transparent 23px),
-                linear-gradient(155deg, var(--brick-pink-dark) 23px, transparent 23px),
-                linear-gradient(335deg, var(--brick-pink-dark) 23px, transparent 23px),
-                linear-gradient(155deg, var(--brick-pink-dark) 23px, transparent 23px);
-            background-size: 58px 58px;
-            background-position: 0px 2px, 4px 35px, 29px 31px, 34px 6px;
-            border: 2px solid var(--mortar);
-            z-index: 10; 
-            opacity: 1; 
-            transition: opacity 1.5s ease;
+        .nav-panel {
+            position: fixed; z-index: 9000;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex; align-items: center; justify-content: center;
         }
         
-        #banner {
-            position: fixed;
-            top: 5%;
-            left: 5%; 
-            width: 90%; 
-            transform: none; 
-            display: flex;
-            flex-wrap: wrap; 
-            justify-content: center; 
-            gap: 5px;
-            z-index: 14; 
-            opacity: 0; 
-            transition: opacity 1s ease 0.5s; 
+        #topNav { top: 0; left: 0; right: 0; height: 4.5rem; transform: translateY(-100%); border-bottom: 1px solid var(--gold); z-index: 9001; }
+        #bottomNav { bottom: 0; left: 0; right: 0; height: 4.5rem; transform: translateY(100%); border-top: 1px solid var(--gold); z-index: 9001; }
+        
+        #leftNav { top: 0; bottom: 0; left: 0; width: 6rem; transform: translateX(-100%); flex-direction: column; padding: 6rem 0; border-right: 1px solid var(--gold); overflow-y: auto; }
+        #rightNav { top: 0; bottom: 0; right: 0; width: 6rem; transform: translateX(100%); flex-direction: column; padding: 6rem 0; border-left: 1px solid var(--gold); overflow-y: auto; }
+
+        /* Force override Tailwind classes when active */
+        .nav-active #topNav, .nav-active #bottomNav { transform: translateY(0) !important; }
+        .nav-active #leftNav, .nav-active #rightNav { transform: translateX(0) !important; }
+
+        .nav-link {
+            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px;
+            color: #cbd5e1; text-decoration: none; transition: 0.3s;
+            text-align: center; width: 100%; padding: 0 5px;
         }
-        #banner .line { 
-            display: flex;
-            justify-content: center;
-            width: 100%; 
-            margin-bottom: 5px; 
+        
+        /* FIXED: Override the width for horizontal bars so buttons sit tight */
+        #topNav .nav-link, #bottomNav .nav-link {
+            width: auto !important;
+            padding-left: 15px;
+            padding-right: 15px;
         }
-        #banner span {
-            font-family: 'Pacifico', cursive; 
-            font-size: 1.25rem; 
-            padding: 8px 4px; 
-            background: white;
-            color: var(--frosting);
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            transform: rotate(-5deg);
+
+        .nav-link:hover { color: var(--gold); text-shadow: 0 0 10px var(--gold); }
+
+        .stage {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column; align-items: center;
+            padding-top: 6rem; padding-bottom: 6rem;
+            opacity: 0; transform: scale(0.95); filter: blur(10px);
+            transition: all 0.8s ease; pointer-events: none;
         }
-        #banner span:nth-child(even) {
-            transform: rotate(5deg);
-            background: var(--sprinkle1);
-            color: white;
+        .stage.active { opacity: 1; transform: scale(1); filter: blur(0); pointer-events: auto; }
+
+        .scroll-content {
+            width: 100%; height: 100%; overflow-y: auto;
+            display: flex; flex-direction: column; align-items: center;
+            -webkit-overflow-scrolling: touch; padding: 0 1.5rem;
         }
-        #banner span:nth-child(3n) {
-            transform: rotate(2deg);
-            background: var(--sprinkle2);
-            color: white;
+        .scroll-content::-webkit-scrollbar { display: none; }
+
+        .bday-card {
+            background: var(--glass-bg);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            margin-top: 2rem;
+            text-align: center;
+            position: relative;
         }
-        #banner span.space {
-            background: transparent;
-            box-shadow: none;
-            padding: 0 2px;
+        .bday-card::before {
+            content: ''; position: absolute; top: -2px; left: 50%; transform: translateX(-50%);
+            width: 40%; height: 4px; background: var(--gold);
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 0 15px var(--gold);
         }
+
+        .party-btn {
+            background: linear-gradient(45deg, var(--gold), #FDB931);
+            color: #020617;
+            font-family: 'Cinzel', serif; font-weight: bold;
+            padding: 1rem 2.5rem; border-radius: 50px;
+            margin-top: 3rem; cursor: pointer;
+            box-shadow: 0 0 20px var(--gold-glow);
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-transform: uppercase; letter-spacing: 2px;
+            border: none;
+        }
+        .party-btn:hover { transform: scale(1.05); box-shadow: 0 0 40px var(--gold); }
+
+        #color-modal {
+            position: fixed; inset: 0; z-index: 10000;
+            background: rgba(2, 6, 23, 0.8);
+            backdrop-filter: blur(8px);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        #color-modal.visible { opacity: 1; pointer-events: auto; }
+        
+        .modal-card {
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid var(--gold);
+            padding: 2rem; border-radius: 24px;
+            text-align: center; max-width: 90%; width: 400px;
+            transform: scale(0.8) translateY(20px);
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+        #color-modal.visible .modal-card { transform: scale(1) translateY(0); }
+        
+        .close-modal {
+            position: absolute; top: 1rem; right: 1rem;
+            color: white; opacity: 0.5; cursor: pointer;
+            font-size: 1.5rem; transition: 0.3s;
+        }
+        .close-modal:hover { opacity: 1; color: var(--gold); }
 
         .cake-container {
             position: relative;
-            width: 200px;
-            height: 120px;
-            transition: opacity 1s ease-in-out;
-            transform: scale(0.8);
-            opacity: 0; 
-            z-index: 15; 
+            width: 250px;
+            height: 250px;
+            margin: 3rem auto 0;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
-        @media (min-width: 400px) {
-            .cake-container { transform: scale(1); }
+        
+        .plate {
+            position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 260px; height: 12px;
+            background: #e2e8f0; border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
         }
-
-        .frosting {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 40px;
-            background: var(--frosting);
-            border-radius: 20px 20px 10px 10px;
-        }
-        .frosting::before, .frosting::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            background: var(--frosting);
-            width: 20px;
-            height: 55px; 
+        
+        .layer {
+            position: absolute; left: 50%; transform: translateX(-50%);
             border-radius: 10px;
         }
-        .frosting::before { left: 30px; }
-        .frosting::after { right: 30px; }
-
-        .cake-body {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 80px;
-            background: var(--cake-body);
-            border-radius: 0 0 15px 15px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        .layer-bottom {
+            bottom: 12px; width: 220px; height: 80px;
+            background: linear-gradient(to right, #78350f, #92400e, #78350f);
+            box-shadow: inset 0 -10px 20px rgba(0,0,0,0.3);
+        }
+        .layer-top {
+            bottom: 92px; width: 180px; height: 70px;
+            background: linear-gradient(to right, #fcd34d, #fbbf24, #fcd34d);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
         
-        .face { position: absolute; width: 100%; height: 100%; }
-        .eye { position: absolute; top: 15px; width: 12px; height: 12px; }
-        .eye-left { left: 35%; }
-        .eye-right { right: 35%; }
+        .icing {
+            position: absolute; top: 0; left: 0; width: 100%; height: 25px;
+            background: #fff; border-radius: 10px 10px 5px 5px;
+            z-index: 2;
+        }
+        .icing:before, .icing:after {
+            content: ''; position: absolute; background: #fff;
+            width: 15px; height: 30px; border-radius: 0 0 10px 10px;
+        }
+        .icing:before { left: 20px; height: 40px; }
+        .icing:after { right: 40px; height: 35px; }
 
-        .eye-open {
-            width: 12px; height: 12px; background: var(--eye); border-radius: 50%; opacity: 0;
-            transform: translateX(-20px); transition: opacity 0.2s ease, transform 0.3s ease;
-        }
-        .eye-closed {
-            position: absolute; top: 0; width: 12px; height: 8px;
-            border-bottom: 3px solid var(--eye); border-radius: 0 0 12px 12px;
-            opacity: 0; transition: opacity 0.2s ease;
-        }
-
-        .mouth {
-            position: absolute; top: 35px; left: 50%;
-            transform: translateX(-50%) translateX(-20px);
-            width: 30px; height: 15px;
-            border: 3px solid var(--eye); border-top-color: transparent;
-            border-radius: 0 0 15px 15px; opacity: 0;
-            transition: opacity 0.3s ease 0.1s, transform 0.4s ease 0.1s;
-        }
-
-        .sprinkles {
-            position: absolute; bottom: 10px; width: 100%; height: 10px;
-            text-align: center; opacity: 0;
-            transform: translateX(-20px); transition: opacity 0.3s ease 0.2s, transform 0.4s ease 0.2s;
-        }
-        .sprinkles span {
-            display: inline-block; width: 3px; height: 8px; border-radius: 2px; margin: 0 2px;
-            transform: rotate(20deg);
-        }
-        .sprinkles span:nth-child(4n+1) { background: var(--sprinkle1); }
-        .sprinkles span:nth-child(4n+2) { background: var(--sprinkle2); }
-        .sprinkles span:nth-child(4n+3) { background: var(--sprinkle3); }
-        .sprinkles span:nth-child(4n+4) { background: var(--sprinkle4); }
-        .sprinkles span:nth-child(odd) { transform: rotate(-20deg); }
-
-        .candles-container {
-            position: absolute; top: -30px; width: 100%; display: flex;
-            justify-content: center; gap: 20px; z-index: -1; 
-        }
         .candle {
-            position: relative; width: 12px; height: 35px; background: white; border-radius: 5px 5px 0 0;
-            transform: translateY(100%); transition: transform 0.5s ease-in-out, opacity 0.3s ease;
+            position: absolute; bottom: 160px; left: 50%; transform: translateX(-50%);
+            width: 16px; height: 60px;
+            background: repeating-linear-gradient(45deg, #fff, #fff 5px, #3b82f6 5px, #3b82f6 10px);
+            border-radius: 4px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+            z-index: 5;
         }
+        
+        .wick {
+            position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+            width: 4px; height: 8px; background: #333;
+        }
+
         .flame {
-            position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-            width: 10px; height: 14px; background: var(--flame);
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; opacity: 0;
-            transition: opacity 0.3s ease;
-            box-shadow: 0 0 10px var(--flame), 0 0 15px var(--flame);
+            position: absolute; top: -35px; left: 50%; transform: translateX(-50%);
+            width: 24px; height: 36px;
+            background: radial-gradient(ellipse at bottom, #fde047, #ea580c, transparent);
+            border-radius: 50% 50% 20% 20%;
+            filter: blur(1px);
+            box-shadow: 0 0 30px #facc15, 0 0 60px #ea580c;
+            animation: flicker 0.1s infinite alternate, breathe 2s infinite ease-in-out;
+            transition: opacity 0.5s;
+            transform-origin: center bottom;
         }
+        .flame.out { opacity: 0; transform: scale(0); }
 
-        .card-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            display: grid; place-items: center;
-            opacity: 0; pointer-events: none; 
-            transition: opacity 1.5s ease-in-out 0.5s;
-            z-index: 100;
-            overflow: hidden;
-            background: #020617; 
-        }
+        @keyframes flicker { 0%{transform:translateX(-50%) skewX(-2deg) scale(1);} 100%{transform:translateX(-50%) skewX(2deg) scale(1.05);} }
+        @keyframes breathe { 0%, 100% { box-shadow: 0 0 30px #facc15, 0 0 60px #ea580c; } 50% { box-shadow: 0 0 50px #facc15, 0 0 80px #ea580c; } }
 
-        .aurora-bg {
-            position: absolute; inset: 0; z-index: -2;
-            background: #020617;
-            overflow: hidden;
-        }
-
-        .aurora-curtain {
-            position: absolute;
-            top: -20%;
-            left: -50%;
-            width: 200%;
-            height: 150%; 
-            filter: blur(25px);
-            opacity: 0.6;
-            mix-blend-mode: screen;
-            transform-origin: center;
-        }
-
-        .curtain-1 {
-            background: repeating-linear-gradient(
-                90deg,
-                transparent 0%,
-                rgba(0, 255, 136, 0.0) 5%,
-                rgba(0, 255, 136, 0.5) 10%,
-                rgba(0, 255, 136, 0.0) 15%,
-                transparent 20%
-            );
-            animation: drift-cross-1 20s linear infinite alternate;
-            opacity: 0.8;
-        }
-
-        .curtain-2 {
-            background: repeating-linear-gradient(
-                90deg,
-                transparent 0%,
-                rgba(157, 0, 255, 0.0) 8%,
-                rgba(180, 50, 255, 0.4) 12%,
-                rgba(157, 0, 255, 0.0) 16%,
-                transparent 24%
-            );
-            animation: drift-cross-2 25s ease-in-out infinite alternate-reverse;
-            top: -10%;
-            opacity: 0.7;
-        }
-
-        .curtain-3 {
-            background: repeating-linear-gradient(
-                90deg,
-                transparent 0%,
-                rgba(0, 162, 255, 0.0) 12%,
-                rgba(0, 162, 255, 0.3) 16%,
-                rgba(0, 162, 255, 0.0) 20%,
-                transparent 30%
-            );
-            animation: drift-cross-3 30s linear infinite alternate;
-            top: 0%;
-            opacity: 0.5;
-        }
-        
-        .aurora-curtain::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(to bottom, #020617 0%, transparent 20%, transparent 80%, #020617 100%);
-        }
-
-        @keyframes drift-cross-1 {
-            0% { transform: rotate(-25deg) translateX(-10%); }
-            100% { transform: rotate(-15deg) translateX(10%); }
-        }
-        @keyframes drift-cross-2 {
-            0% { transform: rotate(25deg) translateX(10%); }
-            100% { transform: rotate(15deg) translateX(-10%); }
-        }
-        @keyframes drift-cross-3 {
-            0% { transform: rotate(0deg) scale(1.1) translateX(-5%); }
-            100% { transform: rotate(0deg) scale(1.2) translateX(5%); }
-        }
-
-        .star {
-            position: absolute;
-            background: white;
+        .smoke {
+            position: absolute; top: -20px; left: 50%;
+            width: 8px; height: 8px; background: rgba(255,255,255,0.6);
             border-radius: 50%;
-            opacity: 0;
-            animation: twinkle var(--duration) ease-in-out infinite;
-            animation-delay: var(--delay);
-        }
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.2; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 4px white; }
-        }
-
-        .shooting-star {
-            position: absolute;
-            width: 100px; height: 2px;
-            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 50%, rgba(255,255,255,0) 100%);
-            transform: rotate(-45deg) translateX(-200px);
-            opacity: 0;
-            animation: shoot 4s ease-in-out infinite;
-        }
-        @keyframes shoot {
-            0% { transform: rotate(-45deg) translateX(-200px); opacity: 0; }
-            10% { opacity: 1; }
-            20% { transform: rotate(-45deg) translateX(calc(100vw + 200px)); opacity: 0; }
-            100% { transform: rotate(-45deg) translateX(calc(100vw + 200px)); opacity: 0; }
-        }
-
-        .moon {
-            position: absolute;
-            top: 8%;
-            right: 10%;
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle at 35% 35%, #fffdf5, #fffdca 20%, #f0f0f0 100%);
-            border-radius: 50%;
-            box-shadow: 
-                0 0 30px 5px rgba(255, 253, 202, 0.4),
-                0 0 80px 20px rgba(255, 255, 255, 0.1);
-            z-index: -1;
-            animation: moon-pulse 6s ease-in-out infinite alternate;
-        }
-        
-        .moon::before {
-            content: '';
-            position: absolute;
-            top: 20%; left: 30%;
-            width: 20px; height: 20px;
-            border-radius: 50%;
-            background: rgba(200, 200, 200, 0.1);
-            box-shadow: 
-                35px 10px 0 -5px rgba(200, 200, 200, 0.1), 
-                10px 35px 0 -2px rgba(200, 200, 200, 0.1);
-        }
-
-        @keyframes moon-pulse {
-            0% { transform: scale(1); box-shadow: 0 0 30px 5px rgba(255, 253, 202, 0.4), 0 0 80px 20px rgba(255, 255, 255, 0.1); }
-            100% { transform: scale(1.02); box-shadow: 0 0 40px 10px rgba(255, 253, 202, 0.5), 0 0 100px 30px rgba(255, 255, 255, 0.2); }
-        }
-
-        .card-message {
-            position: relative;
-            width: 90%; 
-            max-width: 700px;
-            padding: 35px 40px; 
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 24px;
-            text-align: left; 
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            color: white;
-            
-            transform: scale(0.9) translateY(30px);
-            opacity: 0;
-            transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1) 1.2s, opacity 1s ease-out 1.2s;
-            max-height: 80vh;
-            overflow-y: auto;
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255,255,255,0.3) transparent;
-        }
-        
-        .card-message::-webkit-scrollbar { width: 6px; }
-        .card-message::-webkit-scrollbar-thumb { background-color: rgba(255,255,255,0.3); border-radius: 3px; }
-        .card-message::-webkit-scrollbar-track { background: transparent; }
-        
-        .card-overlay.visible .card-message {
-            transform: scale(1) translateY(0);
-            opacity: 1;
-        }
-        
-        .card-message h1 {
-            font-family: 'Pacifico', cursive;
-            font-size: 2.8rem;
-            margin-bottom: 0.25rem;
-            text-align: center; 
-            background: linear-gradient(to right, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
-            color: transparent; 
-            filter: drop-shadow(0 0 10px rgba(255,105,180,0.5));
-        }
-        
-        .subtitle {
-            text-align: center;
-            display: block;
-            margin-bottom: 2.5rem;
-            color: #ffd700;
-            font-style: italic;
-            font-size: 1rem;
-        }
-        
-        .message-content {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .message-line {
-            display: flex;
-            align-items: flex-start; 
-            gap: 15px; 
-        }
-
-        .message-line .icon {
-            font-size: 1.2rem;
-            line-height: 1.6; 
-            filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.6));
-        }
-
-        .message-line p {
-            font-family: 'Inter', sans-serif;
-            color: rgba(255, 255, 255, 0.95);
-            line-height: 1.6;
-            font-size: 1.05rem;
-            font-weight: 300;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-            margin: 0;
-            flex: 1; 
-        }
-
-        #button-container {
-            position: absolute;
-            bottom: 50px; 
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: column; 
-            gap: 15px;
-            z-index: 16; 
-        }
-        #button-container.on-wall { z-index: 201; }
-        
-        .action-button {
-            padding: 12px 28px;
-            background-color: var(--frosting);
-            color: white;
-            font-size: 1.125rem; 
-            font-weight: 600; 
-            border: none;
-            border-radius: 9999px; 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            cursor: pointer;
+            filter: blur(4px);
             opacity: 0;
             pointer-events: none;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-            white-space: nowrap;
         }
-        
-        #lets-decorate-button {
-            background-color: #f8f9fa;
-            color: #d63384;
-            font-family: 'Pacifico', cursive;
-            font-size: 1.3rem;
+        @keyframes rise {
+            0% { opacity: 0; transform: translateX(-50%) translateY(0) scale(0.5); }
+            20% { opacity: 0.8; transform: translateX(-50%) translateY(-20px) scale(1.5); }
+            100% { opacity: 0; transform: translateX(-60%) translateY(-80px) scale(3); }
         }
 
-        .action-button.visible {
-            opacity: 1;
-            pointer-events: auto;
-            transform: translateY(0);
-            animation: pulse 2s infinite ease-in-out;
+        .swatch-card {
+            width: 100px;
+            height: 160px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
         }
-        
-        @keyframes pulse {
-            0% { box-shadow: 0 5px 15px rgba(0,0,0,0.1); transform: scale(1); }
-            50% { box-shadow: 0 8px 25px rgba(0,0,0,0.15); transform: scale(1.05); }
-            100% { box-shadow: 0 5px 15px rgba(0,0,0,0.1); transform: scale(1); }
+        .swatch-card:hover {
+            transform: translateY(-10px) rotate(2deg);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            z-index: 10;
         }
-        
-        .action-button:hover, .action-button.clicked { animation: none; }
-
-        #slice {
-            position: absolute; top: 50%; left: 50%; width: 4px; height: 150px; 
-            background: white; border-radius: 2px; box-shadow: 0 0 10px white, 0 0 20px white;
-            transform: translate(-100px, -200px) rotate(30deg) scaleY(0);
-            transform-origin: top center; transition: transform 0.4s ease-in-out, opacity 0.4s ease;
-            opacity: 0; z-index: 99;
+        .swatch-color {
+            height: 75%;
+            width: 100%;
+            position: relative;
         }
-        
-        #confetti-container, #balloon-container, #heart-container {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            overflow: hidden; pointer-events: none; opacity: 0; transition: opacity 1s ease;
+        .swatch-color::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom right, rgba(255,255,255,0.2), transparent);
         }
-        #confetti-container { z-index: 11; }
-        #balloon-container { z-index: 12; }
-        #heart-container { z-index: 13; }
-
-        .confetti {
-            position: absolute; top: -20px; width: 8px; height: 15px;
-            border-radius: 2px; opacity: 0.8; animation: fall 10s linear infinite;
-        }
-        @keyframes fall {
-            from { transform: translateY(-20px) rotate(0deg); }
-            to { transform: translateY(105vh) rotate(720deg); opacity: 0; }
-        }
-        
-        .emoji-heart {
-            position: absolute; bottom: -150px; font-size: 50px; 
-            animation: float 15s linear infinite;
-        }
-        @keyframes float {
-            from { transform: translateY(0) translateX(0) rotate(0deg); opacity: 1; }
-            to { transform: translateY(-120vh) translateX(100px) rotate(360deg); opacity: 0; }
-        }
-
-        .heart {
-            position: absolute; bottom: -50px; width: 20px; height: 20px;
-            transform: rotate(-45deg); animation: float-heart 20s linear infinite; opacity: 0.1; 
-        }
-        .heart::before, .heart::after {
-            content: ""; position: absolute; width: 20px; height: 20px; border-radius: 50%;
-        }
-        .heart::before { top: -10px; left: 0; }
-        .heart::after { top: 0; left: 10px; }
-        
-        .heart.pink { background-color: #ff69b4; }
-        .heart.pink::before, .heart.pink::after { background-color: #ff69b4; }
-        .heart.red { background-color: #e01b1b; }
-        .heart.red::before, .heart.red::after { background-color: #e01b1b; }
-        .heart.white { background-color: #ffffff; }
-        .heart.white::before, .heart.white::after { background-color: #ffffff; }
-
-        @keyframes float-heart {
-            from { transform: translateY(0) translateX(var(--sway-start, 0px)) rotate(-45deg); opacity: 0.7; }
-            50% { transform: translateY(-60vh) translateX(var(--sway-mid, 40px)) rotate(-45deg); }
-            to { transform: translateY(-120vh) translateX(var(--sway-end, 0px)) rotate(-45deg); opacity: 0; }
+        .swatch-label {
+            height: 25%;
+            background: #f8fafc;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Cinzel', serif;
+            font-size: 0.6rem;
+            font-weight: bold;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            border-top: 1px solid rgba(0,0,0,0.05);
         }
 
     </style>
 </head>
-<body class="font-sans overflow-hidden">
-    
-    <button id="navToggle" class="fixed top-6 left-6 z-[110] p-2 bg-purple-600 text-white rounded-full shadow-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+<body>
+
+    <canvas id="balloon-canvas"></canvas>
+
+    <div id="intro-curtain" class="fixed inset-0 z-[100] bg-slate-950 flex flex-col items-center justify-center transition-transform duration-1000 ease-in-out">
+        <p class="font-script text-4xl text-gold mb-6 animate-pulse">A Royal Celebration</p>
+        <button onclick="startParty()" class="px-8 py-3 border border-gold text-gold font-royal uppercase tracking-widest hover:bg-gold hover:text-slate-900 transition-all shadow-[0_0_30px_rgba(255,215,0,0.2)] cursor-pointer">
+            Enter Party
+        </button>
+    </div>
+
+    <button id="navToggle" onclick="toggleNav()" class="fixed top-6 left-6 z-[9999] p-2 bg-slate-800 text-white rounded-full shadow-lg hover:bg-slate-700 hover:text-gold hover:shadow-[0_0_15px_rgba(255,215,0,0.5)] focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 transition-all duration-300 border border-white/10">
         <svg id="navToggleIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-8 6h8"></path></svg>
         <svg id="navToggleX" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
     </button>
 
-        <nav id="topNav" class="nav-panel fixed top-0 left-0 right-0 z-[105] h-16 bg-purple-600 text-yellow-100 shadow-md flex items-center justify-center space-x-6 -translate-y-full">
-            <a href="index.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Home</a>
-            <a href="Special.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Special</a>
-            <a href="letter.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Letter</a>
+        <nav id="topNav" class="nav-panel fixed top-0 left-0 right-0 z-[105] h-16 bg-slate-900 text-yellow-100 shadow-md flex items-center justify-center -translate-y-full">
+            <a href="index.html" class="nav-link px-1 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Home</a>
+            <a href="Special.html" class="nav-link px-1 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Special</a>
+            <a href="letter.html" class="nav-link px-1 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Letter</a>
         </nav>
 
-        <nav id="bottomNav" class="nav-panel fixed bottom-0 left-0 right-0 z-[105] h-16 bg-purple-600 text-yellow-100 shadow-md flex items-center justify-center space-x-6 translate-y-full">
-            <a href="anatomy.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Anatomy</a>
-            <a href="chat.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Heaven</a>
-            <a href="you.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">You</a>
+        <nav id="bottomNav" class="nav-panel fixed bottom-0 left-0 right-0 z-[105] h-16 bg-slate-900 text-yellow-100 shadow-md flex items-center justify-center translate-y-full">
+            <a href="anatomy.html" class="nav-link px-1 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Anatomy</a>
+            <a href="chat.html" class="nav-link px-1 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Heaven</a>
+            <a href="you.html" class="nav-link px-1 py-2 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">You</a>
         </nav>
 
-        <nav id="leftNav" class="nav-panel fixed left-0 top-0 bottom-0 z-[105] w-20 bg-purple-800 text-yellow-100 shadow-md flex flex-col items-center space-y-6 -translate-x-full overflow-y-auto py-20">
-            <a href="Diary.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Diary</a>
-            <a href="Universe.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Universe</a>
-            <a href="Box.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Box</a>
-            <a href="color.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Color</a>
-            <a href="Teacher.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Teacher</a>
-            <a href="The_River.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">River</a>
-            <a href="Mountain.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Mountain</a>
-            <a href="Paper_Star.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Paper Star</a>
-            <a href="Carttoon.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Cartoon</a>
-            <a href="Santa.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Santa</a>
-            <a href="Cloud.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Cloud</a>
-            <a href="Ink.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Paint</a>
-            <a href="Butterfly.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Butterfly</a>
-            <a href="Weather.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Weather</a>
+        <!-- CHANGED: Increased spacing from space-y-1 to space-y-4 -->
+        <nav id="leftNav" class="nav-panel fixed left-0 top-0 bottom-0 z-[105] w-20 bg-slate-950 text-yellow-100 shadow-md flex flex-col items-center space-y-4 -translate-x-full overflow-y-auto py-12">
+            <a href="Diary.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Diary</a>
+            <a href="Universe.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Universe</a>
+            <a href="Box.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Box</a>
+            <a href="color.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Color</a>
+            <a href="Teacher.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Teacher</a>
+            <a href="The_River.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">River</a>
+            <a href="Mountain.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Mountain</a>
+            <a href="Paper_Star.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Paper Star</a>
+            <a href="Carttoon.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Cartoon</a>
+            <a href="Santa.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Santa</a>
+            <a href="Cloud.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Cloud</a>
+            <a href="Ink.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Paint</a>
+            <a href="Butterfly.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Butterfly</a>
+            <a href="Weather.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Weather</a>
         </nav>
 
-        <nav id="rightNav" class="nav-panel fixed right-0 top-0 bottom-0 z-[105] w-20 bg-purple-800 text-yellow-100 shadow-md flex flex-col items-center space-y-6 translate-x-full overflow-y-auto py-20">
-            <a href="Skill.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Skill</a>
-            <a href="Msg.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Massege</a>
-            <a href="21_Wish.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">21_Door</a>
-            <a href="Cake.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Cake</a>
-            <a href="Periodik_table.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Periodik_table</a>
-            <a href="Presence.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Presence</a>
-            <a href="Concept.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Concept</a>
-            <a href="Calender.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Calender</a>
-            <a href="Perspective.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Perspective</a>
-            <a href="Spotlight.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Spotlight</a>
-            <a href="Room.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Room</a>
-            <a href="Radio.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Radio</a>
-            <a href="Food.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Food</a>
-            <a href="Music.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-purple-700 transition-colors duration-200 festive-text">Music</a>
+        <!-- CHANGED: Increased spacing from space-y-1 to space-y-4 -->
+        <nav id="rightNav" class="nav-panel fixed right-0 top-0 bottom-0 z-[105] w-20 bg-slate-950 text-yellow-100 shadow-md flex flex-col items-center space-y-4 translate-x-full overflow-y-auto py-12">
+            <a href="Skill.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Skill</a>
+            <a href="Msg.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Massege</a>
+            <a href="21_Wish.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">21_Door</a>
+            <a href="Cake.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Cake</a>
+            <a href="Periodik_table.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Periodik_table</a>
+            <a href="Presence.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Presence</a>
+            <a href="Concept.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Concept</a>
+            <a href="Calender.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Calender</a>
+            <a href="Perspective.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Perspective</a>
+            <a href="Spotlight.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Spotlight</a>
+            <a href="Room.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Room</a>
+            <a href="Radio.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Radio</a>
+            <a href="Food.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Food</a>
+            <a href="Music.html" class="nav-link p-1 rounded-md text-sm font-medium hover:bg-white/10 transition-colors duration-200 festive-text">Music</a>
         </nav>
 
-        <main id="mainContent">
+    <div id="color-modal" onclick="closeModal()">
+        <div class="modal-card" onclick="event.stopPropagation()">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            
+            <div id="modal-gem" class="w-20 h-20 rounded-full mx-auto mb-6 shadow-[0_0_30px_currentColor] transition-all duration-500"></div>
+            
+            <h3 id="modal-title" class="font-royal text-3xl text-gold mb-4 uppercase tracking-widest">Color Name</h3>
+            <p id="modal-desc" class="text-white/90 font-light italic leading-relaxed text-lg">
+                Description goes here...
+            </p>
+            
+            <button onclick="closeModal()" class="mt-8 text-xs uppercase tracking-widest text-white/50 hover:text-gold transition-colors">Close</button>
+        </div>
+    </div>
 
-        <div id="brick-wall"></div>
-        <div id="confetti-container"></div>
-        <div id="balloon-container"></div>
-        <div id="heart-container"></div>
+    <div class="stage-container w-full h-full relative">
         
-        <div id="banner">
-            <div class="line">
-                <span>H</span><span>A</span><span>P</span><span>P</span><span>Y</span>
-                <span class="space"></span>
-                <span>B</span><span>I</span><span>R</span><span>T</span><span>H</span><span>D</span><span>A</span><span>Y</span>
-            </div>
-            <div class="line">
-                <span>M</span><span>I</span><span>S</span><span>S</span>
-                <span class="space"></span>
-                <span>J</span><span>U</span><span>N</span><span>E</span><span>!</span>
-            </div>
-        </div>
-    
-        <div id="cake" class="cake-container">
-            <div class="frosting"></div>
-            <div class="cake-body">
-                <div class="face">
-                    <div class="eye eye-left">
-                        <div class="eye-open"></div>
-                        <div class="eye-closed"></div>
-                    </div>
-                    <div class="eye eye-right">
-                        <div class="eye-open"></div>
-                        <div class="eye-closed"></div>
-                    </div>
-                    <div id="mouth" class="mouth"></div>
-                    <div id="sprinkles" class="sprinkles">
-                        <span></span><span></span><span></span><span></span><span></span>
-                        <span></span><span></span><span></span><span></span><span></span>
-                    </div>
+        <div id="stage-1" class="stage active">
+            <div class="scroll-content">
+                <div class="text-center mt-10 mb-6">
+                    <p class="font-script text-4xl text-gold mb-2">Happy Birthday</p>
+                    <h1 class="font-royal text-6xl md:text-8xl font-bold gold-text drop-shadow-2xl animate-[pulse_3s_infinite]">
+                        RADHIKA
+                    </h1>
                 </div>
-            </div>
-            <div class="candles-container">
-                <div class="candle" id="candle1"><div class="flame"></div></div>
-                <div class="candle" id="candle2"><div class="flame"></div></div>
-                <div class="candle" id="candle3"><div class="flame"></div></div>
-            </div>
-        </div>
-    
-        <div id="button-container" class="on-wall">
-            <button id="lets-decorate-button" class="action-button visible">Let's Decorate</button>
-            <button id="cake-button" class="action-button">Where is my cake?</button>
-            <button id="light-button" class="action-button">Light me up!</button>
-            <button id="cut-button" class="action-button">Cut the Cake</button>
-        </div>
-    
-        <div id="slice"></div>
-    
-        <div id="card" class="card-overlay">
-            <div class="aurora-bg">
-                <div class="aurora-curtain curtain-1"></div>
-                <div class="aurora-curtain curtain-2"></div>
-                <div class="aurora-curtain curtain-3"></div>
-            </div>
-            
-            <div id="star-container" class="absolute inset-0 w-full h-full z-[-1]"></div>
-            <div class="shooting-star"></div>
-            
-            <div class="moon"></div>
 
-            <div class="card-message">
-                <h1>Happy Birthday</h1>
-                <span class="subtitle">✨ To the magical Miss June ✨</span>
-                
-                <div class="message-content">
-                    <div class="message-line">
-                        <span class="icon">✨</span>
-                        <p>Happy birthday to the girl who treats small things with such care that it makes you rethink what “important” really means.</p>
-                    </div>
-                    <div class="message-line">
-                        <span class="icon">✨</span>
-                        <p>Happy birthday to the girl who can turn a simple “hi” into a memory that stays for days.</p>
-                    </div>
-                    <div class="message-line">
-                        <span class="icon">✨</span>
-                        <p>Happy birthday to the girl who laughs in a way that makes you wonder how such a sound exists in real life.</p>
-                    </div>
-                    <div class="message-line">
-                        <span class="icon">✨</span>
-                        <p>Happy birthday to the girl who never shows off, yet everything about her feels effortlessly impressive.</p>
-                    </div>
-                    <div class="message-line">
-                        <span class="icon">✨</span>
-                        <p>Happy birthday to the girl who has a smile that looks like it was handcrafted for good days.</p>
-                    </div>
-                    <div class="message-line">
-                        <span class="icon">✨</span>
-                        <p>Happy birthday to the girl who never realizes how inspiring she actually is to others.</p>
-                    </div>
-                    <div class="message-line">
-                        <span class="icon">✨</span>
-                        <p>Happy birthday to the girl who can turn any moment into a memory without even trying.</p>
-                    </div>
-                    <div class="message-line">
-                        <span class="icon">✨</span>
-                        <p>Happy birthday to the girl who makes people feel lucky just by having crossed paths with her once.</p>
-                    </div>
-                    <div class="message-line">
-                        <span class="icon">✨</span>
-                        <p>Happy birthday to the girl who doesn’t chase attention, but somehow becomes the part we remember the most.</p>
-                    </div>
-                    <div class="message-line">
-                        <span class="icon">✨</span>
-                        <p>Happy birthday to the girl who deserves a birthday so good (not just thik thak 😅) that she replays it in her head for weeks.</p>
+                <div class="bday-card w-full max-w-md mx-auto">
+                    <h3 class="font-royal text-xl text-white mb-4 border-b border-white/10 pb-2">The Royal Guest List</h3>
+                    <div class="space-y-4 text-left">
+                        <div class="flex items-center gap-4 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors">
+                            <div class="w-10 h-10 rounded-full bg-red-500 flex items-center justify-center text-lg shadow-[0_0_15px_rgba(239,68,68,0.5)]">❤️</div>
+                            <div>
+                                <p class="font-bold text-red-200 font-royal">Red (Mom)</p>
+                                <p class="text-xs text-gray-300">The Queen of Hearts & Unconditional Love.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors">
+                            <div class="w-10 h-10 rounded-full bg-green-600 flex items-center justify-center text-lg shadow-[0_0_15px_rgba(22,163,74,0.5)]">🌳</div>
+                            <div>
+                                <p class="font-bold text-green-200 font-royal">Green (Dad)</p>
+                                <p class="text-xs text-gray-300">The King of Strength & Endless Support.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-colors">
+                            <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-lg shadow-[0_0_15px_rgba(59,130,246,0.5)]">🎭</div>
+                            <div>
+                                <p class="font-bold text-blue-200 font-royal">Blue (Sister)</p>
+                                <p class="text-xs text-gray-300">The Princess of Joy, Secrets & Fun.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <p class="mt-6 text-center font-bold" style="color: #ff69b4;">
-                    - From your secret admirer 
-                </p>
-                
+                <button onclick="nextStage(2)" class="party-btn">Make a Wish</button>
             </div>
         </div>
 
-    </main> 
+        <div id="stage-2" class="stage">
+            <div class="scroll-content text-center relative w-full h-full flex flex-col items-center justify-center">
+                
+                <div class="absolute top-20 left-0 right-0 z-10">
+                    <h2 class="font-royal text-4xl text-white mb-2 drop-shadow-lg">Make a Wish</h2>
+                    <p class="text-gold/80 text-sm uppercase tracking-widest animate-pulse">Close your eyes... Tap the flame</p>
+                </div>
+
+                <div class="cake-container" onclick="blowCandle(this)">
+                    <div class="plate"></div>
+                    <div class="layer layer-bottom"></div>
+                    <div class="layer layer-top">
+                        <div class="icing"></div>
+                    </div>
+                    <div class="candle">
+                        <div class="wick"></div>
+                        <div class="flame"></div>
+                    </div>
+                </div>
+
+                <div id="wish-message" class="mt-12 opacity-0 transition-opacity duration-1000 z-10">
+                    <p class="font-script text-4xl text-gold mb-6 drop-shadow-[0_0_10px_rgba(255,215,0,0.5)]">May your year be magical!</p>
+                    <button onclick="nextStage(3)" class="party-btn text-sm px-8 py-3">See Your Colors</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="stage-3" class="stage" onclick="nextStage(4)">
+            <div class="scroll-content text-center">
+                <h2 class="font-royal text-4xl text-white mb-2">Your Royal Palette</h2>
+                <p class="text-blue-200/70 text-xs uppercase tracking-widest mb-8">Touch a Swatch to reveal its meaning</p>
+                
+                <div id="grid-container" class="flex flex-wrap justify-center gap-6 w-full max-w-4xl pb-20">
+                </div>
+
+                <button onclick="event.stopPropagation(); nextStage(4)" class="party-btn mt-4">The Final Gift</button>
+            </div>
+        </div>
+
+        <div id="stage-4" class="stage">
+            <div class="scroll-content text-center">
+                <div class="relative inline-block mb-8 group mt-6">
+                    <div class="absolute -inset-10 bg-blue-600/20 rounded-full blur-2xl animate-pulse"></div>
+                    
+                    <div class="relative w-64 h-64 rounded-full overflow-hidden border-[6px] border-[#FFD700] shadow-[0_0_50px_rgba(255,215,0,0.4)] flex items-center justify-center bg-[#305CDE]" style="background-color: #305CDE !important;">
+                        <span class="font-royal text-9xl text-white drop-shadow-lg select-none">R</span>
+                    </div>
+                </div>
+
+                <h2 class="font-royal text-6xl mb-6 text-[#305CDE] drop-shadow-lg">Royal Blue</h2>
+                
+                <div class="bday-card p-8 mx-auto max-w-md bg-opacity-80">
+                    <p class="font-royal text-2xl italic leading-relaxed text-gray-100">
+                        "Of all the colors in the universe, the most beautiful is the one brought into life by you."
+                    </p>
+                    <div class="mt-6 text-right">
+                        <span class="text-xs uppercase tracking-[0.3em] font-bold text-gold">— Sankho</span>
+                    </div>
+                </div>
+
+                <button onclick="nextStage(1)" class="text-xs text-white/40 mt-12 uppercase hover:text-gold transition-colors tracking-widest">Replay Party</button>
+            </div>
+        </div>
+
+    </div>
 
     <script>
-        
-        let areNavsOpen = false;
+        const canvas = document.getElementById('balloon-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+        let balloons = [];
 
-        function openAllNavs() {
-            const mainContent = document.getElementById('mainContent');
-            const topNav = document.getElementById('topNav');
-            const bottomNav = document.getElementById('bottomNav');
-            const leftNav = document.getElementById('leftNav');
-            const rightNav = document.getElementById('rightNav');
-            const navToggleIcon = document.getElementById('navToggleIcon');
-            const navToggleX = document.getElementById('navToggleX');
-            const card = document.getElementById('card'); 
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
 
-            if (!topNav || !mainContent) return; 
-
-            if(topNav) topNav.classList.remove('-translate-y-full');
-            if(bottomNav) bottomNav.classList.remove('translate-y-full');
-            if(leftNav) leftNav.classList.remove('-translate-x-full');
-            if(rightNav) rightNav.classList.remove('translate-x-full');
-            
-            if (card && card.style.opacity !== '1') {
-                mainContent.classList.add('pt-16', 'pb-16', 'pl-24', 'pr-24');
+        class Balloon {
+            constructor() {
+                this.init();
             }
-            
-            mainContent.style.padding = ''; 
-            
-            if(navToggleIcon) navToggleIcon.classList.add('hidden');
-            if(navToggleX) navToggleX.classList.remove('hidden');
-            
-            areNavsOpen = true;
-        }
-
-        function closeAllNavs() {
-            const mainContent = document.getElementById('mainContent');
-            const topNav = document.getElementById('topNav');
-            const bottomNav = document.getElementById('bottomNav');
-            const leftNav = document.getElementById('leftNav');
-            const rightNav = document.getElementById('rightNav');
-            const navToggleIcon = document.getElementById('navToggleIcon');
-            const navToggleX = document.getElementById('navToggleX');
-
-            if (!topNav || !mainContent) return; 
-
-            if(topNav) topNav.classList.add('-translate-y-full');
-            if(bottomNav) bottomNav.classList.add('translate-y-full');
-            if(leftNav) leftNav.classList.add('-translate-x-full');
-            if(rightNav) rightNav.classList.add('translate-x-full');
-            
-            mainContent.classList.remove('pt-16', 'pb-16', 'pl-24', 'pr-24');
-            mainContent.style.padding = '0'; 
-            
-            if(navToggleIcon) navToggleIcon.classList.remove('hidden');
-            if(navToggleX) navToggleX.classList.add('hidden');
-            
-            areNavsOpen = false;
-        }
-
-        function toggleAllNavs() {
-            if (areNavsOpen) {
-                closeAllNavs();
-            } else {
-                openAllNavs();
+            init() {
+                this.x = Math.random() * width;
+                this.y = height + Math.random() * 100;
+                this.speed = Math.random() * 1 + 0.5;
+                this.radius = Math.random() * 15 + 10;
+                this.color = Math.random() > 0.5 ? '#1e40af' : '#FFD700'; 
+                this.wobble = Math.random() * Math.PI * 2;
+            }
+            update() {
+                this.y -= this.speed;
+                this.x += Math.sin(this.wobble) * 0.5;
+                this.wobble += 0.05;
+                if(this.y < -50) this.init();
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.ellipse(this.x, this.y, this.radius, this.radius * 1.2, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.moveTo(this.x, this.y + this.radius * 1.2);
+                ctx.lineTo(this.x, this.y + this.radius * 1.2 + 20);
+                ctx.strokeStyle = 'rgba(255,255,255,0.2)';
+                ctx.stroke();
             }
         }
-        
-        window.onload = function() {
-            
+
+        for(let i=0; i<35; i++) balloons.push(new Balloon());
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            balloons.forEach(b => { b.update(); b.draw(); });
+            requestAnimationFrame(animate);
+        }
+        animate();
+
+        function startParty() {
+            document.getElementById('intro-curtain').style.transform = 'translateY(-100%)';
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 150, spread: 100, origin: { y: 0.6 }, colors: ['#FFD700', '#1e3a8a', '#FFF'] });
+            }
+        }
+
+        let isNavOpen = false;
+        function toggleNav() {
             const body = document.body;
-            const brickWall = document.getElementById('brick-wall');
-            const buttonContainer = document.getElementById('button-container');
-            const cake = document.getElementById('cake');
-            const banner = document.getElementById('banner'); 
-            const confetti = document.getElementById('confetti-container');
-            const balloons = document.getElementById('balloon-container');
-            const hearts = document.getElementById('heart-container');
-            const navToggle = document.getElementById('navToggle');
-            const topNav = document.getElementById('topNav');
-            const bottomNav = document.getElementById('bottomNav');
-            const leftNav = document.getElementById('leftNav');
-            const rightNav = document.getElementById('rightNav');
-            const eyeLeftOpen = document.querySelector('.eye-left .eye-open');
-            const eyeRightOpen = document.querySelector('.eye-right .eye-open');
-            const eyesClosed = document.querySelectorAll('.eye-closed');
-            const mouth = document.getElementById('mouth');
-            const sprinkles = document.getElementById('sprinkles');
-            const candles = document.querySelectorAll('.candle');
-            const flames = document.querySelectorAll('.flame');
-            const card = document.getElementById('card');
-            const slice = document.getElementById('slice'); 
-            const letsDecorateButton = document.getElementById('lets-decorate-button');
-            const cakeButton = document.getElementById('cake-button');
-            const lightButton = document.getElementById('light-button');
-            const cutButton = document.getElementById('cut-button');
+            const purpleIcon = document.getElementById('navToggleIcon');
+            const purpleX = document.getElementById('navToggleX');
 
-            letsDecorateButton.addEventListener('click', () => {
+            if(isNavOpen) {
+                // Closing
+                body.classList.remove('nav-active');
                 
-                letsDecorateButton.classList.remove('visible');
-                letsDecorateButton.classList.add('clicked'); 
-                buttonContainer.classList.remove('on-wall');
-                banner.style.opacity = '1';
-                confetti.style.opacity = '1';
-                balloons.style.opacity = '1';
-                hearts.style.opacity = '1';
-                createConfetti();
-                createEmojiHearts();
-                createHearts();
-                setTimeout(() => {
-                    cakeButton.classList.add('visible');
-                }, 1500);
-            });
-            
-            cakeButton.addEventListener('click', () => {
+                if(purpleIcon) purpleIcon.classList.remove('hidden');
+                if(purpleX) purpleX.classList.add('hidden');
+
+                isNavOpen = false;
+            } else {
+                // Opening
+                body.classList.add('nav-active');
                 
-                cakeButton.classList.remove('visible');
-                cakeButton.classList.add('clicked');
+                if(purpleIcon) purpleIcon.classList.add('hidden');
+                if(purpleX) purpleX.classList.remove('hidden');
 
-                cake.style.opacity = '1';
-                setTimeout(() => {
-                    eyeLeftOpen.style.opacity = '1';
-                    eyeLeftOpen.style.transform = 'translateX(0)';
-                }, 500); 
-
-                setTimeout(() => {
-                    eyeRightOpen.style.opacity = '1';
-                    eyeRightOpen.style.transform = 'translateX(0)';
-                    mouth.style.opacity = '1';
-                    mouth.style.transform = 'translateX(-50%) translateX(0)';
-                    sprinkles.style.opacity = '1';
-                    sprinkles.style.transform = 'translateX(0)';
-                }, 800); 
-
-                setTimeout(() => {
-                    eyeLeftOpen.style.opacity = '0';
-                    eyeRightOpen.style.opacity = '0';
-                    eyesClosed.forEach(e => e.style.opacity = '1');
-                }, 1800); 
-                
-                setTimeout(() => {
-                    eyeLeftOpen.style.opacity = '1';
-                    eyeRightOpen.style.opacity = '1';
-                    eyesClosed.forEach(e => e.style.opacity = '0');
-                }, 2100); 
-                
-                setTimeout(() => {
-                    lightButton.classList.add('visible');
-                }, 2500);
-            });
-
-            lightButton.addEventListener('click', () => {
-                
-                lightButton.classList.remove('visible');
-                lightButton.classList.add('clicked');
-                setTimeout(() => {
-                    candles.forEach(c => c.style.transform = 'translateY(0)');
-                }, 500); 
-
-                setTimeout(() => {
-                    flames.forEach(f => f.style.opacity = '1');
-                }, 1500); 
-
-                
-                setTimeout(() => {
-                    cutButton.classList.add('visible');
-                }, 2300); 
-            });
-
-            cutButton.addEventListener('click', () => {
-                
-                cutButton.classList.remove('visible');
-                cutButton.classList.add('clicked'); 
-
-                
-                flames.forEach(f => f.style.opacity = '0');
-
-                
-                setTimeout(() => {
-                    slice.style.opacity = '1';
-                    slice.style.transform = 'translate(-20px, -80px) rotate(30deg) scaleY(1)';
-                }, 200);
-
-                
-                setTimeout(() => {
-                    slice.style.transform = 'translate(40px, 50px) rotate(30deg) scaleY(1)';
-                }, 600);
-
-                
-                setTimeout(() => {
-                    slice.style.opacity = '0';
-                }, 800);
-
-                
-                setTimeout(() => {
-                    body.style.background = '#1a0b1a'; 
-                    
-                    brickWall.style.opacity = '0';
-                    confetti.style.opacity = '0';
-                    balloons.style.opacity = '0';
-                    hearts.style.opacity = '0';
-                    banner.style.opacity = '0';
-
-                    buttonContainer.style.opacity = '0';
-                    buttonContainer.style.pointerEvents = 'none';
-
-                    navToggle.style.opacity = '1';
-                    navToggle.style.pointerEvents = 'auto';
-                    
-                    closeAllNavs(); 
-
-                    const purpleNavs = document.querySelectorAll('.bg-purple-600');
-                    purpleNavs.forEach(nav => {
-                        nav.classList.remove('bg-purple-600');
-                        nav.classList.add('bg-slate-900'); 
-                    });
-
-                    const darkPurpleNavs = document.querySelectorAll('.bg-purple-800');
-                    darkPurpleNavs.forEach(nav => {
-                        nav.classList.remove('bg-purple-800');
-                        nav.classList.add('bg-slate-950');
-                    });
-                    
-                    const navLinks = document.querySelectorAll('.nav-link');
-                    navLinks.forEach(link => {
-                        link.classList.remove('hover:bg-purple-700');
-                        link.classList.add('hover:bg-slate-700');
-                    });
-                    
-                    navToggle.classList.remove('hover:bg-purple-700', 'focus:ring-purple-500');
-                    navToggle.classList.add('hover:bg-slate-700', 'focus:ring-slate-500');
-
-                }, 1500); 
-
-                setTimeout(() => {
-                    cake.style.opacity = '0';
-                    createStarryNight(); 
-                }, 2500); 
-
-                setTimeout(() => {
-                    card.style.opacity = '1';
-                    card.style.pointerEvents = 'auto';
-                    card.classList.add('visible'); 
-                }, 3500);
-            });
-
-            function createStarryNight() {
-                const container = document.getElementById('star-container');
-                for (let i = 0; i < 100; i++) {
-                    const star = document.createElement('div');
-                    star.classList.add('star');
-                    const x = Math.random() * 100;
-                    const y = Math.random() * 100;
-                    const size = Math.random() * 2 + 1;
-                    const delay = Math.random() * 5;
-                    const duration = Math.random() * 3 + 2;
-
-                    star.style.left = `${x}%`;
-                    star.style.top = `${y}%`;
-                    star.style.width = `${size}px`;
-                    star.style.height = `${size}px`;
-                    star.style.setProperty('--delay', `${delay}s`);
-                    star.style.setProperty('--duration', `${duration}s`);
-
-                    container.appendChild(star);
-                }
+                isNavOpen = true;
             }
+        }
 
-            function createConfetti() {
-                const confettiContainer = document.getElementById('confetti-container');
-                const colors = ['var(--sprinkle1)', 'var(--sprinkle2)', 'var(--sprinkle3)', 'var(--sprinkle4)', 'var(--frosting)'];
-                
-                setInterval(() => {
-                    if (confettiContainer.style.opacity !== '1') return; 
-                    const confetti = document.createElement('div');
-                    confetti.classList.add('confetti');
-                    
-                    confetti.style.left = `${Math.random() * 100}vw`;
-                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                    confetti.style.animationDuration = `${Math.random() * 5 + 8}s`; 
-                    confetti.style.animationDelay = `${Math.random() * 3}s`; 
+        // Close nav when clicking outside
+        document.addEventListener('click', (e) => {
+            const inNav = e.target.closest('.nav-panel');
+            const onBtn = e.target.closest('#navToggle');
 
-                    confettiContainer.appendChild(confetti);
-
-                    setTimeout(() => {
-                        confetti.remove();
-                    }, 13000); 
-
-                }, 200);
+            if (isNavOpen && !inNav && !onBtn) {
+                toggleNav();
             }
-
-            function createEmojiHearts() {
-                const balloonContainer = document.getElementById('balloon-container');
-
-                function createSingleEmojiHeart() {
-                    if (balloonContainer.style.opacity !== '1') return; 
-                    const balloon = document.createElement('div');
-                    balloon.classList.add('emoji-heart');
-                    balloon.innerHTML = '❤️'; 
-                    
-                    balloon.style.left = `${Math.random() * 80 + 10}vw`; 
-                    balloon.style.animationDuration = `${Math.random() * 10 + 15}s`; 
-                    balloon.style.animationDelay = `${Math.random() * 5}s`;
-
-                    const sway = (Math.random() - 0.5) * 200;
-                    balloon.style.setProperty('--sway-amount', `${sway}px`);
-                    
-                    balloonContainer.appendChild(balloon);
-
-                    setTimeout(() => {
-                        balloon.remove();
-                    }, 25000); 
-                }
-
-                for (let i = 0; i < 3; i++) {
-                    createSingleEmojiHeart();
-                }
-                setInterval(createSingleEmojiHeart, 8000);
-            }
-
-            function createHearts() {
-                const heartContainer = document.getElementById('heart-container');
-                const colors = ['pink', 'red', 'white'];
-
-                function createSingleHeart() {
-                    if (heartContainer.style.opacity !== '1') return; 
-                    const heart = document.createElement('div');
-                    const color = colors[Math.floor(Math.random() * colors.length)];
-                    heart.classList.add('heart', color);
-                    
-                    heart.style.left = `${Math.random() * 90 + 5}vw`; 
-                    heart.style.animationDuration = `${Math.random() * 10 + 15}s`;
-                    heart.style.animationDelay = `${Math.random() * 7}s`;
-
-                    const swayStart = (Math.random() - 0.5) * 40; 
-                    const swayMid = (Math.random() - 0.5) * 120;
-                    const swayEnd = (Math.random() - 0.5) * 40; 
-                    
-                    heart.style.setProperty('--sway-start', `${swayStart}px`);
-                    heart.style.setProperty('--sway-mid', `${swayMid}px`);
-                    heart.style.setProperty('--sway-end', `${swayEnd}px`);
-
-                    heartContainer.appendChild(heart);
-
-                    setTimeout(() => {
-                        heart.remove();
-                    }, 25000);
-                }
-
-                for (let i = 0; i < 3; i++) {
-                    createSingleHeart();
-                }
-                setInterval(createSingleHeart, 6000);
-            }
-        };
-
-        
-        document.addEventListener('DOMContentLoaded', () => {
-            
-            const navLinks = document.querySelectorAll('.nav-panel .nav-link');
-            const mainContent = document.getElementById('mainContent');
-            const topNav = document.getElementById('topNav');
-            const bottomNav = document.getElementById('bottomNav');
-            const leftNav = document.getElementById('leftNav');
-            const rightNav = document.getElementById('rightNav');
-            const navToggle = document.getElementById('navToggle');
-            const navToggleIcon = document.getElementById('navToggleIcon');
-            const navToggleX = document.getElementById('navToggleX');
-            
-            navToggle.addEventListener('click', (e) => {
-                e.stopPropagation(); 
-                toggleAllNavs();
-            });
-            
-            mainContent.addEventListener('click', (e) => {
-                
-                if (e.target.closest('button')) {
-                    return;
-                }
-                
-                if (areNavsOpen) {
-                    closeAllNavs();
-                }
-            });
-            
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    const targetHash = e.currentTarget.getAttribute('href');
-                    
-                    if (targetHash.startsWith('#')) {
-                        e.preventDefault(); 
-                        if (areNavsOpen) {
-                            closeAllNavs();
-                        }
-                    }
-                    
-                    if (areNavsOpen) {
-                        closeAllNavs();
-                    }
-                });
-            });
-            
-            closeAllNavs();
         });
-    </script>
 
+        const stages = [
+            document.getElementById('stage-1'),
+            document.getElementById('stage-2'),
+            document.getElementById('stage-3'),
+            document.getElementById('stage-4')
+        ];
+
+        window.nextStage = function(num) {
+            const activeStage = document.querySelector('.stage.active');
+            if(activeStage) activeStage.classList.remove('active');
+            
+            if(num === 2) {
+                document.body.classList.add('dimmed'); 
+            } else {
+                document.body.classList.remove('dimmed');
+            }
+            
+            setTimeout(() => { stages[num-1].classList.add('active'); }, 600);
+        }
+
+        window.blowCandle = function(el) {
+            const flame = el.querySelector('.flame');
+            if(!flame.classList.contains('out')) {
+                
+                flame.classList.add('out');
+                
+                setTimeout(() => { document.body.classList.remove('dimmed'); }, 300);
+                
+                document.getElementById('wish-message').classList.remove('opacity-0');
+                
+                const candle = el.querySelector('.candle');
+                for(let i=0; i<5; i++) {
+                    let smoke = document.createElement('div');
+                    smoke.className = 'smoke';
+                    smoke.style.animation = `rise ${1.5 + Math.random()}s ease-out forwards`;
+                    smoke.style.left = (50 + (Math.random() * 10 - 5)) + '%';
+                    candle.appendChild(smoke);
+                }
+                
+                if (typeof confetti === 'function') {
+                    var duration = 3000;
+                    var animationEnd = Date.now() + duration;
+                    var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
+
+                    var interval = setInterval(function() {
+                        var timeLeft = animationEnd - Date.now();
+                        if (timeLeft <= 0) { return clearInterval(interval); }
+                        var particleCount = 50 * (timeLeft / duration);
+                        confetti(Object.assign({}, defaults, { particleCount, origin: { x: Math.random(), y: Math.random() - 0.2 } }));
+                    }, 250);
+                }
+            }
+        }
+
+        const colors = [
+            { c: '#ef4444', t: 'The Spark', d: 'That electric feeling when you walk into the room—undeniable, vibrant, and utterly unforgettable.' }, 
+            { c: '#f97316', t: 'The Muse', d: 'Your energy inspires stories, songs, and the kind of art that the world remembers forever.' }, 
+            { c: '#FFD700', t: 'The Crown', d: 'You don\'t need a tiara; your kindness is the only regalia you will ever need to rule a heart.' }, 
+            { c: '#10b981', t: 'The Haven', d: 'In a noisy, chaotic world, your presence is the quiet garden where true peace is found.' }, 
+            { c: '#3b82f6', t: 'The Constant', d: 'Steady as the tides, deep as the ocean—the one beautiful truth I can always rely on.' }, 
+            { c: '#6366f1', t: 'The Enigma', d: 'Beautifully complex and full of wonder, a mystery I could spend a thousand lifetimes reading.' }, 
+            { c: '#d946ef', t: 'The Spell', d: 'You have this rare, unexplained way of making time stop, simply by being you.' } 
+        ];
+        
+        const grid = document.getElementById('grid-container');
+        const modal = document.getElementById('color-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalDesc = document.getElementById('modal-desc');
+        const modalGem = document.getElementById('modal-gem');
+
+        window.closeModal = function() {
+            modal.classList.remove('visible');
+        }
+
+        colors.forEach(c => {
+            const div = document.createElement('div');
+            div.className = 'swatch-card';
+            
+            div.onclick = (e) => { 
+                e.stopPropagation();
+                if (typeof confetti === 'function') {
+                    confetti({ particleCount: 30, spread: 60, colors: [c.c], origin: { y: 0.7 } });
+                }
+                
+                modalTitle.innerText = c.t;
+                modalTitle.style.color = c.c;
+                modalDesc.innerText = c.d;
+                
+                modalGem.style.backgroundColor = c.c;
+                modalGem.style.color = c.c; 
+                
+                modal.classList.add('visible');
+            };
+            
+            div.innerHTML = `
+                <div class="swatch-color" style="background-color: ${c.c}"></div>
+                <div class="swatch-label">${c.t}</div>
+            `;
+            grid.appendChild(div);
+        });
+
+    </script>
 </body>
 </html>
