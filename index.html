@@ -1,885 +1,787 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Decuple Stream of Sovereignty: Particle Stream</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>The Jass Constellation</title>
+<!-- Patrick Hand font included for the nav -->
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,500&family=Patrick+Hand&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --bg-deep: #ffe6ea; 
+        --gold-lux: #d4a017; 
+        --gold-pale: #b06d72; 
+        --text-primary: #590d22; 
+        --text-secondary: #800f2f; 
+        
+        --glass: rgba(255, 255, 255, 0.98); 
+        --glass-border: rgba(255, 255, 255, 1);
+        --shadow: rgba(164, 19, 60, 0.15);
+        
+        /* UPDATED COLORS TO MATCH REFERENCE IMAGE */
+        --nav-bg: #3d2b25; /* Deep Chocolate Brown */
+        --nav-text: #ffeebb; /* Warm Cream Text */
+        --nav-font: 'Patrick Hand', cursive;
+        
+        --rose-petal: #ffb6c1;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+        margin: 0;
+        background-color: var(--bg-deep);
+        color: var(--text-primary);
+        font-family: 'Cormorant Garamond', serif;
+        overflow-x: hidden;
+        background-image: 
+            radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.8) 0%, transparent 70%),
+            radial-gradient(circle at 10% 20%, rgba(255, 179, 193, 0.4) 0%, transparent 50%),
+            radial-gradient(circle at 90% 80%, rgba(255, 143, 163, 0.3) 0%, transparent 50%),
+            radial-gradient(circle at 70% 30%, rgba(255, 182, 193, 0.4) 0%, transparent 50%);
+        background-size: 100% 100%;
+        background-attachment: fixed;
+    }
+
+    #petal-container {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none; z-index: -1; overflow: hidden;
+    }
+    .petal {
+        position: absolute; top: -10%; width: 18px; height: 18px;
+        background-color: var(--rose-petal);
+        border-radius: 20px 2px 20px 2px;
+        opacity: 0.8; animation: fall linear infinite;
+        box-shadow: 1px 1px 5px rgba(0,0,0,0.1);
+    }
+    @keyframes fall {
+        0% { top: -10%; transform: translateX(0px) rotate(0deg); opacity: 0; }
+        10% { opacity: 0.8; }
+        50% { transform: translateX(50px) rotate(180deg); }
+        100% { top: 110%; transform: translateX(-50px) rotate(360deg); opacity: 0; }
+    }
+
+    #dust-canvas {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        pointer-events: none; z-index: 9999;
+    }
+
+    /* --- NAVIGATION --- */
+    .nav-toggle-btn {
+        position: fixed; top: 15px; left: 15px; 
+        z-index: 5000; /* Increased Z-Index */
+        width: 44px; height: 44px; border-radius: 50%;
+        background-color: transparent; 
+        color: var(--nav-text);
+        border: 2px solid rgba(255,255,255,0.5);
+        box-shadow: none;
+        cursor: pointer; display: flex; align-items: center; justify-content: center;
+        transition: transform 0.3s ease;
+    }
+    .nav-toggle-btn:hover { transform: scale(1.1); background: rgba(255,255,255,0.1); }
+    .nav-toggle-btn svg { width: 24px; height: 24px; stroke-width: 2px; }
     
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Gochi+Hand&family=Pacifico&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&display=swap" rel="stylesheet">
+    .nav-panel {
+        position: fixed; z-index: 2500;
+        background-color: var(--nav-bg);
+        border: none;
+        box-shadow: 0 0 15px rgba(0,0,0,0.4); /* Stronger shadow for depth */
+        display: flex;
+        transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
     
-    <script src="https://cdn.tailwindcss.com"></script>
+    .nav-link {
+        color: var(--nav-text); text-decoration: none;
+        font-family: var(--nav-font);
+        font-size: 1.1rem; /* Better readability */
+        letter-spacing: 0.5px; padding: 5px;
+        transition: all 0.2s ease;
+        text-transform: capitalize;
+        white-space: nowrap;
+    }
+    .nav-link:hover { color: #fff; transform: scale(1.1); text-shadow: 0 0 5px rgba(255,255,255,0.5); }
+
+    /* Desktop Defaults */
+    #topNav, #bottomNav { left: 0; right: 0; height: 64px; justify-content: center; align-items: center; gap: 20px; }
+    #topNav { top: 0; transform: translateY(-100%); }
+    #bottomNav { bottom: 0; transform: translateY(100%); }
+
+    #leftNav, #rightNav { top: 0; bottom: 0; width: 100px; flex-direction: column; align-items: center; padding: 80px 10px; gap: 15px; overflow-y: auto; }
+    #leftNav { left: 0; transform: translateX(-100%); }
+    #rightNav { right: 0; transform: translateX(100%); }
+
+    .nav-open #topNav { transform: translateY(0); }
+    .nav-open #bottomNav { transform: translateY(0); }
+    .nav-open #leftNav { transform: translateX(0); }
+    .nav-open #rightNav { transform: translateX(0); }
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    .nav-panel::-webkit-scrollbar { width: 0px; } 
+
+    #intro {
+        position: fixed; inset: 0; z-index: 4000; background: #fff0f3;
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        transition: opacity 1.5s ease; pointer-events: all; 
+    }
+    #intro.hidden { display: none !important; pointer-events: none; }
+    .intro-text {
+        font-family: 'Cinzel', serif; color: var(--text-primary);
+        font-size: 1.5rem; letter-spacing: 4px; animation: fadeUp 2s ease forwards; opacity: 0;
+    }
+    .intro-sub {
+        margin-top: 15px; font-size: 0.9rem; color: var(--gold-pale); font-style: italic;
+        animation: fadeUp 2s ease 0.5s forwards; opacity: 0;
+    }
+
+    nav.original-nav {
+        position: fixed; top: 0; width: 100%; z-index: 100;
+        padding: 20px 40px 20px 80px; display: flex; justify-content: space-between; align-items: center;
+        background: rgba(255, 240, 243, 0.85); backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255,255,255,0.5);
+    }
+    .brand { font-family: 'Cinzel', serif; color: var(--text-primary); font-size: 1.2rem; letter-spacing: 2px; text-transform: uppercase; }
+    .progress-line { height: 3px; background: var(--gold-lux); width: 0%; transition: width 0.3s; position: absolute; bottom: 0; left: 0; }
+
+    #universe { padding: 100px 20px; max-width: 1400px; margin: 0 auto; }
     
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        'title-serif': ['Playfair Display', 'Georgia', 'serif'],
-                        'divine': ['Cinzel Decorative', 'serif'],
-                    },
-                    colors: {
-                        'primary-gold': '#FFD700',
-                        'accent-pink': '#EC4899',
-                        'durga-red': '#8B0000',
-                    },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    .grid-stage {
+        display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 40px; perspective: 2000px;
+    }
 
-    <style>
-        body {
-            background-color: #0c0a09;
-            font-family: 'Inter', sans-serif;
-            overflow: hidden;
-            color: white;
-            min-height: 100vh;
-        }
+    .star-card {
+        height: 420px; position: relative; cursor: pointer;
+        transform-style: preserve-3d;
+        -webkit-transform-style: preserve-3d; 
+        transition: transform 0.6s cubic-bezier(0.4, 0.2, 0.2, 1);
+        will-change: transform;
+    }
+    .star-card.flipped { transform: rotateY(180deg) !important; }
 
-        .nav-panel, #mainContent, #navToggleIcon, #navToggleX {
-            transition: all 0.3s ease-in-out;
-        }
-        
-        #mainContent, .nav-panel {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-        
-        #mainContent::-webkit-scrollbar,
-        .nav-panel::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .festive-text {
-            font-family: 'Gochi Hand', cursive;
-        }
-        
-        .nav-panel-style {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 215, 0, 0.5);
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.1);
-            color: white;
-        }
-        
-        .nav-panel a.nav-link {
-            color: white;
-            transition: background-color 0.2s ease, color 0.2s ease;
-            font-weight: 700;
-        }
-        
-        .nav-panel a.nav-link:hover {
-            background-color: rgba(255, 215, 0, 0.2);
-            color: #FFD700;
-        }
-        
-        #canvas-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-        }
+    .face {
+        position: absolute; inset: 0; 
+        -webkit-backface-visibility: hidden; 
+        backface-visibility: hidden;
+        border-radius: 12px; overflow: hidden;
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        padding: 30px; text-align: center;
+        background: var(--glass);
+        border: 1px solid var(--glass-border);
+        box-shadow: 0 15px 35px rgba(164, 19, 60, 0.1), inset 0 0 20px rgba(255,255,255,0.8);
+        transform: translateZ(1px); 
+    }
 
-        #intro-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1000;
-            background: radial-gradient(circle at center, #600000 0%, #300000 50%, #000000 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 1.5s ease-in-out;
-            padding: 2rem;
-        }
+    .face::before {
+        content: ""; position: absolute; inset: 8px;
+        border: 1px solid rgba(212, 160, 23, 0.5);
+        border-radius: 8px; pointer-events: none;
+    }
+
+    .month-no { 
+        font-family: 'Cinzel', serif; font-size: 6rem; 
+        color: rgba(255,255,255,0.7); 
+        position: absolute; top: -10px; right: 10px; 
+        pointer-events: none; text-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .card-title { 
+        font-family: 'Cinzel', serif; font-size: 1.8rem; 
+        color: var(--text-primary); margin-bottom: 5px; 
+        line-height: 1.1; position: relative; z-index: 2;
+    }
+    .card-subtitle { 
+        font-size: 0.85rem; text-transform: uppercase; 
+        letter-spacing: 4px; color: var(--gold-pale); 
+        position: relative; z-index: 2; font-weight: 700; margin-top: 5px;
+        background: rgba(255,255,255,0.5);
+        padding: 4px 12px; border-radius: 20px;
+    }
+    .icon-deco { 
+        font-size: 2.2rem; margin-bottom: 20px; 
+        color: var(--gold-lux); position: relative; z-index: 2;
+        filter: drop-shadow(0 2px 4px rgba(212, 160, 23, 0.3));
+    }
+
+    /* Back Face Fix */
+    .back {
+        transform: rotateY(180deg) translateZ(1px); 
+        background: #fff; 
+        border: 2px solid var(--gold-lux);
+        z-index: 2; 
+    }
+    .back .month-no { display: none; }
+    .back::before { border: 1px double rgba(89, 13, 34, 0.15); }
+    
+    .trait-desc { 
+        font-size: 1.1rem; line-height: 1.7; 
+        color: var(--text-secondary); font-style: italic; 
+        position: relative; z-index: 2;
+    }
+    .highlight { 
+        color: var(--text-primary); font-style: normal; 
+        font-weight: 700; border-bottom: 2px solid rgba(212, 160, 23, 0.3); 
+    }
+
+    /* --- MOBILE SPECIFIC PATTERN LAYOUT --- */
+    @media (max-width: 768px) {
+        body { overflow-y: auto; }
         
-        #intro-screen.hidden-intro {
-            opacity: 0;
-            pointer-events: none;
+        /* Side Bars: Full Height */
+        #leftNav {
+            left: 0; top: 0; bottom: 0;
+            width: 75px; 
+            padding: 70px 5px 20px 5px; 
+            transform: translateX(-100%);
+            z-index: 3001; 
+        }
+        #rightNav {
+            right: 0; top: 0; bottom: 0;
+            width: 75px; 
+            padding: 20px 5px;
+            transform: translateX(100%);
+            z-index: 3001;
         }
 
-        .intro-border {
-            position: absolute;
-            top: 30px;
-            left: 30px;
-            right: 30px;
-            bottom: 30px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            pointer-events: none;
+        /* Top/Bottom Bars: Inset */
+        #topNav {
+            top: 0; left: 75px; right: 75px; 
+            height: 50px; /* Reduced height */
+            transform: translateY(-100%);
+            z-index: 3000;
         }
-        
-        .intro-border-inner {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
-            bottom: 10px;
-            border: 1px solid rgba(255, 215, 0, 0.15);
+        #bottomNav {
+            bottom: 0; left: 75px; right: 75px;
+            height: 50px; /* Reduced height */
+            transform: translateY(100%);
+            z-index: 3000;
         }
 
-        .intro-corner {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            border-color: #FFD700;
-            border-style: solid;
-            opacity: 0.8;
-        }
-        
-        .tl { top: 30px; left: 30px; border-width: 3px 0 0 3px; }
-        .tr { top: 30px; right: 30px; border-width: 3px 3px 0 0; }
-        .bl { bottom: 30px; left: 30px; border-width: 0 0 3px 3px; }
-        .br { bottom: 30px; right: 30px; border-width: 0 3px 3px 0; }
+        /* Adjust Nav Font Size for Mobile */
+        .nav-link { font-size: 0.8rem; padding: 10px 2px; }
 
-        #content-overlay {
+        /* Button position */
+        .nav-toggle-btn {
+            left: 15px; top: 15px;
+            border-color: rgba(255,255,255,0.6);
+        }
+
+        .nav-open #leftNav { transform: translateX(0); }
+        .nav-open #rightNav { transform: translateX(0); }
+        .nav-open #topNav { transform: translateY(0); }
+        .nav-open #bottomNav { transform: translateY(0); }
+
+        #universe { 
+            position: relative; 
+            padding: 80px 20px 100px 20px; 
+            margin: 0; width: 100%; height: auto; max-width: none;
+            display: block; perspective: 1000px;
+        }
+
+        #universe::before {
+            content: '';
+            position: absolute; left: 25px; top: 80px; bottom: 100px;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, var(--gold-lux), transparent);
+            z-index: 0;
+        }
+
+        .grid-stage {
+            display: flex; flex-direction: column;
+            width: 100%; height: auto;
+            gap: 50px; 
+        }
+
+        .star-card { 
             position: relative;
-            z-index: 20;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: calc(100vh - 112px); 
-            padding: 1rem;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-        }
-        
-        #content-overlay.visible-content {
-            opacity: 1;
+            width: calc(100% - 60px); height: 380px; margin-left: 45px; 
+            opacity: 1 !important;
         }
 
-        .gold-text {
-            color: #FFD700;
-            text-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
-        }
-
-        .divine-glow {
-            text-shadow: 0 0 20px rgba(255, 69, 0, 0.6), 0 0 40px rgba(255, 215, 0, 0.4);
-        }
-        
-        .stream-container {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .stream-container:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.4);
-        }
-
-        .typing-cursor {
-            display: inline-block;
-            width: 3px;
-            height: 1em;
-            margin-left: 2px;
-            background-color: #FFD700;
-            animation: blink 0.7s step-end infinite;
-        }
-
-        @keyframes blink {
-            from, to { background-color: transparent }
-            50% { background-color: #FFD700; }
-        }
-        
-        .message-card {
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            transition: all 0.5s ease;
-            transform: scale(0.9);
-            opacity: 0;
-            pointer-events: none;
-        }
-        
-        .message-card.active {
-            opacity: 1;
-            transform: scale(1);
-            pointer-events: auto;
-        }
-
-        .durga-image-container {
-            width: 220px;
-            height: 220px;
+        .star-card::after {
+            content: '';
+            position: absolute; left: -47px; top: 40px;
+            width: 14px; height: 14px;
+            background: var(--bg-deep);
+            border: 2px solid var(--gold-lux);
             border-radius: 50%;
-            overflow: hidden;
-            border: 4px solid #FFD700;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5), 0 0 10px rgba(255, 0, 0, 0.8) inset;
-            background: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            box-shadow: 0 0 8px var(--gold-lux);
+            z-index: 10;
+            transform: translateZ(5px); 
         }
 
-        .durga-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 5s ease-in-out;
-        }
-        
-        .durga-image-container:hover .durga-image {
-            transform: scale(1.1);
-        }
-        
-        .reveal-btn {
-            background: linear-gradient(45deg, rgba(139, 0, 0, 0.8), rgba(255, 215, 0, 0.2));
-            backdrop-filter: blur(5px);
-            border: 1px solid #FFD700;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
-            transition: all 0.4s ease;
-        }
-        
-        .reveal-btn:hover {
-            background: linear-gradient(45deg, rgba(255, 215, 0, 0.2), rgba(139, 0, 0, 0.8));
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
-            transform: scale(1.05);
-            letter-spacing: 2px;
-        }
-    </style>
+        .face { padding: 25px; align-items: flex-start; text-align: left; }
+        .month-no { font-size: 4rem; right: 20px; top: 20px; }
+        .card-title { font-size: 1.5rem; text-align: left; }
+        .card-subtitle { margin-top: 0; margin-bottom: 15px; }
+        .icon-deco { align-self: center; margin-bottom: 15px; }
+        .back { align-items: center; text-align: center; background: #fff !important; } 
+    }
+
+    #final-modal {
+        position: fixed; inset: 0; background: rgba(255, 240, 245, 0.95); z-index: 2000;
+        display: none; justify-content: center; align-items: center;
+        opacity: 0; transition: opacity 1s;
+    }
+    .modal-content {
+        max-width: 500px; width: 85%; text-align: center;
+        border: 2px solid var(--gold-lux); padding: 40px; position: relative;
+        background: #fff; box-shadow: 0 20px 50px rgba(89, 13, 34, 0.15); border-radius: 12px;
+    }
+    .modal-content::after {
+        content: '♛'; position: absolute; top: -25px; left: 50%; transform: translateX(-50%);
+        background: #fff; padding: 0 15px; color: var(--gold-lux); font-size: 30px;
+        border-radius: 50%; border: 2px solid var(--gold-lux);
+    }
+    .family-tribute {
+        margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(89, 13, 34, 0.1);
+        font-size: 0.9rem; color: var(--gold-pale);
+    }
+
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } from { opacity: 0; transform: translateY(20px); } }
+    .hidden { display: none !important; }
+    .visible { display: flex !important; opacity: 1 !important; }
+
+</style>
 </head>
-<body class="text-white">
+<body>
 
-    <div id="canvas-container"></div>
+<div id="intro">
+    <div class="intro-text">The 12 Elements of Her</div>
+    <div class="intro-sub">Entering the Gallery...</div>
+</div>
 
-    <div id="intro-screen">
-        <div class="intro-corner tl"></div>
-        <div class="intro-corner tr"></div>
-        <div class="intro-corner bl"></div>
-        <div class="intro-corner br"></div>
-        <div class="intro-border">
-            <div class="intro-border-inner"></div>
+<canvas id="dust-canvas"></canvas>
+
+<button id="navToggle" class="nav-toggle-btn" aria-label="Toggle Navigation">
+    <svg id="navIconMenu" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-8 6h8"></path>
+    </svg>
+    <svg id="navIconClose" style="display:none;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+    </svg>
+</button>
+
+<nav id="topNav" class="nav-panel">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="Special.html" class="nav-link">Special</a>
+    <a href="letter.html" class="nav-link">Letter</a>
+</nav>
+
+<nav id="bottomNav" class="nav-panel">
+    <a href="anatomy.html" class="nav-link">Anatomy</a>
+    <a href="chat.html" class="nav-link">Heaven</a>
+    <a href="you.html" class="nav-link">You</a>
+</nav>
+
+<nav id="leftNav" class="nav-panel">
+    <a href="Diary.html" class="nav-link">Diary</a>
+    <a href="Universe.html" class="nav-link">Universe</a>
+    <a href="Box.html" class="nav-link">Box</a>
+    <a href="color.html" class="nav-link">Color</a>
+    <a href="Teacher.html" class="nav-link">Teacher</a>
+    <a href="The_River.html" class="nav-link">River</a>
+    <a href="Mountain.html" class="nav-link">Mountain</a>
+    <a href="Paper_Star.html" class="nav-link">Paper Star</a>
+    <a href="Carttoon.html" class="nav-link">Cartoon</a>
+    <a href="Santa.html" class="nav-link">Santa</a>
+    <a href="Cloud.html" class="nav-link">Cloud</a>
+    <a href="Ink.html" class="nav-link">Paint</a>
+    <a href="Butterfly.html" class="nav-link">Butterfly</a>
+    <a href="Weather.html" class="nav-link">Weather</a>
+</nav>
+
+<nav id="rightNav" class="nav-panel">
+    <a href="Skill.html" class="nav-link">Skill</a>
+    <a href="Msg.html" class="nav-link">Message</a>
+    <a href="21_Wish.html" class="nav-link">21_Door</a>
+    <a href="Cake.html" class="nav-link">Cake</a>
+    <a href="Periodik_table.html" class="nav-link">Table</a>
+    <a href="Presence.html" class="nav-link">Presence</a>
+    <a href="Concept.html" class="nav-link">Concept</a>
+    <a href="Calender.html" class="nav-link">Calendar</a>
+    <a href="Perspective.html" class="nav-link">View</a>
+    <a href="Spotlight.html" class="nav-link">Spotlight</a>
+    <a href="Room.html" class="nav-link">Room</a>
+    <a href="Radio.html" class="nav-link">Radio</a>
+    <a href="Food.html" class="nav-link">Food</a>
+    <a href="Music.html" class="nav-link">Music</a>
+</nav>
+
+<nav class="original-nav">
+    <div class="brand">Jass</div>
+    <div style="font-size: 0.8rem; color: var(--text-secondary); opacity: 0.8;">Tap cards to reveal</div>
+    <div class="progress-line" id="progressBar"></div>
+</nav>
+
+<div id="petal-container"></div>
+
+<div id="universe">
+    <div class="grid-stage">
+
+        <div class="star-card" onclick="flip(this)">
+            <div class="face front">
+                <div class="card-subtitle">January</div>
+                <div class="month-no">01</div>
+                <div class="icon-deco">✦</div>
+                <div class="card-title">The Impact</div>
+            </div>
+            <div class="face back">
+                <div class="trait-desc">
+                    She enters, and the room shifts. A presence that stops time without a whisper. It isn't about being loud; it is about a natural gravity that pulls the world in.
+                </div>
+            </div>
         </div>
 
-        <div class="text-center p-8 max-w-2xl relative z-10 flex flex-col items-center">
-            
-            <div class="mb-8 animate-float durga-image-container">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Durga_Puja_2017_-_Sobhabazar_Rajbari_02.jpg/600px-Durga_Puja_2017_-_Sobhabazar_Rajbari_02.jpg" 
-                     alt="Goddess Durga" 
-                     class="durga-image"
-                     onerror="this.src='https://placehold.co/400x400/8B0000/FFD700?text=Ma+Durga';">
+        <div class="star-card" onclick="flip(this)">
+            <div class="face front">
+                <div class="card-subtitle">February</div>
+                <div class="month-no">02</div>
+                <div class="icon-deco">✾</div>
+                <div class="card-title">The Charm</div>
             </div>
-            
-            <h1 class="text-5xl md:text-7xl font-divine text-primary-gold mb-8 divine-glow tracking-wide">
-                The Divine Reflection
-            </h1>
-            
-            <div class="space-y-6 mb-12">
-                <p class="text-xl md:text-3xl text-gray-100 leading-relaxed font-title-serif italic">
-                    "Just as Ma Durga wields power in her ten hands,<br>
-                    you too hold ten distinct gifts."
-                </p>
-                
-                <div class="h-px w-32 bg-gradient-to-r from-transparent via-primary-gold to-transparent mx-auto opacity-50"></div>
-                
-                <p class="text-lg text-red-200 font-light tracking-wider">
-                    EACH HAND DEFINES A SKILL.<br>EACH SKILL DEFINES A PART OF YOUR SOUL.
-                </p>
+            <div class="face back">
+                <div class="trait-desc">
+                    Elegance in motion. Her charm exists in the small gestures—the way she listens, the way she reacts. Even in annoyance, she holds a <span class="highlight">style</span> that is uniquely hers.
+                </div>
             </div>
-
-            <button onclick="enterExperience()" 
-                class="reveal-btn px-12 py-5 text-primary-gold font-bold text-xl rounded-sm uppercase tracking-widest">
-                Reveal Your Powers
-            </button>
         </div>
+
+        <div class="star-card" onclick="flip(this)">
+            <div class="face front">
+                <div class="card-subtitle">March</div>
+                <div class="month-no">03</div>
+                <div class="icon-deco">∞</div>
+                <div class="card-title">The Mind</div>
+            </div>
+            <div class="face back">
+                <div class="trait-desc">
+                    A rare intellect. She connects thoughts in a flow that feels effortless. From serious depths to sudden humor, her mind is a <span class="highlight">labyrinth</span> one loves to get lost in.
+                </div>
+            </div>
+        </div>
+
+        <div class="star-card" onclick="flip(this)">
+            <div class="face front">
+                <div class="card-subtitle">April</div>
+                <div class="month-no">04</div>
+                <div class="icon-deco">⚡</div>
+                <div class="card-title">The Wit</div>
+            </div>
+            <div class="face back">
+                <div class="trait-desc">
+                    Humor that is subtle, sharp, and intelligent. She doesn't need to try. A single expression from her speaks volumes. The genius who finds amusement in the mundane.
+                </div>
+            </div>
+        </div>
+
+        <div class="star-card" onclick="flip(this)">
+            <div class="face front">
+                <div class="card-subtitle">May</div>
+                <div class="month-no">05</div>
+                <div class="icon-deco">≋</div>
+                <div class="card-title">The Vibe</div>
+            </div>
+            <div class="face back">
+                <div class="trait-desc">
+                    A chameleon of energy. Whether chaos or calm, she understands the room. She doesn't force the atmosphere; she <span class="highlight">becomes</span> it, harmonizing with the moment.
+                </div>
+            </div>
+        </div>
+
+        <div class="star-card" onclick="flip(this)">
+            <div class="face front">
+                <div class="card-subtitle">June</div>
+                <div class="month-no">06</div>
+                <div class="icon-deco">⚔</div>
+                <div class="card-title">The Spine</div>
+            </div>
+            <div class="face back">
+                <div class="trait-desc">
+                    Quiet confidence. Her decision-making isn't about drama; it's about <span class="highlight">resolution</span>. A grounded strength that likely reflects the values of the parents who raised her.
+                </div>
+            </div>
+        </div>
+
+        <div class="star-card" onclick="flip(this)">
+            <div class="face front">
+                <div class="card-subtitle">July</div>
+                <div class="month-no">07</div>
+                <div class="icon-deco">☀</div>
+                <div class="card-title">The Spark</div>
+            </div>
+            <div class="face back">
+                <div class="trait-desc">
+                    The beautiful distraction. A simple smile or a raised eyebrow that lingers in memory. She is the <span class="highlight">highlight</span> of the day, turning ordinary moments into scenes worth saving.
+                </div>
+            </div>
+        </div>
+
+        <div class="star-card" onclick="flip(this)">
+            <div class="face front">
+                <div class="card-subtitle">August</div>
+                <div class="month-no">08</div>
+                <div class="icon-deco">♛</div>
+                <div class="card-title">The Echo</div>
+            </div>
+            <div class="face back">
+                <div class="trait-desc">
+                    Unforgettable. People may forget words, but they never forget the way she makes them feel. She leaves a <span class="highlight">mark</span> on the timeline of everyone she meets.
+                </div>
+            </div>
+        </div>
+
+        <div class="star-card" onclick="flip(this)">
+            <div class="face front">
+                <div class="card-subtitle">September</div>
+                <div class="month-no">09</div>
+                <div class="icon-deco">◈</div>
+                <div class="card-title">The Aesthetic</div>
+            </div>
+            <div class="face back">
+                <div class="trait-desc">
+                    Visual poetry. She doesn't pose; she simply exists, and that is enough. Every movement, every glance falls into perfect <span class="highlight">harmony</span>, creating a picture of grace.
+                </div>
+            </div>
+        </div>
+
+        <div class="star-card" onclick="flip(this)">
+            <div class="face front">
+                <div class="card-subtitle">October</div>
+                <div class="month-no">10</div>
+                <div class="icon-deco">☾</div>
+                <div class="card-title">The Depth</div>
+            </div>
+            <div class="face back">
+                <div class="trait-desc">
+                    Infinite layers. Just when one thinks they know her, she reveals a new chapter. A <span class="highlight">mystery</span> that keeps the world intrigued and wanting to know more.
+                </div>
+            </div>
+        </div>
+
+        <div class="star-card" onclick="flip(this)">
+            <div class="face front">
+                <div class="card-subtitle">November</div>
+                <div class="month-no">11</div>
+                <div class="icon-deco">⚖</div>
+                <div class="card-title">The Logic</div>
+            </div>
+            <div class="face back">
+                <div class="trait-desc">
+                    A steady hand. She navigates life with sharp intuition. A pillar of <span class="highlight">reason</span>, perhaps the wise voice her sister always looks toward.
+                </div>
+            </div>
+        </div>
+
+        <div class="star-card" onclick="flip(this)">
+            <div class="face front">
+                <div class="card-subtitle">December</div>
+                <div class="month-no">12</div>
+                <div class="icon-deco">★</div>
+                <div class="card-title">The Finale</div>
+            </div>
+            <div class="face back">
+                <div class="trait-desc">
+                    The masterpiece. She doesn't chase the spotlight; it finds her. A <span class="highlight">protagonist</span> in her own story, wrapping up the year with the promise of brilliance.
+                </div>
+            </div>
+        </div>
+
     </div>
+</div>
 
-    <button id="navToggle" class="fixed top-6 left-6 z-[1002] p-2 rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-primary-gold focus:ring-offset-2 nav-panel-style transition-opacity duration-1000">
-        <svg id="navToggleIcon" class="w-6 h-6 gold-text" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-8 6h8"></path></svg>
-        <svg id="navToggleX" class="w-6 h-6 hidden gold-text" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-    </button>
-
-    <nav id="topNav" class="nav-panel fixed top-0 left-0 right-0 z-[1001] h-16 shadow-md flex items-center justify-center space-x-6 -translate-y-full nav-panel-style">
-        <a href="index.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Home</a>
-        <a href="Special.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Special</a>
-        <a href="letter.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Letter</a>
-    </nav>
-
-    <nav id="bottomNav" class="nav-panel fixed bottom-0 left-0 right-0 z-[1001] h-16 shadow-md flex items-center justify-center space-x-6 translate-y-full nav-panel-style">
-        <a href="anatomy.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Anatomy</a>
-        <a href="chat.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Heaven</a>
-        <a href="you.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">You</a>
-    </nav>
-
-    <nav id="leftNav" class="nav-panel fixed left-0 top-0 bottom-0 z-[1001] w-20 shadow-md flex flex-col items-center space-y-6 -translate-x-full overflow-y-auto py-20 nav-panel-style">
-        <a href="Diary.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Diary</a>
-        <a href="Universe.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Universe</a>
-        <a href="Box.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Box</a>
-        <a href="color.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Color</a>
-        <a href="Teacher.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Teacher</a>
-        <a href="The_River.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">River</a>
-        <a href="Mountain.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Mountain</a>
-        <a href="Paper_Star.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Paper Star</a>
-        <a href="Carttoon.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Cartoon</a>
-        <a href="Santa.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Santa</a>
-        <a href="Cloud.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Cloud</a>
-        <a href="Ink.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Paint</a>
-        <a href="Butterfly.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Butterfly</a>
-        <a href="Weather.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Weather</a>
-    </nav>
-
-    <nav id="rightNav" class="nav-panel fixed right-0 top-0 bottom-0 z-[1001] w-22 shadow-md flex flex-col items-center space-y-6 translate-x-full overflow-y-auto py-20 nav-panel-style">
-        <a href="Skill.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Skill</a>
-        <a href="Msg.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Message</a>
-        <a href="21_Wish.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">21 Wishes</a>
-        <a href="Cake.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Cake</a>
-        <a href="Periodik_table.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Periodik_table</a>
-        <a href="Presence.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Presence</a>
-        <a href="Concept.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Concept</a>
-        <a href="Calender.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Calender</a>
-        <a href="Perspective.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Perspective</a>
-        <a href="Spotlight.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Spotlight</a>
-        <a href="Room.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Room</a>
-        <a href="Radio.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Radio</a>
-        <a href="Food.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Food</a>
-        <a href="Music.html" class="nav-link p-2 rounded-md text-sm font-medium transition-colors duration-200 festive-text">Music</a>
-    </nav>
-    
-    <main id="mainContent" class="absolute inset-0 pt-28 overflow-y-auto">
-
-        <div id="content-overlay">
-            <main class="w-full max-w-4xl p-4 sm:p-6 flex flex-col items-center">
-                
-                <header class="w-full text-center pb-8 pt-4">
-                    <h1 class="text-3xl sm:text-5xl font-black tracking-wider gold-text font-title-serif">
-                        The Decuple Stream of Sovereignty
-                    </h1>
-                    <p class="mt-2 text-lg text-gray-300 italic">
-                        The Ten Hands of Power
-                    </p>
-                </header>
-
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 w-full justify-center mb-8">
-                    
-                    <div id="stream-0" class="stream-container rounded-xl p-4 text-center cursor-pointer w-full" 
-                        onclick="activateStream(0, 'The Warrior’s Edge (Karate)', 'The discipline forged in motion gives you unshakeable confidence. Your strength is your grace and your focus.')">
-                        <h3 class="text-xl font-bold mb-1" style="color: #FF4D4D;">Karate</h3>
-                        <p class="text-sm text-gray-400">Dynamic Power</p>
-                    </div>
-
-                    <div id="stream-1" class="stream-container rounded-xl p-4 text-center cursor-pointer w-full" 
-                        onclick="activateStream(1, 'The Scholar’s Center (Yoga)', 'Your inner focus creates stability amidst life\'s chaos. This calm center allows you to pursue dreams with clarity and peace.')">
-                        <h3 class="text-xl font-bold mb-1" style="color: #4287F5;">Yoga</h3>
-                        <p class="text-sm text-gray-400">Inner Calm</p>
-                    </div>
-
-                    <div id="stream-2" class="stream-container rounded-xl p-4 text-center cursor-pointer w-full" 
-                        onclick="activateStream(2, 'The Future Architect (College)', 'Your hunger for knowledge proves your ambition. Every hour you spend studying is a brick laid for a magnificent future.')">
-                        <h3 class="text-xl font-bold mb-1" style="color: #4CAF50;">College</h3>
-                        <p class="text-sm text-gray-400">Magnificent Future</p>
-                    </div>
-                    
-                    <div id="stream-3" class="stream-container rounded-xl p-4 text-center cursor-pointer w-full" 
-                        onclick="activateStream(3, 'The Creative Flow (Drawing)', 'Your art is a window into your soul—a vibrant world of colors and ideas. Your creativity inspires everything you touch.')">
-                        <h3 class="text-xl font-bold mb-1" style="color: #FFC107;">Drawing</h3>
-                        <p class="text-sm text-gray-400">Vibrant Ideas</p>
-                    </div>
-
-                    <div id="stream-4" class="stream-container rounded-xl p-4 text-center cursor-pointer w-full" 
-                        onclick="activateStream(4, 'The Zenith of Focus (Olympic Shooting)', 'The stillness required for the perfect shot mirrors your inner calm under pressure. Your precision, patience, and unwavering focus ensure you always hit your mark in life.')">
-                        <h3 class="text-xl font-bold mb-1" style="color: #CD7F32;">Shooting</h3>
-                        <p class="text-sm text-gray-400">Unwavering Focus</p>
-                    </div>
-                    
-                    <div id="stream-5" class="stream-container rounded-xl p-4 text-center cursor-pointer w-full" 
-                        onclick="activateStream(5, 'The Torchbearer’s Light (Teaching)', 'Your ability to share knowledge and inspire growth illuminates paths for others. The wisdom you impart creates an infinite chain of light.')">
-                        <h3 class="text-xl font-bold mb-1" style="color: #00FFFF;">Teaching</h3>
-                        <p class="text-sm text-gray-400">Infinite Light</p>
-                    </div>
-
-                    <div id="stream-6" class="stream-container rounded-xl p-4 text-center cursor-pointer w-full" 
-                        onclick="activateStream(6, 'The Natural Healer (Tree Medicine)', 'Your connection to nature allows you to harness its quiet strength, providing healing and wisdom to those around you.')">
-                        <h3 class="text-xl font-bold mb-1" style="color: #FF9800;">Tree Medicine</h3>
-                        <p class="text-sm text-gray-400">Nurturing Wisdom</p>
-                    </div>
-
-                    <div id="stream-7" class="stream-container rounded-xl p-4 text-center cursor-pointer w-full" 
-                        onclick="activateStream(7, 'The Voyager’s Spirit (Seamanship)', 'Like a master of the seas, you navigate life’s unpredictable tides with intuition and grace. Your resilience steers you through every storm to new horizons.')">
-                        <h3 class="text-xl font-bold mb-1" style="color: #20B2AA;">Seamanship</h3>
-                        <p class="text-sm text-gray-400">Steadfast Navigation</p>
-                    </div>
-
-                    <div id="stream-8" class="stream-container rounded-xl p-4 text-center cursor-pointer w-full" 
-                        onclick="activateStream(8, 'The Fearless Spirit (Adventure Sports)', 'Whether trekking high peaks or diving from the skies, your courage conquers fear. You embrace challenges with a bold spirit that reaches new heights.')">
-                        <h3 class="text-xl font-bold mb-1" style="color: #8E24AA;">Adventure</h3>
-                        <p class="text-sm text-gray-400">Boundless Courage</p>
-                    </div>
-
-                    <div id="stream-9" class="stream-container rounded-xl p-4 text-center cursor-pointer w-full" 
-                        onclick="activateStream(9, 'The Nourishing Heart (Cooking)', 'You feed not just bodies but souls, blending love into every flavor. Your care provides the warmth that sustains us all.')">
-                        <h3 class="text-xl font-bold mb-1" style="color: #E91E63;">Cooking</h3>
-                        <p class="text-sm text-gray-400">Sustaining Love</p>
-                    </div>
-
-                </div>
-                
-                <div id="message-card" class="message-card w-full p-6 sm:p-8 rounded-xl mt-8 shadow-2xl max-w-md">
-                    <h3 id="message-title" class="text-2xl sm:text-3xl font-bold gold-text mb-4 text-center min-h-8">
-                        
-                    </h3>
-                    <p id="typed-message" class="text-lg italic text-gray-300 min-h-24 text-center">
-                        
-                    </p>
-                    
-                    <div id="unlock-container" class="mt-6 text-center hidden">
-                        <button onclick="checkCompletion()" id="final-button"
-                            class="bg-accent-pink hover:bg-red-500 text-white font-bold py-3 px-8 rounded-full text-lg 
-                                                 transition duration-300 transform hover:scale-105 shadow-xl disabled:opacity-50 disabled:cursor-not-allowed">
-                            See the Final Wish (0/10)
-                        </button>
-                    </div>
-                </div>
-                
-            </main>
-            <div class="h-96 w-full"></div> 
+<div id="final-modal">
+    <div class="modal-content">
+        <h2 style="font-family:'Cinzel'; color:var(--text-primary); margin-top:0;">The Origin</h2>
+        <p style="color:var(--text-secondary); line-height:1.6; font-size:1.1rem;">
+            A masterpiece does not create itself.
+            <br><br>
+            Behind the grace, the wit, and the strength of Jass, there is a foundation.
+        </p>
+        
+        <div class="family-tribute">
+            <p>To the <strong>Parents</strong> who raised a Queen,<br>and the <strong>Sister</strong> who stood beside her.</p>
+            <p style="font-size:0.8rem; margin-top:15px; color:var(--gold-pale);">The world thanks you for sharing her with us.</p>
         </div>
 
-        <footer class="text-center py-10 mt-16 bg-transparent text-gray-500 relative z-20">
-            <p>Built with Three.js and the Sovereignty Streams.</p>
-        </footer>
-    </main>
+        <button onclick="closeModal()" style="margin-top:20px; background:transparent; border:1px solid #777; color:var(--text-secondary); padding:8px 20px; cursor:pointer; font-family:'Cinzel';">Close</button>
+    </div>
+</div>
 
-    <script>
-        const NUM_STREAMS = 10;
-        const collectedTributes = Array(NUM_STREAMS).fill(false);
-        const finalMessage = "Like Ma Durga, you wield ten powers: Discipline, peace, knowledge, creativity, focus, illumination, nurture, navigation, courage, and sustenance. On your birthday, I bow to the divinity within you. Happy Birthday!";
-        
-        let typingInterval = null;
-        let activeMessageIndex = -1;
+<script>
+    function createPetals() {
+        const container = document.getElementById('petal-container');
+        const petalCount = 50; 
 
-        const messageCard = document.getElementById('message-card');
-        const messageTitle = document.getElementById('message-title');
-        const typedMessageElement = document.getElementById('typed-message');
-        const finalButton = document.getElementById('final-button');
-
-        const navLinks = document.querySelectorAll('.nav-panel .nav-link');
-        const mainContent = document.getElementById('mainContent');
-        const topNav = document.getElementById('topNav');
-        const bottomNav = document.getElementById('bottomNav');
-        const leftNav = document.getElementById('leftNav');
-        const rightNav = document.getElementById('rightNav');
-        const navToggle = document.getElementById('navToggle');
-        const navToggleIcon = document.getElementById('navToggleIcon');
-        const navToggleX = document.getElementById('navToggleX');
-        let areNavsOpen = false;
-        
-        function enterExperience() {
-            const intro = document.getElementById('intro-screen');
-            const content = document.getElementById('content-overlay');
+        for (let i = 0; i < petalCount; i++) {
+            const petal = document.createElement('div');
+            petal.classList.add('petal');
             
-            intro.classList.add('hidden-intro');
-            content.classList.add('visible-content');
+            const left = Math.random() * 100;
+            const duration = 6 + Math.random() * 10; 
+            const delay = Math.random() * -15; 
+            const scale = 0.5 + Math.random() * 1; 
+            
+            petal.style.left = `${left}%`;
+            petal.style.animationDuration = `${duration}s`;
+            petal.style.animationDelay = `${delay}s`;
+            petal.style.transform = `scale(${scale}) rotate(${Math.random() * 360}deg)`;
+            
+            container.appendChild(petal);
         }
+    }
 
-        let scene, camera, renderer, particles, geometry, material;
-        let ambientLight;
-        const particleCount = 8000;
-        const positions = new Float32Array(particleCount * 3);
-        const colors = new Float32Array(particleCount * 3);
-        const velocities = new Float32Array(particleCount * 3);
-        const particleAttributes = [];
-        const particleSize = 0.5;
-        
-        const colorsList = [
-            new THREE.Color(0xFF4D4D), 
-            new THREE.Color(0x4287F5), 
-            new THREE.Color(0x4CAF50), 
-            new THREE.Color(0xFFC107), 
-            new THREE.Color(0xCD7F32), 
-            new THREE.Color(0x00FFFF), 
-            new THREE.Color(0xFF9800), 
-            new THREE.Color(0x20B2AA), 
-            new THREE.Color(0x3F51B5), 
-            new THREE.Color(0xE91E63)  
-        ];
+    const canvas = document.getElementById('dust-canvas');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+    
+    function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
 
-        let finalExplosionActive = false;
-        
-        function initThreeJS() {
-            const container = document.getElementById('canvas-container');
-            const width = window.innerWidth;
-            const height = window.innerHeight;
-
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            
-            renderer.setSize(width, height);
-            container.appendChild(renderer.domElement);
-            camera.position.z = 50;
-
-            ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
-            scene.add(ambientLight);
-
-            const pointLight = new THREE.PointLight(0xFFD700, 0, 100);
-            pointLight.position.set(0, 0, 0);
-            scene.add(pointLight);
-            scene.userData.pointLight = pointLight;
-
-            const orbGeometry = new THREE.SphereGeometry(1, 16, 16);
-            const orbMaterial = new THREE.MeshBasicMaterial({ color: 0xFFD700, transparent: true, opacity: 0.15, blending: THREE.AdditiveBlending });
-            const centralOrb = new THREE.Mesh(orbGeometry, orbMaterial);
-            centralOrb.position.set(0, 0, 0);
-            scene.add(centralOrb);
-            scene.userData.centralOrb = centralOrb;
-
-            geometry = new THREE.BufferGeometry();
-            
-            for (let i = 0; i < particleCount; i++) {
-                positions[i * 3] = (Math.random() - 0.5) * 100;
-                positions[i * 3 + 1] = (Math.random() - 0.5) * 100;
-                positions[i * 3 + 2] = (Math.random() - 0.5) * 100;
-                
-                velocities[i * 3] = 0;
-                velocities[i * 3 + 1] = 0;
-                velocities[i * 3 + 2] = 0;
-
-                const colorIndex = i % NUM_STREAMS;
-                const color = colorsList[colorIndex];
-                colors[i * 3] = color.r;
-                colors[i * 3 + 1] = color.g;
-                colors[i * 3 + 2] = color.b;
-                
-                particleAttributes.push({
-                    colorIndex: colorIndex,
-                    target: new THREE.Vector3(0, 0, 0),
-                    collected: false,
-                    velocity: new THREE.Vector3(0, 0, 0),
-                    originalPos: new THREE.Vector3(positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2])
-                });
-            }
-
-            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-            geometry.setAttribute('velocity', new THREE.BufferAttribute(velocities, 3));
-
-            material = new THREE.PointsMaterial({
-                size: particleSize,
-                vertexColors: true,
-                blending: THREE.AdditiveBlending,
-                transparent: true,
-                sizeAttenuation: true
-            });
-
-            particles = new THREE.Points(geometry, material);
-            scene.add(particles);
-
-            window.addEventListener('resize', onWindowResize, false);
-            
-            animate();
+    class Particle {
+        constructor(x, y) {
+            this.x = x;
+            this.y = y;
+            this.size = Math.random() * 3;
+            this.speedX = Math.random() * 2 - 1;
+            this.speedY = Math.random() * 2 - 1;
+            this.color = `rgba(212, 160, 23, ${Math.random()})`; 
+            this.life = 100; 
         }
-
-        function onWindowResize() {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+        update() {
+            this.x += this.speedX;
+            this.y += this.speedY;
+            this.life--;
+            if (this.life < 20) this.size *= 0.9;
         }
-
-        function animate() {
-            requestAnimationFrame(animate);
-
-            particles.rotation.z += 0.0005;
-            particles.rotation.x += 0.0002;
-            
-            const positionAttribute = geometry.attributes.position;
-            const velocityAttribute = geometry.attributes.velocity;
-            
-            const centralOrb = scene.userData.centralOrb;
-
-            if (centralOrb) {
-                if (collectedTributes.every(Boolean)) {
-                      centralOrb.material.opacity = 0.5 + Math.sin(Date.now() * 0.005) * 0.3;
-                      centralOrb.scale.setScalar(2 + Math.sin(Date.now() * 0.003) * 0.3);
-                      centralOrb.material.color.set(0xEC4899); 
-                } else if (collectedTributes.some(Boolean)) {
-                    centralOrb.material.color.set(0xFFD700);
-                    centralOrb.material.opacity = 0.4;
-                    centralOrb.scale.setScalar(1.2 + Math.sin(Date.now() * 0.008) * 0.1);
-                } else {
-                    centralOrb.material.color.set(0xFFD700);
-                    centralOrb.scale.setScalar(1 + Math.sin(Date.now() * 0.003) * 0.05);
-                    centralOrb.material.opacity = 0.15 + Math.cos(Date.now() * 0.001) * 0.05;
-                }
-            }
-
-
-            for (let i = 0; i < particleCount; i++) {
-                const attr = particleAttributes[i];
-                
-                if (finalExplosionActive) {
-                    positionAttribute.setX(i, positionAttribute.getX(i) + velocityAttribute.getX(i));
-                    positionAttribute.setY(i, positionAttribute.getY(i) + velocityAttribute.getY(i));
-                    positionAttribute.setZ(i, positionAttribute.getZ(i) + velocityAttribute.getZ(i));
-                    
-                    material.opacity = Math.max(0, material.opacity - 0.0002);
-
-                } else if (attr.collected) {
-                    const currentPos = new THREE.Vector3(
-                        positionAttribute.getX(i),
-                        positionAttribute.getY(i),
-                        positionAttribute.getZ(i)
-                    );
-                    
-                    currentPos.lerp(attr.target, 0.05);
-                    
-                    positionAttribute.setXYZ(i, currentPos.x, currentPos.y, currentPos.z);
-                } else {
-                    positionAttribute.setY(i, attr.originalPos.y + Math.sin(Date.now() * 0.001 + i) * 0.5);
-                    positionAttribute.setX(i, attr.originalPos.x + Math.cos(Date.now() * 0.001 + i) * 0.5);
-                }
-            }
-            
-            positionAttribute.needsUpdate = true;
-            renderer.render(scene, camera);
+        draw() {
+            ctx.fillStyle = this.color;
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+            ctx.fill();
         }
+    }
 
-        function activateStream(index, title, message) {
-            if (collectedTributes[index]) return; 
-            
-            if (typingInterval) clearInterval(typingInterval);
-            typedMessageElement.textContent = '';
-            
-            startParticleCollection(index);
-            
-            collectedTributes[index] = true;
-            activeMessageIndex = index;
-            
-            const count = collectedTributes.filter(Boolean).length;
-            finalButton.textContent = `See the Final Wish (${count}/${NUM_STREAMS})`;
-            
-            messageCard.classList.add('active');
-            messageTitle.textContent = title;
-            typeMessage(message);
-            
-            const streamElement = document.getElementById(`stream-${index}`);
-            if (collectedTributes[index]) {
-                streamElement.classList.remove('cursor-pointer', 'stream-container:hover');
-                streamElement.classList.add('opacity-50', 'cursor-default');
-                streamElement.onclick = null;
+    function handleParticles() {
+        for (let i = 0; i < particles.length; i++) {
+            particles[i].update();
+            particles[i].draw();
+            if (particles[i].life <= 0) {
+                particles.splice(i, 1);
+                i--;
             }
         }
-        
-        function startParticleCollection(indexToCollect) {
-            const centralOrb = scene.userData.centralOrb;
-            const collectionTarget = centralOrb ? centralOrb.position : new THREE.Vector3(0, 0, 0);
+    }
 
-            for (let i = 0; i < particleCount; i++) {
-                const attr = particleAttributes[i];
-                if (attr.colorIndex === indexToCollect) {
-                    attr.collected = true;
-                    attr.target = collectionTarget.clone().add(new THREE.Vector3(
-                        (Math.random() - 0.5) * 2,
-                        (Math.random() - 0.5) * 2,
-                        (Math.random() - 0.5) * 2
-                    ));
-                }
-            }
+    function animateDust() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        handleParticles();
+        requestAnimationFrame(animateDust);
+    }
+    animateDust();
+
+    window.addEventListener('mousemove', (e) => {
+        particles.push(new Particle(e.x, e.y));
+        particles.push(new Particle(e.x, e.y));
+    });
+    
+    window.addEventListener('touchmove', (e) => {
+        const touch = e.touches[0];
+        particles.push(new Particle(touch.clientX, touch.clientY));
+        particles.push(new Particle(touch.clientX, touch.clientY));
+    });
+
+
+    window.onload = () => {
+        createPetals();
+        setTimeout(() => {
+            const intro = document.getElementById('intro');
+            intro.style.opacity = 0;
+            setTimeout(() => { intro.classList.add('hidden'); }, 1500);
+        }, 2500);
+    };
+
+    const navToggle = document.getElementById('navToggle');
+    const menuIcon = document.getElementById('navIconMenu');
+    const closeIcon = document.getElementById('navIconClose');
+    let isNavOpen = false;
+
+    navToggle.addEventListener('click', (e) => {
+        e.stopPropagation(); // Stop click from propagating to document
+        isNavOpen = !isNavOpen;
+        if (isNavOpen) {
+            document.body.classList.add('nav-open');
+            menuIcon.style.display = 'none';
+            closeIcon.style.display = 'block';
+            navToggle.setAttribute('aria-label', 'Close Navigation');
+        } else {
+            closeNav();
+        }
+    });
+
+    // Function to close nav
+    function closeNav() {
+        isNavOpen = false;
+        document.body.classList.remove('nav-open');
+        menuIcon.style.display = 'block';
+        closeIcon.style.display = 'none';
+        navToggle.setAttribute('aria-label', 'Open Navigation');
+    }
+
+    // Close Nav on Outside Click
+    document.addEventListener('click', (e) => {
+        if (isNavOpen && !e.target.closest('.nav-panel') && !e.target.closest('#navToggle')) {
+            closeNav();
+        }
+    });
+
+    let flippedCount = 0;
+    const totalCards = 12;
+
+    function flip(card) {
+        card.style.transform = ''; 
+
+        if(card.classList.contains('flipped')) {
+            card.classList.remove('flipped');
+            flippedCount--;
+        } else {
+            card.classList.add('flipped');
+            flippedCount++;
         }
 
-        function typeMessage(message) {
-            let i = 0;
-            typedMessageElement.innerHTML = '';
-            const cursor = typedMessageElement.appendChild(document.createElement('span'));
-            cursor.classList.add('typing-cursor');
+        const percentage = (flippedCount / totalCards) * 100;
+        document.getElementById('progressBar').style.width = percentage + '%';
 
-            typingInterval = setInterval(() => {
-                if (i < message.length) {
-                    typedMessageElement.insertBefore(document.createTextNode(message.charAt(i)), cursor);
-                    i++;
-                } else {
-                    clearInterval(typingInterval);
-                    if (cursor) cursor.remove();
-                    checkCompletion();
-                }
-            }, 50); 
-        }
-        
-        function checkCompletion() {
-            const allCollected = collectedTributes.every(Boolean);
-            const container = document.getElementById('unlock-container');
-            
-            const count = collectedTributes.filter(Boolean).length;
-            finalButton.textContent = `See the Final Wish (${count}/${NUM_STREAMS})`;
-
-            if (allCollected) {
-                container.classList.remove('hidden');
-                finalButton.onclick = startFinalTyping;
-                finalButton.textContent = "Unlock FINAL BIRTHDAY WISH!";
-            } else {
-                 container.classList.remove('hidden');
-            }
-        }
-
-        function startFinalTyping() {
-            finalButton.disabled = true;
-            
-            messageTitle.textContent = "The Golden Finality";
-            typedMessageElement.textContent = '';
-            
-            startExplosion();
-            
-            startLightShow();
-            
+        if(flippedCount === totalCards) {
             setTimeout(() => {
-                typeFinalMessage(finalMessage);
-            }, 1500);
+                const modal = document.getElementById('final-modal');
+                modal.classList.add('visible');
+            }, 1000);
         }
+    }
+
+    function closeModal() {
+        document.getElementById('final-modal').classList.remove('visible');
+    }
+
+    const cards = document.querySelectorAll('.star-card');
+    
+    document.addEventListener('mousemove', (e) => {
+        if(window.innerWidth < 768) return; 
         
-        function startExplosion() {
-            const velocityAttribute = geometry.attributes.velocity;
-            finalExplosionActive = true;
-            
-            const centralOrb = scene.userData.centralOrb;
-            if (centralOrb) centralOrb.visible = false;
+        const x = (e.clientX / window.innerWidth) - 0.5;
+        const y = (e.clientY / window.innerHeight) - 0.5;
 
-
-            for (let i = 0; i < particleCount; i++) {
-                const attr = particleAttributes[i];
-                
-                if (particleAttributes[i].collected) {
-                    geometry.attributes.position.setXYZ(i, 0, 0, 0);
-
-                    const speed = 1.0 + Math.random() * 2.0;
-                    const direction = new THREE.Vector3(
-                        (Math.random() - 0.5) * 2,
-                        (Math.random() - 0.5) * 2,
-                        (Math.random() - 0.5) * 2
-                    ).normalize().multiplyScalar(speed);
-
-                    velocityAttribute.setXYZ(i, direction.x, direction.y, direction.z);
-                    
-                    const finalColor = i % 2 === 0 ? colorsList[3] : new THREE.Color('#EC4899');
-                    geometry.attributes.color.setXYZ(i, finalColor.r, finalColor.g, finalColor.b);
-                } else {
-                    geometry.attributes.color.setXYZ(i, 0, 0, 0); 
-                }
-                
-                attr.collected = false; 
+        cards.forEach(card => {
+            if(!card.classList.contains('flipped')) {
+                card.style.transform = `perspective(2000px) rotateY(${x * 10}deg) rotateX(${-y * 10}deg)`;
             }
+        });
+    });
 
-            geometry.attributes.position.needsUpdate = true;
-            geometry.attributes.color.needsUpdate = true;
-            velocityAttribute.needsUpdate = true;
-            
-            material.opacity = 1; 
-        }
-
-        function startLightShow() {
-            const pointLight = scene.userData.pointLight;
-            
-            pointLight.intensity = 5; 
-            
-            const lightColor = new THREE.Color('#FFD700'); 
-            ambientLight.color.set(lightColor);
-            ambientLight.intensity = 0.5;
-
-            setTimeout(() => {
-                pointLight.intensity = 0;
-                ambientLight.intensity = 0.1;
-            }, 500);
-        }
-        
-        function typeFinalMessage(message) {
-            let i = 0;
-            typedMessageElement.innerHTML = '';
-            const cursor = typedMessageElement.appendChild(document.createElement('span'));
-            cursor.classList.add('typing-cursor');
-
-            typingInterval = setInterval(() => {
-                if (i < message.length) {
-                    typedMessageElement.insertBefore(document.createTextNode(message.charAt(i)), cursor);
-                    i++;
-                } else {
-                    clearInterval(typingInterval);
-                    if (cursor) cursor.remove();
-                    
-                    messageTitle.classList.add('text-accent-pink', 'animate-pulse');
-                }
-            }, 60); 
-        }
-        
-        function openAllNavs() {
-            topNav.classList.remove('-translate-y-full');
-            bottomNav.classList.remove('translate-y-full');
-            leftNav.classList.remove('-translate-x-full');
-            rightNav.classList.remove('translate-x-full');
-            mainContent.classList.add('pt-16', 'pb-16', 'pl-24', 'pr-24');
-            mainContent.classList.remove('pt-28'); 
-            navToggleIcon.classList.add('hidden');
-            navToggleX.classList.remove('hidden');
-            areNavsOpen = true;
-        }
-
-        function closeAllNavs() {
-            topNav.classList.add('-translate-y-full');
-            bottomNav.classList.add('translate-y-full');
-            leftNav.classList.add('-translate-x-full');
-            rightNav.classList.add('translate-x-full');
-            mainContent.classList.remove('pt-16', 'pb-16', 'pl-24', 'pr-24');
-            mainContent.classList.add('pt-28'); 
-            navToggleIcon.classList.remove('hidden');
-            navToggleX.classList.add('hidden');
-            areNavsOpen = false;
-        }
-
-        function toggleAllNavs() {
-            if (areNavsOpen) {
-                closeAllNavs();
-            } else {
-                openAllNavs();
-            }
-        }
-        
-        window.onload = function() {
-            initThreeJS();
-
-            navToggle.addEventListener('click', (e) => {
-                e.stopPropagation(); 
-                toggleAllNavs();
-            });
-            
-            document.addEventListener('click', (e) => {
-                if (areNavsOpen && !e.target.closest('.nav-panel') && !e.target.closest('#navToggle')) {
-                    closeAllNavs();
-                }
-            });
-
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    const targetHash = e.currentTarget.getAttribute('href');
-                    if (areNavsOpen) {
-                        if (!targetHash.startsWith('#')) {
-                             setTimeout(closeAllNavs, 100); 
-                        } else {
-                            closeAllNavs();
-                        }
-                    }
-                });
-            });
-        };
-
-    </script>
+</script>
 </body>
 </html>
