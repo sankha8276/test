@@ -34,7 +34,7 @@
                     keyframes: {
                         float: {
                             '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-20px)' },
+                            '50%': { transform: 'translateY(-10px)' },
                         }
                     }
                 }
@@ -220,9 +220,28 @@
             pointer-events: auto;
         }
 
-        .trishul-icon {
-            color: #FFD700;
-            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.6));
+        .durga-image-container {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid #FFD700;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.5), 0 0 10px rgba(255, 0, 0, 0.8) inset;
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .durga-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 5s ease-in-out;
+        }
+        
+        .durga-image-container:hover .durga-image {
+            transform: scale(1.1);
         }
         
         .reveal-btn {
@@ -254,12 +273,13 @@
             <div class="intro-border-inner"></div>
         </div>
 
-        <div class="text-center p-8 max-w-2xl relative z-10">
-            <div class="mb-8 flex justify-center animate-float">
-                <svg class="w-32 h-32 trishul-icon" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M12,2C9,2 7,4 7,7V10C7,13 9,15 12,15C15,15 17,13 17,10V7C17,4 15,2 12,2M12,17C8,17 4,18 4,20V22H20V20C20,18 16,17 12,17Z" />
-                    <circle cx="12" cy="12" r="1.5" fill="#8B0000" />
-                </svg>
+        <div class="text-center p-8 max-w-2xl relative z-10 flex flex-col items-center">
+            
+            <div class="mb-8 animate-float durga-image-container">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Durga_Puja_2017_-_Sobhabazar_Rajbari_02.jpg/600px-Durga_Puja_2017_-_Sobhabazar_Rajbari_02.jpg" 
+                     alt="Goddess Durga" 
+                     class="durga-image"
+                     onerror="this.src='https://placehold.co/400x400/8B0000/FFD700?text=Ma+Durga';">
             </div>
             
             <h1 class="text-5xl md:text-7xl font-divine text-primary-gold mb-8 divine-glow tracking-wide">
@@ -437,7 +457,7 @@
         </div>
 
         <footer class="text-center py-10 mt-16 bg-transparent text-gray-500 relative z-20">
-            <p>Built with 💖.</p>
+            <p>Built with Three.js and the Sovereignty Streams.</p>
         </footer>
     </main>
 
