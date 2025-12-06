@@ -3,611 +3,1321 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday Juhi</title>
+    <title>Elegant Menu</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Inter:wght@400;500;600;800&family=Pacifico&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 
     <style>
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
-
-        .festive-text { font-family: 'VT323', monospace; font-size: 1.25rem; }
-        h1, h2, h3 { font-family: 'VT323', monospace; font-weight: normal; }
-        html, body { width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden; font-family: 'VT323', monospace; }
+      :root{
+        --bg: #f9f7f0;
+        --paper: #fffcf5;
+        --ink: #1a1a1a;
+        --ink-dim: #5c5c5c;
+        --line: #c4b59d;
+        --accent-rich: #800020; 
+        --accent-gold: #c5a059; 
         
-        :root {
-            --cake-body: #C0C0C0; 
-            --frosting: #000080; 
-            --photo-frame-border: #808080; 
-        }
-
-        body {
-            background-color: #008080; 
-            background-image: linear-gradient(rgba(0,0,0,0.2) 1px, transparent 1px);
-            background-size: 100% 3px; 
-            display: block; 
-        }
-
-        #navToggle { transition: all 0.3s ease-in-out; z-index: 1000; }
-        .nav-panel, #mainContent { transition: all 0.3s ease-in-out; }
+        --radius: 2px;
+        --shadow-book: 0 50px 100px -20px rgba(0,0,0,0.8);
+        --spine-gradient: linear-gradient(to right, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 20%, rgba(0,0,0,0) 100%);
         
-        #mainContent {
-            display: flex;
-            flex-direction: column;
-            align-items: center; 
-            
-            width: 100%; height: 100%;
-            position: absolute; inset: 0; overflow: auto; padding: 20px;
-            -ms-overflow-style: none; scrollbar-width: none;
-        }
-        #mainContent::before, #mainContent::after {
-            content: '';
-            flex-grow: 1;
-            margin: auto;
-        }
-        #mainContent::-webkit-scrollbar { display: none; }
+        --speed:.3s ease-out;
+      }
 
-        @media (min-width: 768px) {
-            .body-nav-open #mainContent { top: 4rem; bottom: 4rem; left: 6rem; right: 6rem; padding: 0; }
-        }
-        @media (max-width: 767px) {
-            .body-nav-open #mainContent { top: 4rem; bottom: 4rem; left: 0; right: 0; opacity: 0.8; }
-        }
+      @media (prefers-reduced-motion: reduce){
+        *{ animation:none !important; transition:none !important; }
+      }
 
-        .letter-container {
-            position: relative; width: 220px; height: 150px;
-            transition: opacity 0.5s ease-in-out, transform 0.5s ease;
-            transform: scale(0.9); opacity: 0; z-index: 15; display: none; 
-        }
-        .letter-container.active-letter { display: block; opacity: 1; transform: scale(1.1); }
-        .envelope { position: relative; width: 100%; height: 100%; }
-        .envelope-body { position: absolute; bottom: 0; width: 100%; height: 100%; background: var(--cake-body); border: 2px outset #FFFFFF; z-index: 16; }
-        .envelope-flap {
-            position: absolute; top: 0; left: 0; width: 100%; height: 75px; 
-            background: var(--cake-body); clip-path: polygon(0 0, 100% 0, 50% 100%);
-            z-index: 17; transform-origin: top; transition: transform 0.5s ease-in-out;
-            border-bottom: 1px solid #808080;
-        }
-        .letter-container.open .envelope-flap { transform: rotateX(180deg); }
+      html,body{
+        margin:0; padding:0; height:100%;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: 'Cormorant Garamond', serif; 
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+      }
 
-        .page {
-            display: none; width: 100%; max-width: 420px; padding: 25px;
-            background: var(--cake-body); border: 2px outset #FFFFFF; text-align: left;
-            opacity: 0; transform: scale(0.9); transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-            z-index: 15; max-height: 85vh; overflow-y: auto; box-shadow: 5px 5px 0px rgba(0,0,0,0.2);
-            margin: auto; 
-        }
-        .page.active-page { display: block; opacity: 1; transform: scale(1); }
-        .page-content { font-family: 'VT323', monospace; font-size: 1.5rem; line-height: 1.6; color: #000000; }
-        .page-content p { margin-bottom: 1.5rem; }
-        .page-content span {
-            display: block; font-size: 1.4rem; font-weight: bold; color: var(--frosting); 
-            font-style: normal; margin-bottom: 0.5rem; border-bottom: 1px dashed var(--frosting); padding-bottom: 5px;
-        }
-        .page h2 { color: var(--frosting); text-align: center; margin-bottom: 1rem; font-size: 2.5rem; text-shadow: 1px 1px 0px #fff; }
-        .page-signature { font-size: 1.5rem; text-align: right; margin-top: 1.5rem; color: #000000; }
+      .subtitle-the {
+          font-family: 'Inter', sans-serif;
+          font-size: 0.85rem;
+          color: var(--accent-gold);
+          text-transform: uppercase;
+          letter-spacing: 4px;
+          margin: 0;
+          font-weight: 600;
+          text-align: center;
+      }
+      
+      h1{
+        font-family: 'Playfair Display', serif; 
+        font-size: 3.8rem; 
+        color: var(--accent-rich);
+        margin: 0;
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+        text-align: center;
+      }
+      
+      .menu-section-title {
+          font-family: 'Playfair Display', serif;
+          font-size: 2.2rem;
+          color: var(--ink);
+          margin-top: 50px;
+          margin-bottom: 25px;
+          padding-bottom: 15px;
+          text-align: center;
+          font-weight: 700;
+          text-transform: uppercase;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+      }
+      
+      .menu-section-title::after {
+          content: '';
+          display: block;
+          width: 80px;
+          height: 15px;
+          background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 15 Q 65 15 75 10 T 100 10 L 100 12 Q 75 18 50 18 Q 25 18 0 12 L 0 10 Q 25 15 50 15 Z' fill='%23c5a059'/%3E%3Ccircle cx='50' cy='5' r='3' fill='%23800020'/%3E%3C/svg%3E");
+          background-repeat: no-repeat;
+          background-position: center;
+          margin-top: 10px;
+          opacity: 0.8;
+      }
 
-        .photo-frame { display: block; width: 100%; height: 100%; object-fit: cover; border: 4px outset var(--photo-frame-border); padding: 2px; background-color: #FFFFFF; }
-        #image-wrapper {
-            display: none; opacity: 0; transition: opacity 0.5s ease-in-out;
-            width: 200px; height: 130px; position: absolute; z-index: 20; 
-            top: 50%; left: 50%; transform: translate(-50%, -50%); cursor: pointer; 
-        }
-        #button-container {
-            position: absolute; top: 50%; left: 50%; transform: translateX(-50%) translateY(120px); 
-            display: flex; flex-direction: column; gap: 15px; z-index: 16; width: 90%; max-width: 300px;
-        }
-        #start-button-container { position: relative; z-index: 16; width: 90%; max-width: 400px; text-align: center; margin: auto; }
-        .action-button {
-            padding: 12px 28px; background: var(--cake-body); color: #000000; 
-            font-size: 1.25rem; font-weight: normal; border: 2px outset #FFFFFF; 
-            cursor: pointer; opacity: 0; pointer-events: none; transform: translateY(20px);
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out; font-family: 'VT323', monospace;
-            box-shadow: 2px 2px 0px rgba(0,0,0,0.3); white-space: normal; line-height: 1.2; width: 100%;
-        }
-        .action-button:active { border-style: inset; transform: translateY(22px); }
-        .action-button.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
-        .page-nav-button {
-            display: block; max-width: 250px; margin: 1rem auto 0 auto; 
-            background: var(--cake-body); color: #000000; font-family: 'VT323', monospace;
-            font-size: 1.25rem; font-weight: normal; padding: 10px 24px; border: 2px outset #FFFFFF;
-            cursor: pointer; text-align: center; transition: background-color 0.2s;
-        }
-        .page-nav-button:hover { background-color: #A0A0A0; }
-        .page-nav-button:active { border-style: inset; }
+      .menu-item{
+        background: transparent;
+        border: none;
+        padding: 10px 0;
+        cursor:pointer;
+        display: block;
+        position: relative;
+        overflow: visible; 
+        margin-bottom: 15px;
+      }
+      
+      .menu-item:hover .dish-name {
+          color: var(--accent-rich);
+      }
+      
+      .menu-content-wrapper {
+          display: flex;
+          justify-content: space-between;
+          align-items: baseline;
+          position: relative;
+          z-index: 2;
+          width: 100%;
+      }
+      
+      .menu-content-wrapper::after {
+          content: "";
+          flex-grow: 1;
+          order: 2;
+          border-bottom: 1px dotted var(--line);
+          margin: 0 10px;
+          position: relative;
+          top: -4px;
+      }
+      
+      .dish-name{
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.4rem;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+        margin:0;
+        order: 1;
+        color: var(--ink);
+        transition: color var(--speed);
+      }
+      
+      .indicator {
+        font-size: 1.2rem;
+        color: var(--accent-gold);
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 600;
+        order: 3;
+      }
 
-        #mobile-wrapper { display: block; width: 100%; height: 100%; }
-        #desktop-wrapper { display: none; }
-        @media (min-width: 768px) {
-            #mobile-wrapper { display: none !important; }
-            #desktop-wrapper { display: block !important; }
-            body { background-color: #008080 !important; background-image: none !important; }
-        }
+      .dish-tags{
+        font-family: 'Inter', sans-serif;
+        font-size: 0.7rem;
+        color: var(--ink-dim);
+        margin-top: 4px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        font-style: italic;
+      }
+      
+      @media (max-width: 1023px) {
+          .wrap{
+            min-height:100dvh;
+            display:flex; flex-direction:column;
+          }
 
-        .retro-outset {
-            border-top: 2px solid #ffffff; border-left: 2px solid #ffffff;
-            border-right: 2px solid #404040; border-bottom: 2px solid #404040;
-            background-color: #c0c0c0; box-shadow: 1px 1px 0 #000000;
-        }
-        .retro-inset {
-            border-top: 2px solid #404040; border-left: 2px solid #404040;
-            border-right: 2px solid #ffffff; border-bottom: 2px solid #ffffff;
-            background-color: #ffffff; box-shadow: inset 1px 1px 0 #000000;
-        }
-        .desktop-icon {
-            width: 80px; display: flex; flex-direction: column; align-items: center;
-            cursor: pointer; color: white; text-align: center; padding: 4px; 
-            border: 1px solid transparent; text-decoration: none; position: relative; 
-        }
-        .desktop-icon:hover { border: 1px dotted #ffff00; background-color: rgba(0, 0, 128, 0.3); }
-        .desktop-icon-img { width: 32px; height: 32px; margin-bottom: 4px; }
-        .desktop-icon-text { font-size: 1rem; padding: 2px 4px; line-height: 1.1; background-color: transparent; }
-        .desktop-icon:hover .desktop-icon-text { background-color: #000080; }
+          main{
+            background: #fffcf5;
+            border: 1px solid #e0dacc;
+            outline: 4px double var(--line);
+            outline-offset: -10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            padding: 50px 30px 60px;
+            max-width: 550px; 
+            width: 92%;
+            margin: 80px auto 50px;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+          }
 
-        .notification-badge {
+          .menu-list{
+            display:flex;
+            flex-direction:column;
+            gap: 15px; 
+            margin-top: 20px;
+          }
+
+          .main-title-wrapper {
+              margin-bottom: 40px;
+              padding-bottom: 15px;
+          }
+          
+          .main-title-wrapper .subtitle-the { display: block; }
+          .main-title-wrapper h1 { display: block; }
+
+          .nav-panel {
+              background: #fffcf5;
+              color: var(--ink);
+              border-color: var(--accent-gold);
+          }
+          .nav-link {
+              color: var(--ink);
+              font-family: 'Inter', sans-serif;
+              text-decoration: none;
+              display: block;
+              font-weight: 600;
+          }
+          
+          #mainContent {
+              position: absolute;
+              inset: 0;
+              min-height: 100vh;
+              overflow-y: auto; 
+              padding-top: 5rem;
+              background-color: #f2efe6; 
+          }
+          
+          .desktop-sidebar { display: none !important; }
+          .bookmark, .corner-ornament, .stamp, .leaf-shadow, .spine-texture { display: none !important; }
+      }
+
+      @media (min-width: 1024px) {
+          body {
+              background-color: #262220; 
+              background-image: 
+                  radial-gradient(circle at 80% 20%, rgba(255,255,255,0.03) 0%, transparent 40%),
+                  url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23332d2a' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              overflow: hidden; 
+          }
+          
+          #navToggle, #topNav, #bottomNav, #leftNav, #rightNav { display: none !important; }
+          
+          .leaf-shadow {
+              position: absolute;
+              top: -50px; left: -50px; right: -50px; bottom: -50px; 
+              pointer-events: none;
+              background-image: 
+                  radial-gradient(ellipse at 10% 20%, rgba(0,0,0,0.4) 0%, transparent 40%),
+                  radial-gradient(ellipse at 90% 80%, rgba(0,0,0,0.3) 0%, transparent 50%),
+                  url("data:image/svg+xml,%3Csvg viewBox='0 0 500 500' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='blur'%3E%3CfeGaussianBlur in='SourceGraphic' stdDeviation='10'/%3E%3C/filter%3E%3Cg filter='url(%23blur)' fill='rgba(0,0,0,0.15)'%3E%3Cpath d='M-50 -50 L200 100 L100 300 Z' /%3E%3Ccircle cx='400' cy='100' r='100' /%3E%3Cpath d='M300 400 L550 550 L500 300 Z' /%3E%3C/g%3E%3C/svg%3E");
+              background-size: cover;
+              mix-blend-mode: multiply;
+              z-index: 5;
+              transition: transform 0.1s ease-out; 
+          }
+          
+          #mainContent {
+              position: relative;
+              inset: auto;
+              width: 100%;
+              height: 100vh;
+              padding: 0;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              overflow: hidden;
+              z-index: 10;
+          }
+
+          .wrap {
+              display: flex;
+              flex-direction: row;
+              width: 95%;
+              max-width: 1600px; 
+              height: 90vh; 
+              background: var(--paper);
+              box-shadow: var(--shadow-book);
+              border-radius: 4px;
+              position: relative;
+              background-image: 
+                  url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg' opacity='0.03'%3E%3Cg fill='%23800020'%3E%3Cpath d='M50 0 C 60 20 80 40 100 50 C 80 60 60 80 50 100 C 40 80 20 60 0 50 C 20 40 40 20 50 0 Z' /%3E%3C/g%3E%3C/svg%3E"),
+                  url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
+              background-size: 200px 200px, auto; 
+          }
+          
+          .wrap::after {
+              content: "";
+              position: absolute;
+              top: 0; bottom: 0; left: 350px; 
+              width: 60px;
+              background: var(--spine-gradient);
+              pointer-events: none;
+              z-index: 20;
+              mix-blend-mode: multiply;
+          }
+
+          .bookmark {
             position: absolute;
-            top: 0;
-            right: 10px;
-            background-color: red;
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            box-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-            z-index: 10;
-        }
-
-        .taskbar {
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 34px;
-            background-color: #c0c0c0; border-top: 2px solid #ffffff;
-            display: flex; align-items: center; padding: 2px; z-index: 100;
-        }
-        .start-btn {
-            display: flex; align-items: center; padding: 2px 6px; height: 26px;
-            margin-right: 8px; font-weight: bold; font-size: 1.1rem; gap: 4px; cursor: pointer;
-        }
-        .start-btn:active, .start-btn.active {
-            border-top: 2px solid #404040; border-left: 2px solid #404040; 
-            border-right: 2px solid #fff; border-bottom: 2px solid #fff; background-color: #d4d0c8;
-        }
-        .task-tab {
-            padding: 2px 10px; height: 26px; background-color: #e0e0e0;
-            border-top: 2px solid #fff; border-left: 2px solid #fff; 
-            border-right: 2px solid #404040; border-bottom: 2px solid #404040;
-            display: flex; align-items: center; gap: 6px; width: 180px; font-weight: bold;
-            cursor: pointer; margin-right: 4px; overflow: hidden;
-        }
-        .task-tab:active {
-            border-top: 2px solid #404040; border-left: 2px solid #404040; 
-            border-right: 2px solid #fff; border-bottom: 2px solid #fff;
-            background-color: #d4d0c8;
-        }
-        .tray-clock { margin-left: auto; height: 26px; padding: 0 10px; display: flex; align-items: center; justify-content: center; font-size: 1rem; }
-
-        .retro-window {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 600px; height: 450px; display: flex; flex-direction: column; padding: 3px;
-            transition: all 0.1s ease-out; z-index: 50;
-        }
-        .retro-window.maximized { top: 0; left: 0; transform: none; width: 100%; height: calc(100% - 34px); }
-        .title-bar {
-            background: linear-gradient(90deg, #000080, #1084d0); color: white; padding: 2px 4px;
-            display: flex; align-items: center; justify-content: space-between; font-weight: bold; font-size: 1.1rem;
-        }
-        .title-controls button {
-            width: 16px; height: 14px; background: #c0c0c0; border: 1px outset #fff; 
-            margin-left: 2px; font-size: 8px; line-height: 10px; text-align: center; color: black; cursor: pointer;
-        }
-        .title-controls button:active { border-style: inset; }
-        .window-content { flex-grow: 1; overflow-y: auto; padding: 20px; }
-        .desktop-page { display: none; min-height: 100%; flex-direction: column; }
-        .desktop-page.active { display: flex; }
-        .desktop-next-btn {
-            align-self: flex-start; margin-top: 20px; padding: 4px 12px; font-size: 1rem;
-            background: #c0c0c0; border: 2px outset #fff; cursor: pointer;
-        }
-        .desktop-next-btn:active { border-style: inset; }
-
-        #start-menu {
-            position: absolute;
-            bottom: 36px;
-            left: 99px; 
-            width: 280px; 
-            height: auto; 
-            max-height: calc(100vh - 42px);
-            min-height: 450px; 
-            background: #c0c0c0;
-            display: none; 
-            flex-direction: row; 
-            z-index: 9999;
-            padding: 2px;
-            border-top: 2px solid #fff; 
-            border-left: 2px solid #fff; 
-            border-right: 2px solid #404040; 
-            border-bottom: 2px solid #404040;
-            box-shadow: 4px 4px 10px rgba(0,0,0,0.5);
-        }
-        
-        .start-menu-sidebar {
-            width: 32px;
-            min-width: 32px;
-            background: linear-gradient(to bottom, #000080, #1084d0);
-            display: flex;
-            align-items: center;     
-            justify-content: center; 
-            color: white;
-            flex-shrink: 0;          
-        }
-        
-        .sidebar-text {
-            writing-mode: vertical-rl;
-            transform: rotate(180deg);
-            white-space: nowrap;
-            font-size: 1.5rem;
-            font-weight: bold;
-            letter-spacing: 2px;
-        }
-        
-        .start-menu-content {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            background: #c0c0c0;
-            padding: 2px 0 2px 2px;
-            overflow-y: auto;
-            overflow-x: hidden;
-        }
-        
-        .start-menu-item {
-            display: flex;
-            align-items: center;
-            padding: 8px 12px;
-            text-decoration: none;
-            color: black;
-            font-size: 1.1rem;
+            top: -15px; 
+            left: 380px; 
+            width: 45px;
+            height: 150px;
+            background: #900020;
+            background-image: linear-gradient(to right, #600010, #a00028 40%, #600010);
+            box-shadow: 4px 5px 15px rgba(0,0,0,0.5);
+            z-index: 30;
+            transform-origin: top center;
+            transition: height 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             cursor: pointer;
-            white-space: nowrap;
-        }
-        .start-menu-item:hover { background-color: #000080; color: white; }
-        .start-menu-item:hover svg { stroke: white; fill: white; }
-        .start-menu-item svg { 
-            width: 24px; height: 24px; margin-right: 12px; flex-shrink: 0; stroke: #000080; 
-        }
-        .start-divider { 
-            height: 2px; border-top: 1px solid #808080; border-bottom: 1px solid #ffffff; margin: 6px 4px; 
-        }
+          }
+          .bookmark::after {
+            content: "";
+            position: absolute;
+            bottom: -22px;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 22.5px solid transparent;
+            border-right: 22.5px solid transparent;
+            border-top: 22px solid #600010; 
+          }
+          .bookmark::before {
+              content: "";
+              position: absolute;
+              bottom: 10px;
+              left: 50%;
+              transform: translateX(-50%);
+              width: 2px;
+              height: 40px;
+              background: #d4af37;
+              box-shadow: 0 0 2px rgba(212, 175, 55, 0.5);
+          }
+          .bookmark:hover {
+             height: 180px;
+          }
 
-        .toolbar {
-            padding: 4px; border-bottom: 1px solid #808080;
-            display: flex; gap: 8px; background: #c0c0c0;
-        }
-        .toolbar-btn {
-            display: flex; align-items: center; gap: 4px;
-            padding: 2px 6px; border: 1px outset #fff; cursor: pointer;
-            font-size: 0.9rem;
-        }
-        .toolbar-btn:active { border-style: inset; }
-        
-        .file-grid {
-            display: flex; flex-wrap: wrap; gap: 16px; align-content: flex-start;
-        }
-        .file-item {
-            width: 70px; display: flex; flex-direction: column; align-items: center; text-align: center;
-            cursor: pointer; padding: 4px; border: 1px solid transparent;
-        }
-        .file-item:hover { background-color: #000080; color: white; }
-        .file-item:hover svg { stroke: white; fill: none; }
-        .file-item svg { width: 32px; height: 32px; margin-bottom: 4px; stroke: #000000; }
-        .file-name { font-size: 0.9rem; line-height: 1.1; }
+          .stamp {
+              width: 110px;
+              height: 110px;
+              border: 2px solid var(--accent-gold);
+              border-radius: 50%;
+              position: absolute;
+              bottom: 40px;
+              left: 50%;
+              transform: translateX(-50%) rotate(-12deg);
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              color: var(--accent-gold);
+              opacity: 0.8;
+              text-align: center;
+              font-family: 'Inter', sans-serif;
+              font-weight: 700;
+              font-size: 0.7rem;
+              text-transform: uppercase;
+              letter-spacing: 1px;
+              padding: 10px;
+              box-shadow: inset 0 0 0 3px transparent, inset 0 0 0 5px var(--accent-gold);
+              pointer-events: none;
+              mix-blend-mode: multiply;
+          }
+          .stamp span { display: block; }
+
+          .desktop-sidebar {
+              width: 350px;
+              height: 100%;
+              padding: 60px 40px;
+              background-color: rgba(240, 235, 225, 0.4); 
+              border-right: 1px solid rgba(0,0,0,0.1);
+              display: flex;
+              flex-direction: column;
+              z-index: 10;
+              overflow-y: auto;
+              flex-shrink: 0;
+              scrollbar-width: thin;
+              scrollbar-color: var(--accent-gold) transparent;
+          /* Gold Foil Effect Text Animation */
+          @keyframes shine {
+              0% { background-position: -200% center; }
+              100% { background-position: 200% center; }
+          }
+
+          .desktop-brand h1 { 
+              font-size: 4.5rem; 
+              line-height: 0.9; 
+              margin-top: 5px;
+              /* Animated Liquid Gold Gradient */
+              background: linear-gradient(
+                  to right, 
+                  #b88a44 20%, 
+                  #ffd700 40%, 
+                  #ffec8b 50%, 
+                  #ffd700 60%, 
+                  #b88a44 80%
+              );
+              background-size: 200% auto;
+              -webkit-background-clip: text;
+              background-clip: text;
+              -webkit-text-fill-color: transparent;
+              filter: drop-shadow(1px 1px 1px rgba(0,0,0,0.3));
+              position: relative;
+              z-index: 1;
+              animation: shine 5s linear infinite;
+          }
+          
+          .desktop-brand {
+              text-align: center;
+              margin-bottom: 50px;
+              padding-bottom: 30px;
+              border-bottom: 2px solid var(--accent-rich);
+          }
+          .desktop-brand h2 { letter-spacing: 3px; font-size: 0.9rem; color: #5c4a35; }
+
+          .desktop-nav-group {
+              margin-bottom: 40px;
+              text-align: center;
+          }
+
+          .desktop-nav-title {
+              font-family: 'Inter', sans-serif;
+              color: var(--accent-rich);
+              font-size: 0.75rem;
+              text-transform: uppercase;
+              letter-spacing: 2px;
+              margin-bottom: 15px;
+              font-weight: 700;
+              display: inline-block;
+              border-bottom: 1px solid var(--accent-gold);
+              padding-bottom: 2px;
+          }
+
+          .desktop-nav-link {
+              display: block;
+              font-family: 'Cormorant Garamond', serif;
+              color: var(--ink);
+              text-decoration: none;
+              padding: 4px 0;
+              font-size: 1.3rem;
+              transition: all 0.2s ease;
+              font-weight: 600;
+              font-style: italic;
+          }
+
+          .desktop-nav-link:hover {
+              color: var(--accent-rich);
+              transform: scale(1.1);
+              text-shadow: 0 2px 5px rgba(0,0,0,0.1);
+          }
+
+          main {
+              flex-grow: 1;
+              background: transparent;
+              padding: 70px 90px;
+              height: 100%;
+              overflow-y: auto; 
+              position: relative;
+              outline: 2px solid var(--accent-gold);
+              outline-offset: -35px;
+          }
+          
+          main::-webkit-scrollbar { width: 6px; }
+          main::-webkit-scrollbar-thumb { background-color: var(--line); border-radius: 3px; }
+
+          .corner-ornament {
+              position: absolute;
+              width: 50px;
+              height: 50px;
+              border: 2px solid var(--accent-rich);
+              z-index: 5;
+              pointer-events: none;
+              opacity: 0.6;
+          }
+          .corner-ornament::after {
+              content: '';
+              position: absolute;
+              width: 10px; height: 10px;
+              background: var(--accent-gold);
+              border-radius: 50%;
+          }
+          
+          .co-tl { top: 35px; left: 35px; border-right: none; border-bottom: none; border-top-left-radius: 10px; }
+          .co-tl::after { top: -6px; left: -6px; }
+          
+          .co-tr { top: 35px; right: 35px; border-left: none; border-bottom: none; border-top-right-radius: 10px; }
+          .co-tr::after { top: -6px; right: -6px; }
+          
+          .co-bl { bottom: 35px; left: 35px; border-right: none; border-top: none; border-bottom-left-radius: 10px; }
+          .co-bl::after { bottom: -6px; left: -6px; }
+          
+          .co-br { bottom: 35px; right: 35px; border-left: none; border-top: none; border-bottom-right-radius: 10px; }
+          .co-br::after { bottom: -6px; right: -6px; }
+
+          .main-title-wrapper {
+              text-align: center;
+              margin-bottom: 50px;
+              margin-top: 10px; 
+          }
+          
+          .main-title-wrapper::after { display: none; } 
+          
+          main .main-title-wrapper { display: none; } 
+
+          .menu-list {
+              column-count: 2; 
+              column-gap: 6rem; 
+              display: block; 
+              margin-top: 40px; 
+          }
+
+          @media (min-width: 1600px) {
+              .menu-list { column-count: 3; }
+          }
+
+          .menu-section-title {
+              break-after: avoid; 
+              column-span: all; 
+              font-size: 2rem;
+              margin-top: 40px; 
+              padding-top: 20px;
+          }
+          
+          .menu-item {
+             break-inside: avoid;
+             margin-bottom: 1.5rem;
+             padding: 10px 15px; 
+             transition: all 0.3s ease;
+             border-radius: 4px;
+          }
+          
+          .menu-item:hover {
+              transform: translateX(5px);
+              background: linear-gradient(to right, rgba(255, 215, 0, 0.1), transparent);
+              box-shadow: -5px 0 10px -5px rgba(212, 175, 55, 0.2);
+          }
+          
+          .menu-item::before {
+              content: "❧";
+              position: absolute;
+              left: -8px;
+              top: 12px;
+              font-size: 1.2rem;
+              color: var(--accent-rich);
+              opacity: 0;
+              transition: opacity 0.2s;
+          }
+          .menu-item:hover::before { opacity: 1; }
+      }
+      }
+
+      .modal-overlay {
+        background-color: rgba(20, 15, 10, 0.85);
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 100;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease;
+        backdrop-filter: blur(5px);
+      }
+
+      .modal-overlay.open {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .modal-content {
+        background: #fffcf5;
+        border: 1px solid var(--accent-gold);
+        outline: 3px double var(--accent-rich);
+        outline-offset: -8px;
+        padding: 50px 40px;
+        max-width: 90%;
+        width: 500px; 
+        box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        transform: scale(0.95);
+        transition: transform 0.3s cubic-bezier(.34,1.56,.64,1);
+        text-align: center;
+      }
+      .modal-overlay.open .modal-content {
+        transform: scale(1);
+      }
+      
+      .modal-title {
+        font-family: 'Playfair Display', serif;
+        font-size: 2.5rem;
+        color: var(--accent-rich);
+        text-align: center;
+        margin-bottom: 1.5rem;
+        border-bottom: 1px solid var(--line);
+        display: inline-block;
+        padding-bottom: 10px;
+      }
+      
+      .modal-joke {
+        font-family: 'Gochi Hand', cursive;
+        font-size: 1.4rem;
+        color: var(--ink);
+        margin-bottom: 2rem;
+        padding: 10px;
+        background: rgba(197, 160, 89, 0.1); 
+        border-radius: 4px;
+      }
+      
+      .modal-specialty {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.3rem;
+        line-height: 1.4;
+        color: var(--ink-dim);
+        font-style: italic;
+      }
+
+      .modal-compliment {
+        font-family: 'Gochi Hand', cursive;
+        font-size: 1.2rem;
+        color: var(--accent-gold);
+        margin-top: 2rem;
+        padding: 1rem;
+        border-top: 1px dotted var(--line);
+        border-bottom: 1px dotted var(--line);
+      }
+
+      .modal-divider {
+        border: 0;
+        height: 1px;
+        background-image: linear-gradient(to right, transparent, var(--accent-gold), transparent);
+        margin: 2rem auto;
+        width: 40%;
+      }
+      
+      .close-btn {
+        position: absolute;
+        top: 15px; right: 15px;
+        background: transparent;
+        border: none;
+        color: var(--accent-rich);
+        font-size: 2rem;
+        cursor: pointer;
+        opacity: 0.6;
+        line-height: 1;
+        transition: 0.2s;
+      }
+      .close-btn:hover { opacity: 1; transform: scale(1.1); }
+      
+      .festive-text {
+          font-family: 'Gochi Hand', cursive;
+          font-size: 1.2rem;
+      }
+      
+      .nav-panel h1, .nav-panel h2, .nav-panel h3 {
+          font-family: 'Pacifico', cursive;
+      }
 
     </style>
 </head>
-<body class="font-sans overflow-hidden">
+<body class="antialiased">
 
-    <div id="mobile-wrapper">
-        <button id="navToggle" class="fixed top-6 left-6 z-[110] p-2 shadow-lg focus:outline-none"
-            style="border-radius: 0; background: #C0C0C0; border: 2px outset #FFFFFF; color: #000;">
-            <svg id="navToggleIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-8 6h8"></path></svg>
-            <svg id="navToggleX" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-        </button>
+    <div class="leaf-shadow hidden lg:block" id="leafShadow"></div>
 
-        <nav id="topNav" class="nav-panel fixed top-0 left-0 right-0 z-[60] h-16 text-yellow-100 flex items-center justify-center space-x-6 -translate-y-full" style="background-color: #C0C0C0; color: #000000; border-bottom: 2px outset #fff;">
-            <a href="index.html" class="nav-link px-3 py-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Home</a>
-            <a href="Special.html" class="nav-link px-3 py-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Special</a>
-            <a href="letter.html" class="nav-link px-3 py-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Letter</a>
-        </nav>
+    <button id="navToggle" class="fixed top-4 left-4 z-[70] p-3 rounded-full shadow-xl transition-all bg-[var(--accent-rich)] text-white hover:bg-[var(--accent)] hover:scale-110 focus:outline-none ring-2 ring-white ring-offset-2 ring-offset-[var(--bg)]">
+        <svg xmlns="http://www.w3.org/2000/svg" id="navToggleIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-8 6h8"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" id="navToggleX" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+    </button>
 
-        <nav id="bottomNav" class="nav-panel fixed bottom-0 left-0 right-0 z-[60] h-16 text-yellow-100 flex items-center justify-center space-x-6 translate-y-full" style="background-color: #C0C0C0; color: #000000; border-top: 2px outset #fff;">
-            <a href="anatomy.html" class="nav-link px-3 py-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Anatomy</a>
-            <a href="chat.html" class="nav-link px-3 py-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Heaven</a>
-            <a href="you.html" class="nav-link px-3 py-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">You</a>
-        </nav>
+    <nav id="topNav" class="nav-panel fixed top-0 left-0 right-0 z-[60] h-16 shadow-lg flex items-center justify-center space-x-6 -translate-y-full border-b-4">
+        <a href="index.html" class="nav-link px-4 py-2 festive-text">Home</a>
+        <a href="Special.html" class="nav-link px-4 py-2 festive-text">Special</a>
+        <a href="letter.html" class="nav-link px-4 py-2 festive-text">Letter</a>
+    </nav>
+    <nav id="bottomNav" class="nav-panel fixed bottom-0 left-0 right-0 z-[60] h-16 shadow-lg flex items-center justify-center space-x-6 translate-y-full border-t-4">
+        <a href="anatomy.html" class="nav-link px-4 py-2 festive-text">Anatomy</a>
+        <a href="chat.html" class="nav-link px-4 py-2 festive-text">Heaven</a>
+        <a href="you.html" class="nav-link px-4 py-2 festive-text">You</a>
+    </nav>
+    <nav id="leftNav" class="nav-panel fixed left-0 top-0 bottom-0 z-[60] w-28 shadow-xl flex flex-col items-center space-y-6 -translate-x-full overflow-y-auto py-24 border-r-4">
+        <a href="Diary.html" class="nav-link p-2 w-full text-center festive-text">Diary</a>
+        <a href="Universe.html" class="nav-link p-2 w-full text-center festive-text">Universe</a>
+        <a href="color.html" class="nav-link p-2 w-full text-center festive-text">Color</a>
+        
+    </nav>
+    <nav id="rightNav" class="nav-panel fixed right-0 top-0 bottom-0 z-[60] w-28 shadow-xl flex flex-col items-center space-y-6 translate-x-full overflow-y-auto py-24 border-l-4">
+         <a href="Skill.html" class="nav-link p-2 w-full text-center festive-text">Skill</a>
+         <a href="Msg.html" class="nav-link p-2 w-full text-center festive-text">Massege</a>
+         <a href="21_Wish.html" class="nav-link p-2 w-full text-center festive-text">21_Door</a>
+         <a href="Cake.html" class="nav-link p-2 w-full text-center festive-text">Cake</a>
+         <a href="Periodik_table.html" class="nav-link p-2 w-full text-center festive-text">Periodik_table</a>
+         <a href="Presence.html" class="nav-link p-2 w-full text-center festive-text">Presence</a>
+         <a href="Concept.html" class="nav-link p-2 w-full text-center festive-text">Concept</a>
+         <a href="Calender.html" class="nav-link p-2 w-full text-center festive-text">Calender</a>
+         <a href="Perspective.html" class="nav-link p-2 w-full text-center festive-text">Perspective</a>
+         <a href="Spotlight.html" class="nav-link p-2 w-full text-center festive-text">Spotlight</a>
+         <a href="Room.html" class="nav-link p-2 w-full text-center festive-text">Room</a>
+         <a href="Radio.html" class="nav-link p-2 w-full text-center festive-text">Radio</a>
+         <a href="Food.html" class="nav-link p-2 w-full text-center festive-text">Food</a>
+         <a href="Music.html" class="nav-link p-2 w-full text-center festive-text">Music</a>
+    </nav>
 
-        <nav id="leftNav" class="nav-panel fixed left-0 top-16 bottom-16 z-[60] w-24 text-yellow-100 flex flex-col items-center space-y-6 -translate-x-full overflow-y-auto py-10" style="background-color: #C0C0C0; color: #000000; border-right: 2px outset #fff;">
-            <a href="Diary.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Diary</a>
-            <a href="Universe.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Universe</a>
-            <a href="Box.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Box</a>
-            <a href="color.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Color</a>
-            <a href="Teacher.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Teacher</a>
-            <a href="The_River.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">River</a>
-            <a href="Mountain.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Mountain</a>
-            <a href="Paper_Star.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Paper Star</a>
-            <a href="Cartoon.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Cartoon</a>
-            <a href="Santa.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Santa</a>
-            <a href="Cloud.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Cloud</a>
-            <a href="Ink.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Paint</a>
-            <a href="Butterfly.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Butterfly</a>
-            <a href="Weather.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Weather</a>
-        </nav>
+    <div id="mainContent">
+      <div class="wrap">
+        
+        <div class="bookmark hidden lg:block"></div>
 
-        <nav id="rightNav" class="nav-panel fixed right-0 top-16 bottom-16 z-[60] w-24 text-yellow-100 flex flex-col items-center space-y-6 translate-x-full overflow-y-auto py-10" style="background-color: #C0C0C0; color: #000000; border-left: 2px outset #fff;">
-            <a href="Skill.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Skill</a>
-            <a href="Msg.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Message</a>
-            <a href="21_Wish.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">21_Door</a>
-            <a href="Cake.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Cake</a>
-            <a href="Periodik_table.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Periodic_Table</a>
-            <a href="Presence.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Presence</a>
-            <a href="Concept.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Concept</a>
-            <a href="Calender.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Calendar</a>
-            <a href="Perspective.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Perspective</a>
-            <a href="Spotlight.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Spotlight</a>
-            <a href="Room.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Room</a>
-            <a href="Radio.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Radio</a>
-            <a href="Food.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Food</a>
-            <a href="Music.html" class="nav-link p-2 text-sm font-medium hover:bg-gray-500 hover:text-white transition-colors duration-200 festive-text">Music</a>
-        </nav>
-
-        <main id="mainContent">
-            <div id="start-button-container"><button id="start-button" class="action-button visible">A message from the heart...</button></div>
-            <div id="letter-container" class="letter-container"><div class="envelope"><div class="envelope-flap"></div><div class="envelope-body"></div></div></div>
-            <div id="image-wrapper"><img id="birthday-photo" class="photo-frame" src="Letter.png" alt="Photo" onerror="this.src='https://placehold.co/150x150/C0C0C0/000080?text=June';"></div>
-            <div id="button-container"><button id="open-letter-button" class="action-button">Open the letter</button></div>
-
-            <div id="page-1" class="page">
-                <h2 class="text-3xl">Happy Birthday, Juhi</h2>
-                <div class="page-content"><p><span>Part 1: The Wish</span> First off, just a huge, happy, happy birthday. I hope your day is filled with tons of fun, amazing surprises, and everything that makes you smile.</p></div>
-                <button class="page-nav-button next-button" data-target="2">Next</button>
+        <aside class="desktop-sidebar hidden lg:flex">
+            <div class="desktop-brand">
+                <h2 class="subtitle-the">THE INDIAN</h2>
+                <h1>MENU</h1>
             </div>
-            <div id="page-2" class="page">
-                <h2 class="text-3xl">Part 2</h2>
-                <div class="page-content"><p><span>Who you are?</span> Kabhi socha hai kon ho tum? Kisi ke liye beti, kisi ke liye behen, kisi ke liye pyaar, kisi ke liye dost. Kisi ke liye student, to kisi ke liye teacher. Lekin asal mein...tum kaun ho tum? Tumhara kya impact hai dusro k jivan mai?</p></div>
-                <button class="page-nav-button next-button" data-target="3">Next</button>
+            
+            <div class="desktop-nav-group">
+                <div class="desktop-nav-title">Essentials</div>
+                <a href="index.html" class="desktop-nav-link">Home</a>
+                <a href="Special.html" class="desktop-nav-link">Special</a>
+                <a href="letter.html" class="desktop-nav-link">Letter</a>
+                <a href="anatomy.html" class="desktop-nav-link">Anatomy</a>
+                <a href="chat.html" class="desktop-nav-link">Heaven</a>
+                <a href="you.html" class="desktop-nav-link">You</a>
             </div>
-            <div id="page-3" class="page">
-                <h2 class="text-3xl">Part 3</h2>
-                <div class="page-content"><p><span>Your impact in everyone’s life</span> Kabhi-kabhi ek insan ki kami se puri kainat kami lagti hai, aur tum to sach-me kisi ki kainat ho. Kisi ki umeed ki kiran tum ho, kabhi kisi ka hasne ka karan ban jaati ho. Kabhi tumhari ek chhoti si baat dil me gehra asar chhod jaati hai. Aur kabhi tum bas saamne ho, to sab kuch thoda behtar lagne lagta hai.</p></div>
-                <button class="page-nav-button next-button" data-target="4">Next</button>
+
+            <div class="desktop-nav-group">
+                <div class="desktop-nav-title">Reflections</div>
+                <a href="Diary.html" class="desktop-nav-link">Diary</a>
+                <a href="Universe.html" class="desktop-nav-link">Universe</a>
+                <a href="color.html" class="desktop-nav-link">Color</a>
+                <a href="Teacher.html" class="desktop-nav-link">Teacher</a>
+                <a href="The_River.html" class="desktop-nav-link">River</a>
+                <a href="Mountain.html" class="desktop-nav-link">Mountain</a>
             </div>
-            <div id="page-4" class="page">
-                <h2 class="text-3xl">Part 4</h2>
-                <div class="page-content"><p>Apne liye kaun ho tum? <span>You are Carbon.</span> You have a very simple and calm nature. You don’t talk too much, but whatever you say always feels special. You care for people quietly, in small ways, without trying to show it. Your behaviour is soft, and your heart is clean and that’s what makes you different from others. Tum Carbon ho. Carbon ki tarah tum alag–alag roop mein khoobsurat lagti ho. Jab zindagi tough hoti hai, tum diamond ki tarah strong ban jaati ho, bilkul clear, bilkul steady. Aur jab kisi ko halka sa support chahiye hota hai, tab tum graphite ki tarah soft aur samajhdaar ban jaati ho. Carbon ka kaam hota hai dusron ko jodna… aur tum bhi waise hi ho, log tumse aasaani se jud jaate hain. Carbon life banata hai… aur tum apne aas–paas ke logon ki life thodi si better kar deti ho, sirf apni achhi nature ki wajah se. Hamesha aise hi rehna, simple, strong, aur apne jaise.</p></div>
-                <button class="page-nav-button next-button" data-target="5">Next</button>
+
+            <div class="desktop-nav-group">
+                <div class="desktop-nav-title">Gallery</div>
+                <a href="Paper_Star.html" class="desktop-nav-link">Paper Star</a>
+                <a href="Carttoon.html" class="desktop-nav-link">Cartoon</a>
+                <a href="Santa.html" class="desktop-nav-link">Santa</a>
+                <a href="Cloud.html" class="desktop-nav-link">Cloud</a>
+                <a href="Ink.html" class="desktop-nav-link">Paint</a>
+                <a href="Butterfly.html" class="desktop-nav-link">Butterfly</a>
+                <a href="Weather.html" class="desktop-nav-link">Weather</a>
             </div>
-            <div id="page-5" class="page">
-                <h2 class="text-3xl">Part 5</h2>
-                <div class="page-content"><p><span>Who you are for me</span> Mere liye tum kaun ho? Dharkanon ka geet ho, jeevan ka ek sangeet ho. Roshni jaisi ho, taazgi jaisi ho, aur khushiyon ki wajah jaisi ho. Tum meri life ka wo hissa ho jo bina koshish ke dil me jagah bana leta hai.</p></div>
-                <p class="page-signature" style="text-align: center;">Tumhara Subhchintak</p>
+            
+            <div class="desktop-nav-group">
+                <div class="desktop-nav-title">Moments</div>
+                <a href="Skill.html" class="desktop-nav-link">Skill</a>
+                <a href="Msg.html" class="desktop-nav-link">Message</a>
+                <a href="21_Wish.html" class="desktop-nav-link">21 Door</a>
+                <a href="Cake.html" class="desktop-nav-link">Cake</a>
+                <a href="Periodik_table.html" class="desktop-nav-link">Periodic Table</a>
+                <a href="Presence.html" class="desktop-nav-link">Presence</a>
+                <a href="Concept.html" class="desktop-nav-link">Concept</a>
+                <a href="Calender.html" class="desktop-nav-link">Calendar</a>
+                <a href="Perspective.html" class="desktop-nav-link">Perspective</a>
+                <a href="Spotlight.html" class="desktop-nav-link">Spotlight</a>
+                <a href="Room.html" class="desktop-nav-link">Room</a>
+                <a href="Radio.html" class="desktop-nav-link">Radio</a>
+                <a href="Food.html" class="desktop-nav-link">Food</a>
+                <a href="Music.html" class="desktop-nav-link">Music</a>
             </div>
-        </main> 
+
+            <div class="stamp">
+                <span>EST.<br>2024</span>
+            </div>
+        </aside>
+
+        <main>
+          <div class="corner-ornament co-tl hidden lg:block"></div>
+          <div class="corner-ornament co-tr hidden lg:block"></div>
+          <div class="corner-ornament co-bl hidden lg:block"></div>
+          <div class="corner-ornament co-br hidden lg:block"></div>
+
+          <div class="main-title-wrapper lg:hidden"> 
+              <p class="subtitle-the">THE INDIAN</p>
+              <h1>MENU</h1>
+          </div>
+          <section class="menu-list" id="menuList" aria-live="polite"></section>
+        </main>
+      </div>
     </div>
-
-    <!-- DESKTOP WRAPPER -->
-    <div id="desktop-wrapper">
-         <div class="absolute top-4 left-4 flex flex-col gap-2">
-            <div class="desktop-icon" onclick="openMsgWindow()">
-                <div id="letter-notification" class="notification-badge">1</div>
-                <svg class="desktop-icon-img" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22 6C22 4.9 21.1 4 20 4H4C2.9 4 2 4.9 2 6V18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6ZM20 6L12 11L4 6H20ZM20 18H4V8L12 13L20 8V18Z" fill="#F0E68C" stroke="black" stroke-width="1"/></svg>
-                <div class="desktop-icon-text">Read Letter</div>
-            </div>
-            <div class="desktop-icon" onclick="openRecycleWindow()">
-                <svg class="desktop-icon-img" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19 4H15.5L14.5 2H9.5L8.5 4H5V6H19V4ZM6 19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7H6V19Z" fill="#C0C0C0" stroke="black"/><path d="M10 17H14" stroke="green" stroke-width="2"/><path d="M8 12L12 16L16 12" stroke="green" stroke-width="2"/></svg>
-                <div class="desktop-icon-text">Recycle Bin</div>
-            </div>
-        </div>
-
-        <!-- START MENU -->
-        <div id="start-menu" class="retro-window retro-outset">
-            <div class="start-menu-sidebar">
-                <span class="sidebar-text">Juhi 98</span>
-            </div>
-            <div id="start-menu-items" class="start-menu-content retro-inset" style="border:none; box-shadow:none;">
-                <!-- Generated Apps -->
-            </div>
-        </div>
-
-        <!-- RECYCLE BIN WINDOW -->
-        <div id="recycle-window" class="retro-window retro-outset" style="display:none; z-index: 60;">
-            <div class="title-bar">
-                <div class="flex items-center gap-2">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M19 4H5V6H19V4ZM6 19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7H6V19Z" fill="white" stroke="white"/></svg>
-                    <span>Recycle Bin</span>
-                </div>
-                <div class="title-controls flex">
-                    <button onclick="minimizeRecycleWindow()">_</button>
-                    <button onclick="maximizeRecycleWindow()">□</button>
-                    <button onclick="closeRecycleWindow()" style="font-weight:bold; color:black;">X</button>
-                </div>
-            </div>
-            <div class="menu-bar">
-                <span class="menu-item">File</span><span class="menu-item">Edit</span><span class="menu-item">View</span><span class="menu-item">Go</span><span class="menu-item">Favorites</span><span class="menu-item">Help</span>
-            </div>
-            <div class="toolbar">
-                <button class="toolbar-btn" onclick="emptyRecycleBin()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-                    Empty Recycle Bin
-                </button>
-            </div>
-            <div id="recycle-content" class="window-content retro-inset file-grid">
-                <!-- Bad things to delete -->
-                <div class="file-item">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-                    <div class="file-name">Overthinking.tmp</div>
-                </div>
-                <div class="file-item">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-                    <div class="file-name">Tension.log</div>
-                </div>
-                <div class="file-item">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-                    <div class="file-name">Pressure.sys</div>
-                </div>
-                <div class="file-item">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-                    <div class="file-name">Pain.dat</div>
-                </div>
-                <div class="file-item">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
-                    <div class="file-name">Bad_Time.old</div>
-                </div>
-            </div>
-        </div>
-
-        <div id="msg-window" class="retro-window retro-outset" style="display:none; z-index: 50;">
-            <div class="title-bar">
-                <div class="flex items-center gap-2">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2Z" stroke="white" fill="white"/></svg>
-                    <span>Message Viewer - Happy Birthday.msg</span>
-                </div>
-                <div class="title-controls flex">
-                    <button onclick="minimizeMsgWindow()">_</button>
-                    <button onclick="maximizeMsgWindow()">□</button>
-                    <button onclick="closeMsgWindow()" style="font-weight:bold; color:black;">X</button>
-                </div>
-            </div>
-            <div class="menu-bar">
-                <span class="menu-item">File</span><span class="menu-item">Edit</span><span class="menu-item">View</span>
-            </div>
-            <div class="window-content retro-inset">
-                <div style="text-align:center; color:#000080; border-bottom: 2px solid #000080; margin-bottom: 20px; padding-bottom:5px;">
-                    <h2 style="font-size: 2rem;">Happy Birthday, Juhi</h2>
-                </div>
-                <div id="desktop-page-1" class="desktop-page active">
-                    <h3 class="text-xl font-bold mb-2">Part 1: The Wish</h3>
-                    <div style="font-size: 1.25rem; line-height: 1.5; flex-grow: 1;">Wishing you a very Happy Birthday from the big screen! May your day be as wonderful and bright as you are. I hope your day is filled with tons of fun, amazing surprises, and everything that makes you smile.</div>
-                    <button class="desktop-next-btn" onclick="desktopNextPage(2)">Next ></button>
-                </div>
-                <div id="desktop-page-2" class="desktop-page">
-                    <h3 class="text-xl font-bold mb-2">Part 2: Who you are?</h3>
-                    <div style="font-size: 1.25rem; line-height: 1.5; flex-grow: 1;">Kabhi socha hai kon ho tum? Kisi ke liye beti, kisi ke liye behen, kisi ke liye pyaar, kisi ke liye dost. Kisi ke liye student, to kisi ke liye teacher. Lekin asal mein...tum kaun ho tum? Tumhara kya impact hai dusro k jivan mai?</div>
-                    <button class="desktop-next-btn" onclick="desktopNextPage(3)">Next ></button>
-                </div>
-                <div id="desktop-page-3" class="desktop-page">
-                    <h3 class="text-xl font-bold mb-2">Part 3: Impact</h3>
-                    <div style="font-size: 1.25rem; line-height: 1.5; flex-grow: 1;">Kabhi-kabhi ek insan ki kami se puri kainat kami lagti hai, aur tum to sach-me kisi ki kainat ho. Kisi ki umeed ki kiran tum ho, kabhi kisi ka hasne ka karan ban jaati ho. Kabhi tumhari ek chhoti si baat dil me gehra asar chhod jaati hai. Aur kabhi tum bas saamne ho, to sab kuch thoda behtar lagne lagta hai.</div>
-                    <button class="desktop-next-btn" onclick="desktopNextPage(4)">Next ></button>
-                </div>
-                <div id="desktop-page-4" class="desktop-page">
-                    <h3 class="text-xl font-bold mb-2">Part 4: You are Carbon</h3>
-                    <div style="font-size: 1.25rem; line-height: 1.5; flex-grow: 1;">You have a very simple and calm nature. You don’t talk too much, but whatever you say always feels special. You care for people quietly, in small ways. Tum Carbon ho. Carbon ki tarah tum alag–alag roop mein khoobsurat lagti ho. Jab zindagi tough hoti hai, tum diamond ki tarah strong ban jaati ho. Aur jab kisi ko halka sa support chahiye hota hai, tab tum graphite ki tarah soft aur samajhdaar ban jaati ho.</div>
-                    <button class="desktop-next-btn" onclick="desktopNextPage(5)">Next ></button>
-                </div>
-                <div id="desktop-page-5" class="desktop-page">
-                    <h3 class="text-xl font-bold mb-2">Part 5: For Me</h3>
-                    <div style="font-size: 1.25rem; line-height: 1.5; flex-grow: 1;">Mere liye tum kaun ho? Dharkanon ka geet ho, jeevan ka ek sangeet ho. Roshni jaisi ho, taazgi jaisi ho, aur khushiyon ki wajah jaisi ho. Tum meri life ka wo hissa ho jo bina koshish ke dil me jagah bana leta hai.<br><br><p style="text-align: right; margin-top:20px; font-weight:bold;">- Tumhara Subhchintak</p></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="taskbar retro-outset">
-            <button class="start-btn retro-outset" onclick="toggleStartMenu()">
-                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1px;">
-                    <div style="width:4px; height:4px; background:red;"></div><div style="width:4px; height:4px; background:green;"></div>
-                    <div style="width:4px; height:4px; background:blue;"></div><div style="width:4px; height:4px; background:yellow;"></div>
-                </div>
-                Start
+    
+    <div id="descriptionModal" class="modal-overlay" onclick="closeDescription()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <button class="close-btn" onclick="closeDescription()">
+                &times;
             </button>
-            <div style="width: 2px; height: 22px; border-left: 1px solid #404040; border-right: 1px solid #ffffff; margin: 0 4px;"></div>
-            <div id="taskbar-tab-msg" class="task-tab" style="display:none;" onclick="toggleMsgWindow()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="black"><path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2Z" stroke="black" fill="none"/></svg>
-                Message Viewer
-            </div>
+            <h2 id="modalTitle" class="modal-title"></h2>
+            
+            <p id="modalJoke" class="modal-joke"></p>
+            <hr class="modal-divider"/>
+            <p id="modalSpecialty" class="modal-specialty"></p>
+            
+            <p id="modalCompliment" class="modal-compliment"></p>
 
-            <div id="taskbar-tab-recycle" class="task-tab" style="display:none;" onclick="toggleRecycleWindow()">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="black"><path d="M19 4H5V6H19V4ZM6 19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7H6V19Z" fill="black"/></svg>
-                Recycle Bin
-            </div>
-
-            <div class="tray-clock retro-inset" id="clock">12:00 PM</div>
+            <p class="text-center text-xs text-[var(--ink-dim)] mt-4">Tap outside or press <span class="font-bold">X</span> to close.</p>
         </div>
     </div>
 
+    
     <script>
-        window.onload = function() {
-            initMobileFunctions();
-            initDesktopFunctions();
-        };
 
-        function initMobileFunctions() {
-            const body = document.body;
-            const startButtonContainer = document.getElementById('start-button-container');
-            const startButton = document.getElementById('start-button');
-            const letterContainer = document.getElementById('letter-container');
-            const openLetterButton = document.getElementById('open-letter-button');
-            const buttonContainer = document.getElementById('button-container'); 
-            const imageWrapper = document.getElementById('image-wrapper');
-            const pageElements = document.querySelectorAll('.page');
-            const nextButtons = document.querySelectorAll('#mobile-wrapper .next-button');
-            
-            function showPage(pageNumber) {
-                document.getElementById('mainContent').scrollTop = 0;
-                pageElements.forEach(page => {
-                    page.classList.remove('active-page');
-                    page.style.display = 'none'; 
+const MENU_STRUCTURE = [
+  { title: "Aarambh (Beginnings)", tags: ["Aarambh"] },
+  { title: "Mukhyo Vyanjan (Main Course)", tags: ["Mukhyo Vyanjan"] },
+  { title: "Mishti (Sweets)", tags: ["Mishti aur Roti"] },
+  { title: "Pey (Beverages)", tags: ["Pey"] }
+];
+
+const DISHES = [
+  {
+    id:"pakora",
+    name:"Vegetable Pakora",
+    tags:["Aarambh","Spicy","Vegan"],
+    line:"Crispy, golden-fried vegetables seasoned just right—a perfect start.",
+    joke:"Just like pakoras, you bring a little crunch and a lot of warmth wherever you go.",
+    compliment:"You have a natural brightness that makes moments feel lighter."
+  },
+  {
+    id:"samosa",
+    name:"Punjabi Samosa",
+    tags:["Aarambh","Comfort","Vegan"],
+    line:"Flaky pastry filled with spiced potatoes and peas.",
+    joke:"Just like samosas, you seem strong on the outside but have a soft, kind heart inside.",
+    compliment:"Your calm nature makes people feel at ease around you."
+  },
+  {
+    id:"kebab",
+    name:"Chicken Tikka Kebab",
+    tags:["Aarambh","Poultry","Spicy"],
+    line:"Smoky, marinated chicken grilled to perfection.",
+    joke:"Just like kebabs, you’re warm, and surprisingly unforgettable.",
+    compliment:"You leave a gentle, memorable impression without trying."
+  },
+  {
+    id:"bhel",
+    name:"Bhel Puri",
+    tags:["Aarambh","Bright","Vegan"],
+    line:"A tangy, crunchy street-food mix of puffed rice and chutneys.",
+    joke:"Just like bhel puri, you add colour, freshness, and a spark of fun to every moment.",
+    compliment:"Your presence naturally brings positivity to the atmosphere."
+  },
+  {
+    id:"papad",
+    name:"Masala Papad",
+    tags:["Aarambh","Bright","Vegan"],
+    line:"Crispy lentil wafers topped with fresh toppings.",
+    joke:"Just like masala papad, your smile can lighten a whole room without even trying.",
+    compliment:"You have an uplifting charm that people genuinely enjoy."
+  },
+  {
+    id:"paneer-pakora",
+    name:"Paneer Pakora",
+    tags:["Aarambh","Comfort"],
+    line:"Soft paneer coated and fried to golden crispiness.",
+    joke:"Just like paneer pakora, you’re soft at heart and always comforting.",
+    compliment:"Your kindness shows in small, thoughtful ways."
+  },
+  {
+    id:"corn-chaat",
+    name:"Corn Chaat",
+    tags:["Aarambh","Bright","Vegan"],
+    line:"Sweet, tangy, and spicy corn tossed fresh.",
+    joke:"Just like corn chaat, you’re sweet, bright, and full of cheerful energy.",
+    compliment:"You bring a refreshing vibe that makes conversations feel easy."
+  },
+  {
+    id:"hara-bhara",
+    name:"Hara Bhara Kebab",
+    tags:["Aarambh","Vegetarian"],
+    line:"Healthy and flavourful spinach & pea patties.",
+    joke:"Just like hara bhara kebab, you’re refreshing, vibrant, and full of life.",
+    compliment:"Your energy feels naturally positive and lively."
+  },
+  {
+    id:"spring-roll",
+    name:"Veg Spring Roll",
+    tags:["Aarambh","Bright","Crispy"],
+    line:"Crispy rolls stuffed with seasoned vegetables.",
+    joke:"Just like spring rolls, you’re crisp, bright, and always make things better.",
+    compliment:"You bring a fresh, happy energy wherever you go."
+  },
+  {
+    id:"dahi-kebab",
+    name:"Dahi Kebab",
+    tags:["Aarambh","Comfort","Vegetarian"],
+    line:"Soft yogurt-based kebabs that melt in the mouth.",
+    joke:"Just like dahi kebab, you’re soft, gentle, and unforgettable.",
+    compliment:"There’s something soothing and kind about you."
+  },
+  {
+    id:"fish-finger",
+    name:"Fish Finger",
+    tags:["Aarambh","Seafood","Crispy"],
+    line:"Crispy, golden-fried fish strips.",
+    joke:"Just like fish fingers, you’re crisp, fun, and instantly likeable.",
+    compliment:"You have an easy, pleasant charm that feels natural."
+  },
+
+  {
+    id:"butter-chicken",
+    name:"Butter Chicken",
+    tags:["Mukhyo Vyanjan","Poultry","Comfort"],
+    line:"Rich, creamy tomato gravy with tender chicken.",
+    joke:"Just like butter chicken, you’re comforting, warm, and make people feel safe.",
+    compliment:"You have a gentle warmth that people appreciate instantly."
+  },
+  {
+    id:"rogan-josh",
+    name:"Kashmiri Rogan Josh",
+    tags:["Mukhyo Vyanjan","Red Meat","Spicy"],
+    line:"Aromatic mutton curry with rich spices.",
+    joke:"Just like rogan josh, you have depth and a strong, graceful charm.",
+    compliment:"Your confidence feels natural and graceful."
+  },
+  {
+    id:"paneer-tikka",
+    name:"Paneer Tikka Masala",
+    tags:["Mukhyo Vyanjan","Vegetarian"],
+    line:"Smoky paneer in a spicy gravy.",
+    joke:"Just like paneer tikka, you’re soft, steady, and quietly impressive.",
+    compliment:"You carry yourself with a soft confidence that feels genuine."
+  },
+  {
+    id:"dal-makhani",
+    name:"Dal Makhani",
+    tags:["Mukhyo Vyanjan","Vegetarian"],
+    line:"Creamy black lentils simmered overnight.",
+    joke:"Just like dal makhani, you bring calm and make everything feel better.",
+    compliment:"Your presence has a comforting, peaceful effect on people."
+  },
+  {
+    id:"aloo-gobi",
+    name:"Aloo Gobi",
+    tags:["Mukhyo Vyanjan","Vegetarian","Vegan"],
+    line:"Classic potatoes and cauliflower with spices.",
+    joke:"Just like aloo gobi, you’re simple in the best way pure and genuinely good.",
+    compliment:"You have a very genuine and sincere nature."
+  },
+  {
+    id:"prawn-malai",
+    name:"Prawn Malai Curry",
+    tags:["Mukhyo Vyanjan","Seafood"],
+    line:"Coastal-style curry cooked in coconut milk.",
+    joke:"Just like prawn malai curry, you carry a gentle elegance that’s memorable.",
+    compliment:"There’s something softness in you that feels very thoughtful."
+  },
+  {
+    id:"chole-bhature",
+    name:"Chole Bhature",
+    tags:["Mukhyo Vyanjan","Comfort"],
+    line:"Spicy chickpeas with fluffy bhature.",
+    joke:"Just like chole bhature, you bring excitement and comfort together perfectly.",
+    compliment:"You balance fun and calmness really beautifully."
+  },
+  {
+    id:"palak-paneer",
+    name:"Palak Paneer",
+    tags:["Mukhyo Vyanjan","Vegetarian"],
+    line:"Paneer cooked in smooth spinach gravy.",
+    joke:"Just like palak paneer, you’re warm, nourishing, and quietly strong.",
+    compliment:"Your seem strong in a steady, composed way."
+  },
+  {
+    id:"veg-biryani",
+    name:"Veg Biryani",
+    tags:["Mukhyo Vyanjan","Vegetarian"],
+    line:"Flavoured rice layered with vegetables and spices.",
+    joke:"Just like biryani, you’re layered, thoughtful, and wonderful with every new thing someone discovers about you.",
+    compliment:"You have thoughtful depth that makes people want to know you more."
+  },
+  {
+    id:"malai-kofta",
+    name:"Malai Kofta",
+    tags:["Mukhyo Vyanjan","Vegetarian","Comfort"],
+    line:"Creamy curry with soft kofta dumplings.",
+    joke:"Just like malai kofta, you’re soft, kind, and truly delightful.",
+    compliment:"Your kindness shows in subtle, meaningful ways."
+  },
+  {
+    id:"kadhai-paneer",
+    name:"Kadhai Paneer",
+    tags:["Mukhyo Vyanjan","Vegetarian","Spicy"],
+    line:"Spicy paneer cooked with capsicum and tomatoes.",
+    joke:"Just like kadhai paneer, you’re dcolourful, and full of lively spirit.",
+    compliment:"You add a lively, positive vibe wherever you go."
+  },
+  {
+    id:"squid",
+    name:"Squid",
+    tags:["Mukhyo Vyanjan","Seafood"],
+    line:"Tender squid cooked with spices.",
+    joke:"Just like squid, you’re unique, graceful, and more fascinating than you let people see at first.",
+    compliment:"There’s something calm and intriguing about you."
+  },
+  {
+    id:"mutton-korma",
+    name:"Mutton Korma",
+    tags:["Mukhyo Vyanjan","Red Meat","Comfort"],
+    line:"Tender mutton pieces cooked in a rich, creamy gravy.",
+    joke:"Just like mutton korma, you’re rich in warmth and always comforting.",
+    compliment:"Your presence feels steady and reassuring."
+  },
+  {
+    id:"chicken-rezala",
+    name:"Chicken Rezala",
+    tags:["Mukhyo Vyanjan","Poultry","Aromatic"],
+    line:"A fragrant Mughlai chicken dish with white gravy.",
+    joke:"Just like rezala, you’re graceful, subtle, and beautifully balanced.",
+    compliment:"You carry yourself with gentle elegance."
+  },
+  {
+    id:"veg-handi",
+    name:"Vegetable Handi",
+    tags:["Mukhyo Vyanjan","Vegetarian","Comfort"],
+    line:"Mixed vegetables cooked in a creamy, aromatic gravy.",
+    joke:"Just like veg handi, you’re warm, colourful, and full of goodness.",
+    compliment:"You have a naturally kind and caring vibe."
+  },
+
+  {
+    id:"rasgulla",
+    name:"Rasgulla",
+    tags:["Mishti aur Roti","Dessert"],
+    line:"Soft cottage cheese balls in syrup.",
+    joke:"Just like a rasgulla, you’re soft, sweet, and impossible not to smile at.",
+    compliment:"Your sweetness feels natural and effortless."
+  },
+  {
+    id:"gulab-jamun",
+    name:"Gulab Jamun",
+    tags:["Mishti aur Roti","Dessert"],
+    line:"Milk-solid dumplings soaked in sugar syrup.",
+    joke:"Just like gulab jamun, you’re warm, comforting, and a little too sweet.",
+    compliment:"You have a comforting warmth that stays with people."
+  },
+  {
+    id:"sandesh",
+    name:"Sandesh",
+    tags:["Mishti aur Roti","Dessert"],
+    line:"A Bengali delight made from chhena.",
+    joke:"Just like sandesh, you’re soft, elegant, and effortlessly sweet.",
+    compliment:"There’s an elegance in the way you carry yourself."
+  },
+  {
+    id:"kheer",
+    name:"Kheer",
+    tags:["Mishti aur Roti","Dessert"],
+    line:"Traditional rice pudding with nuts.",
+    joke:"Just like kheer, you’re gentle, warm, and make moments special.",
+    compliment:"Your gentle behaviour makes people feel comfortable."
+  },
+  {
+    id:"jalebi",
+    name:"Jalebi",
+    tags:["Mishti aur Roti","Dessert"],
+    line:"Crispy spirals soaked in syrup.",
+    joke:"Just like jalebi, you’re sweet, unique, and a little too adorable.",
+    compliment:"You have a naturally adorable charm."
+  },
+  {
+    id:"mishti-doi",
+    name:"Mishti Doi",
+    tags:["Mishti aur Roti","Dessert"],
+    line:"Caramelised sweet yogurt.",
+    joke:"Just like mishti doi, you’re calming and sweet in a natural way.",
+    compliment:"Your sweetness feels peaceful and sincere."
+  },
+  {
+    id:"naan",
+    name:"Garlic Naan",
+    tags:["Mukhyo Vyanjan","Comfort"],
+    line:"Soft flatbread brushed with garlic butter.",
+    joke:"Just like garlic naan, you make everything feel warmer and better.",
+    compliment:"You bring a sense of warmth to the people around you."
+  },
+  {
+    id:"roti",
+    name:"Tandoori Roti",
+    tags:["Mukhyo Vyanjan"],
+    line:"Whole wheat roti cooked in a tandoor.",
+    joke:"Just like tandoori roti, you’re simple, real, and always appreciated.",
+    compliment:"Your authenticity is one of your nicest qualities."
+  },
+  {
+    id:"pulao",
+    name:"Peas Pulao",
+    tags:["Mukhyo Vyanjan","Vegetarian"],
+    line:"Fragrant rice with peas.",
+    joke:"Just like peas pulao, you quietly make days better just by being there.",
+    compliment:"Your presence has a quiet, soothing effect."
+  },
+  {
+    id:"paratha",
+    name:"Laccha Paratha",
+    tags:["Mukhyo Vyanjan","Comfort"],
+    line:"Layered flaky flatbread.",
+    joke:"Just like laccha paratha, you have layers—each one lovelier than the last.",
+    compliment:"You’re someone who becomes even more likeable the more one knows you."
+  },
+  {
+    id:"jeera-rice",
+    name:"Jeera Rice",
+    tags:["Mukhyo Vyanjan","Comfort"],
+    line:"Rice tempered with cumin.",
+    joke:"Just like jeera rice, you’re simple, comforting, and easy to love.",
+    compliment:"You have a calm simplicity that feels very genuine."
+  },
+  {
+    id:"poori",
+    name:"Poori",
+    tags:["Mukhyo Vyanjan","Comfort"],
+    line:"Deep-fried puffed bread.",
+    joke:"Just like poori, you make moments feel joyful and full of warmth.",
+    compliment:"Your cheerful nature makes people enjoy your company."
+  },
+  {
+    id:"rabri",
+    name:"Rabri",
+    tags:["Mishti aur Roti","Dessert"],
+    line:"Thickened sweetened milk with nuts.",
+    joke:"Just like rabri, you’re rich, sweet, and truly special.",
+    compliment:"Your sweetness feels genuine and heartfelt."
+  },
+  {
+    id:"brownie",
+    name:"Chocolate Brownie",
+    tags:["Mishti aur Roti","Dessert","Comfort"],
+    line:"Warm chocolate brownie with a fudgy center.",
+    joke:"Just like a brownie, you’re warm, soft, and easy to love.",
+    compliment:"You have a comforting nature that people enjoy being around."
+  },
+  {
+    id:"roomali-roti",
+    name:"Roomali Roti",
+    tags:["Mukhyo Vyanjan","Bread"],
+    line:"Ultra-soft, thin roti folded like a handkerchief.",
+    joke:"Just like roomali roti, you’re soft, delicate, and truly impressive.",
+    compliment:"Your gentle side is one of your most beautiful qualities."
+  },
+
+  {
+    id:"lassi",
+    name:"Sweet Lassi",
+    tags:["Pey","Drink"],
+    line:"A cooling sweet yogurt drink.",
+    joke:"Just like lassi, you bring a calm that cools even the busiest day.",
+    compliment:"You naturally make things feel more peaceful."
+  },
+  {
+    id:"chai",
+    name:"Masala Chai",
+    tags:["Pey","Drink"],
+    line:"Hot spiced tea brewed with milk.",
+    joke:"Just like masala chai, you’re warm, comforting, and easy to look forward to.",
+    compliment:"Talking to you feels warm and comforting."
+  },
+  {
+    id:"lemonade",
+    name:"Fresh Lemonade",
+    tags:["Pey","Drink","Vegan"],
+    line:"Refreshing Indian lemon drink.",
+    joke:"Just like lemonade, you’re refreshing, bright, and always able to lighten the mood.",
+    compliment:"Your cheerful nature makes things feel fresh and positive."
+  },
+  {
+    id:"cold-coffee",
+    name:"Cold Coffee",
+    tags:["Pey","Drink","Comfort"],
+    line:"Chilled coffee blended with milk.",
+    joke:"Just like cold coffee, you’re cool, refreshing, and surprisingly addictive.",
+    compliment:"You have a naturally cool and pleasant vibe."
+  },
+  {
+    id:"hot-chocolate",
+    name:"Hot Chocolate",
+    tags:["Pey","Drink","Comfort"],
+    line:"Warm cocoa drink topped with cream.",
+    joke:"Just like hot chocolate, you’re warm, sweet, and the definition of comfort.",
+    compliment:"You bring a gentle warmth to every interaction."
+  },
+  {
+    id:"mango-shake",
+    name:"Mango Shake",
+    tags:["Pey","Drink","Comfort"],
+    line:"Thick shake made with ripe mangoes.",
+    joke:"Just like a mango shake, you’re fun, cheerful, and naturally sweet.",
+    compliment:"Your cheerful vibes make people feel lighter."
+  },
+  {
+    id:"coconut-water",
+    name:"Coconut Water",
+    tags:["Pey","Drink","Vegan"],
+    line:"Pure water from fresh coconuts.",
+    joke:"Just like coconut water, you’re refreshing, pure, and full of energy.",
+    compliment:"You have a calming presence that feels very pure-hearted."
+  },
+  {
+    id:"watermelon-juice",
+    name:"Watermelon Juice",
+    tags:["Pey","Drink","Bright"],
+    line:"Refreshing juice made from fresh watermelon.",
+    joke:"Just like watermelon juice, you’re refreshing, sweet, and full of good vibes.",
+    compliment:"You bring a bright, cool energy with you."
+  },
+  {
+    id:"blue-lagoon",
+    name:"Blue Lagoon",
+    tags:["Pey","Drink","Bright"],
+    line:"A citrusy mocktail with a cool blue tint.",
+    joke:"Just like a blue lagoon, you’re calm, cool, and beautifully refreshing.",
+    compliment:"You have a peaceful, pleasant aura that stands out."
+  }
+];
+
+      const STORAGE_KEY = "menuPlannerLines.v2";
+      let lines = loadLines();
+      
+      const menuList = document.getElementById('menuList');
+      const modal = document.getElementById('descriptionModal');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalJoke = document.getElementById('modalJoke');
+      const modalSpecialty = document.getElementById('modalSpecialty');
+      
+      const modalCompliment = document.getElementById('modalCompliment');
+      
+      function loadLines(){
+        try{
+          const raw = localStorage.getItem(STORAGE_KEY);
+          return raw ? JSON.parse(raw) : {};
+        }catch(e){ return {}; }
+      }
+      
+      function escapeHtml(s){
+        if (typeof s !== 'string') s = String(s);
+        return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+      }
+
+      function getVisibleDishes() {
+        if (window.innerWidth >= 1024) {
+            return DISHES;
+        }
+
+        const mobileIds = [
+            "samosa", "kebab", "bhel", "corn-chaat", "spring-roll", "fish-finger",
+            "butter-chicken", "rogan-josh", "dal-makhani", "palak-paneer", "veg-biryani", "malai-kofta", "naan", "jeera-rice",
+            "rasgulla", "gulab-jamun", "jalebi", "mishti-doi", "brownie",
+            "lassi", "chai", "cold-coffee", "mango-shake", "blue-lagoon"
+        ];
+        
+        return DISHES.filter(d => mobileIds.includes(d.id));
+      }
+
+      function render(){
+        menuList.innerHTML = "";
+        
+        const visibleDishes = getVisibleDishes();
+
+        MENU_STRUCTURE.forEach(section => {
+            const sectionItems = visibleDishes.filter(d => 
+                d.tags.some(tag => section.tags.includes(tag))
+            );
+
+            if (sectionItems.length > 0) {
+                const titleElement = document.createElement('h2');
+                titleElement.className = 'menu-section-title';
+                titleElement.textContent = section.title;
+                menuList.appendChild(titleElement);
+
+                sectionItems.forEach(d => {
+                  const item = document.createElement('div');
+                  item.className = 'menu-item';
+                  item.setAttribute('data-id', d.id);
+                  item.onclick = () => openDescription(d.id);
+                  
+                  item.innerHTML = `
+                    <div class="menu-content-wrapper">
+                        <h2 class="dish-name">${d.name}</h2>
+                        <div class="indicator"></div>
+                    </div>
+                    <div class="dish-tags">
+                        ${d.tags.map(t => `<span class="tag-label">${t}</span>`).join('')}
+                    </div>
+                  `;
+                  menuList.appendChild(item);
                 });
-                if (pageNumber > 0) {
-                    const targetPage = document.getElementById(`page-${pageNumber}`);
-                    if (targetPage) {
-                        targetPage.style.display = 'block'; 
-                        setTimeout(() => targetPage.classList.add('active-page'), 50);
-                    }
-                }
             }
+        });
+      }
+
+      window.addEventListener('resize', render);
+
+      function openDescription(id) {
+        const dish = DISHES.find(d => d.id === id);
+        if (!dish) return;
+
+        const specialtyText = lines[id] ?? dish.line;
+        const jokeText = dish.joke;
+        
+        const complimentText = dish.compliment;
+
+        modalTitle.textContent = dish.name;
+        modalJoke.textContent = `"${jokeText}"`; 
+        modalSpecialty.innerHTML = `<span class="font-bold text-[var(--accent-rich)] text-sm uppercase tracking-wider block mb-2">Specialty</span>${specialtyText}`; 
+        
+        modalCompliment.textContent = complimentText;
+        
+        modal.classList.add('open');
+      }
+
+      function closeDescription() {
+        modal.classList.remove('open');
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('open')) {
+          closeDescription();
+        }
+      });
+
+      const leafShadow = document.getElementById('leafShadow');
+      if (leafShadow) {
+          document.addEventListener('mousemove', (e) => {
+              if (window.innerWidth >= 1024) {
+                  const x = (e.clientX / window.innerWidth) * 20;
+                  const y = (e.clientY / window.innerHeight) * 20;
+                  leafShadow.style.transform = `translate(${x}px, ${y}px)`;
+              }
+          });
+      }
+
+      render();
+    </script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
             
-            function openLetterSequence() {
-                openLetterButton.classList.remove('visible'); 
-                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#000080', '#C0C0C0', '#ffffff', '#ff0000'] });
-                letterContainer.classList.add('open');
-                imageWrapper.style.opacity = '0'; 
-                setTimeout(() => {
-                    letterContainer.classList.remove('active-letter');
-                    letterContainer.style.opacity = '0'; 
-                    imageWrapper.style.display = 'none';
-                    setTimeout(() => {
-                        letterContainer.style.display = 'none';
-                        showPage(1); 
-                    }, 500); 
-                }, 800); 
-            }
-            
-            startButton.addEventListener('click', () => {
-                startButton.classList.remove('visible');
-                startButtonContainer.style.display = 'none'; 
-                letterContainer.style.display = 'block';
-                setTimeout(() => letterContainer.classList.add('active-letter'), 50);
-                imageWrapper.style.display = 'block';
-                setTimeout(() => imageWrapper.style.opacity = '1', 100);
-                setTimeout(() => openLetterButton.classList.add('visible'), 550);
-            });
-
-            openLetterButton.addEventListener('click', openLetterSequence);
-            imageWrapper.addEventListener('click', openLetterSequence);
-
-            nextButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const targetPageNumber = button.getAttribute('data-target');
-                    showPage(targetPageNumber);
-                });
-            });
-
             const navLinks = document.querySelectorAll('.nav-panel .nav-link');
             const mainContent = document.getElementById('mainContent');
             const topNav = document.getElementById('topNav');
@@ -617,201 +1327,78 @@
             const navToggle = document.getElementById('navToggle');
             const navToggleIcon = document.getElementById('navToggleIcon');
             const navToggleX = document.getElementById('navToggleX');
-
             let areNavsOpen = false;
 
             function openAllNavs() {
-                topNav.classList.remove('-translate-y-full'); bottomNav.classList.remove('translate-y-full');
-                leftNav.classList.remove('-translate-x-full'); rightNav.classList.remove('translate-x-full');
-                document.body.classList.add('body-nav-open');
-                navToggleIcon.classList.add('hidden'); navToggleX.classList.remove('hidden'); areNavsOpen = true;
+                if(topNav) topNav.classList.remove('-translate-y-full');
+                if(bottomNav) bottomNav.classList.remove('translate-y-full');
+                if(leftNav) leftNav.classList.remove('-translate-x-full');
+                if(rightNav) rightNav.classList.remove('translate-x-full');
+                if(mainContent) {
+                    mainContent.classList.remove('pt-20');
+                    mainContent.classList.add('pt-14', 'pb-14', 'pl-24', 'pr-24');
+                }
+                if(navToggleIcon) navToggleIcon.classList.add('hidden');
+                if(navToggleX) navToggleX.classList.remove('hidden');
+                areNavsOpen = true;
             }
 
             function closeAllNavs() {
-                topNav.classList.add('-translate-y-full'); bottomNav.classList.add('translate-y-full');
-                leftNav.classList.add('-translate-x-full'); rightNav.classList.add('translate-x-full');
-                document.body.classList.remove('body-nav-open');
-                navToggleIcon.classList.remove('hidden'); navToggleX.classList.add('hidden'); areNavsOpen = false;
+                if(topNav) topNav.classList.add('-translate-y-full');
+                if(bottomNav) bottomNav.classList.add('translate-y-full');
+                if(leftNav) leftNav.classList.add('-translate-x-full');
+                if(rightNav) rightNav.classList.add('translate-x-full');
+                if(mainContent) {
+                    mainContent.classList.remove('pt-14', 'pb-14', 'pl-24', 'pr-24');
+                    mainContent.classList.add('pt-20');
+                }
+                if(navToggleIcon) navToggleIcon.classList.remove('hidden');
+                if(navToggleX) navToggleX.classList.add('hidden');
+                areNavsOpen = false;
             }
 
-            function toggleAllNavs() { if (areNavsOpen) closeAllNavs(); else openAllNavs(); }
-
-            navToggle.addEventListener('click', (e) => { e.stopPropagation(); toggleAllNavs(); });
-            mainContent.addEventListener('click', (e) => { if (e.target.closest('button')) return; if (areNavsOpen) closeAllNavs(); });
+            function toggleAllNavs() {
+                if (areNavsOpen) {
+                    closeAllNavs();
+                } else {
+                    openAllNavs();
+                }
+            }
+            
+            if(navToggle) {
+                navToggle.addEventListener('click', (e) => {
+                    e.stopPropagation(); 
+                    toggleAllNavs();
+                });
+            }
+            
+            if(mainContent) {
+                mainContent.addEventListener('click', () => {
+                    if (areNavsOpen) {
+                        closeAllNavs();
+                    }
+                });
+            }
+            
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
-                    const targetHash = e.currentTarget.getAttribute('href');
-                    if (targetHash.startsWith('#')) { e.preventDefault(); if (areNavsOpen) closeAllNavs(); }
-                    if (areNavsOpen) closeAllNavs();
-                });
-            });
-            closeAllNavs();
-        }
-
-        function initDesktopFunctions() {
-            function updateClock() {
-                const now = new Date();
-                let hours = now.getHours(); const minutes = now.getMinutes(); const ampm = hours >= 12 ? 'PM' : 'AM';
-                hours = hours % 12; hours = hours ? hours : 12; 
-                const strTime = hours + ':' + (minutes < 10 ? '0' + minutes : minutes) + ' ' + ampm;
-                document.getElementById('clock').innerText = strTime;
-            }
-            setInterval(updateClock, 1000); updateClock();
-            
-            generateStartMenuApps();
-            // REMOVED: openMsgWindow() default call
-
-            document.addEventListener('click', function(event) {
-                const menu = document.getElementById('start-menu');
-                const btn = document.querySelector('.start-btn');
-                const isClickInside = menu.contains(event.target) || btn.contains(event.target);
-                if (!isClickInside && menu.style.display === 'flex') { toggleStartMenu(); }
-            });
-            
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Meta' || e.code === 'MetaLeft' || e.code === 'MetaRight') {
-                    e.preventDefault(); 
-                    toggleStartMenu();
-                }
-                // DELETE KEY Functionality
-                if (e.key === 'Delete') {
-                    const recycleWindow = document.getElementById('recycle-window');
-                    if (recycleWindow && recycleWindow.style.display === 'flex') {
-                        emptyRecycleBin();
+                    const targetHref = e.currentTarget.getAttribute('href');
+                    
+                    if (targetHref && targetHref.startsWith('#')) {
+                        e.preventDefault(); 
                     }
-                }
-            });
-        }
 
-        function generateStartMenuApps() {
-            const mobileLinks = document.querySelectorAll('#mobile-wrapper .nav-link');
-            const menuContainer = document.getElementById('start-menu-items');
-            if (!menuContainer) return;
-            menuContainer.innerHTML = '';
-            
-            const programsHeader = document.createElement('div');
-            programsHeader.style.padding = '4px 8px'; programsHeader.style.fontWeight = 'bold';
-            programsHeader.style.borderBottom = '1px solid #808080'; programsHeader.style.marginBottom = '4px';
-            programsHeader.innerText = 'Programs';
-            menuContainer.appendChild(programsHeader);
-
-            mobileLinks.forEach(link => {
-                const title = link.innerText; const href = link.getAttribute('href');
-                const item = document.createElement('a');
-                item.className = 'start-menu-item'; item.href = href;
-                
-                // FIXED: Wait before closing menu so navigation triggers
-                item.addEventListener('click', function() {
-                    setTimeout(() => toggleStartMenu(), 200); 
+                    if (areNavsOpen) {
+                        setTimeout(closeAllNavs, 100); 
+                    }
                 });
-
-                item.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg><span>${title}</span>`;
-                menuContainer.appendChild(item);
             });
-            
-            const divider = document.createElement('div'); divider.className = 'start-divider'; menuContainer.appendChild(divider);
-            const shutdown = document.createElement('div'); shutdown.className = 'start-menu-item';
-            shutdown.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg><span>Shut Down...</span>`;
-            menuContainer.appendChild(shutdown);
-        }
 
-        window.toggleStartMenu = function() {
-            const menu = document.getElementById('start-menu');
-            const btn = document.querySelector('.start-btn');
-            if (menu.style.display === 'flex') {
-                menu.style.display = 'none'; btn.classList.remove('active');
-            } else {
-                menu.style.display = 'flex'; btn.classList.add('active'); menu.style.zIndex = 1000;
+            if (!topNav || !bottomNav || !leftNav || !rightNav || !mainContent || !navToggleIcon || !navToggleX) {
+                
             }
-        };
-
-        // --- MSG WINDOW FUNCTIONS ---
-        let isMsgMaximized = false;
-        window.minimizeMsgWindow = function() { document.getElementById('msg-window').style.display = 'none'; };
-        window.maximizeMsgWindow = function() {
-            const win = document.getElementById('msg-window');
-            isMsgMaximized = !isMsgMaximized;
-            if (isMsgMaximized) win.classList.add('maximized'); else win.classList.remove('maximized');
-        };
-        window.closeMsgWindow = function() {
-            document.getElementById('msg-window').style.display = 'none';
-            document.getElementById('taskbar-tab-msg').style.display = 'none';
-        };
-        window.openMsgWindow = function() {
-            const win = document.getElementById('msg-window');
-            win.style.display = 'flex'; win.style.zIndex = 60;
-            document.getElementById('taskbar-tab-msg').style.display = 'flex';
-            document.getElementById('recycle-window').style.zIndex = 50;
-            // Hide notification badge
-            document.getElementById('letter-notification').style.display = 'none';
-        };
-        window.toggleMsgWindow = function() {
-            const win = document.getElementById('msg-window');
-            if (win.style.display === 'none') { 
-                win.style.display = 'flex'; win.style.zIndex = 60; 
-                document.getElementById('recycle-window').style.zIndex = 50;
-                // Hide notification badge
-                document.getElementById('letter-notification').style.display = 'none';
-            } else { 
-                win.style.display = 'none'; 
-            }
-        };
-
-        // --- RECYCLE BIN FUNCTIONS ---
-        let isRecycleMaximized = false;
-        window.openRecycleWindow = function() {
-            const win = document.getElementById('recycle-window');
-            win.style.display = 'flex'; win.style.zIndex = 60;
-            document.getElementById('taskbar-tab-recycle').style.display = 'flex';
-            document.getElementById('msg-window').style.zIndex = 50;
-        };
-        window.closeRecycleWindow = function() {
-            document.getElementById('recycle-window').style.display = 'none';
-            document.getElementById('taskbar-tab-recycle').style.display = 'none';
-        };
-        window.minimizeRecycleWindow = function() {
-            document.getElementById('recycle-window').style.display = 'none';
-        };
-        window.maximizeRecycleWindow = function() {
-            const win = document.getElementById('recycle-window');
-            isRecycleMaximized = !isRecycleMaximized;
-            if (isRecycleMaximized) win.classList.add('maximized'); else win.classList.remove('maximized');
-        };
-        window.toggleRecycleWindow = function() {
-            const win = document.getElementById('recycle-window');
-            if (win.style.display === 'none') {
-                win.style.display = 'flex'; win.style.zIndex = 60;
-                document.getElementById('msg-window').style.zIndex = 50;
-            } else {
-                win.style.display = 'none';
-            }
-        };
-        window.emptyRecycleBin = function() {
-            const content = document.getElementById('recycle-content');
-            content.innerHTML = ''; // Clear items
             
-            // Celebration
-            confetti({
-                particleCount: 200,
-                spread: 100,
-                origin: { y: 0.6 },
-                colors: ['#00FF00', '#FFFF00', '#FF0000']
-            });
-            
-            // Optional: Show empty message
-            const emptyMsg = document.createElement('div');
-            emptyMsg.style.width = '100%'; emptyMsg.style.textAlign = 'center'; emptyMsg.style.padding = '20px';
-            emptyMsg.innerHTML = "<i>Recycle Bin is empty</i>";
-            content.appendChild(emptyMsg);
-        };
-
-        window.desktopNextPage = function(pageNum) {
-            confetti({ particleCount: 50, spread: 40, origin: { y: 0.6 }, colors: ['#000080', '#008080'] });
-            const pages = document.querySelectorAll('.desktop-page');
-            pages.forEach(p => p.classList.remove('active'));
-            const target = document.getElementById(`desktop-page-${pageNum}`);
-            if(target) target.classList.add('active');
-        };
+        });
     </script>
 </body>
 </html>
