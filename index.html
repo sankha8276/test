@@ -1,1641 +1,1120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Radio Birthday</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Playfair+Display:ital,wght@1,500;900&family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Birthday Star - Wikipedia</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Special+Elite&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Noto+Serif:wght@400;700&display=swap');
+
+:root {
+    --ink-black: #1a1a1a;
+    --paper-white: #f4f1ea;
+    --accent-red: #8b0000;
+    --wiki-bg: #f6f6f6;
+    --wiki-border: #a7d7f9;
+    --wiki-link: #3366cc;
+    --wiki-text: #202122;
+}
+
 body {
-    margin: 0;
-    background: #050505;
-    font-family: "Poppins", sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
-    background-image: radial-gradient(circle at center, #1a1a1a 0%, #000 100%);
-    user-select: none;
+    transition: background-color 0.5s ease;
 }
 
-#radioWrapper {
-    width: 100%;
-    max-width: 900px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1;
-}
-
-.freq-readout {
-    display: block;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.7em;
-    color: #ff5555;
-    margin-bottom: 5px;
-    letter-spacing: 1px;
-    text-shadow: 0 0 8px #ff2222;
-}
-
-.hint-text {
-    display: block;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.5em; 
-    color: #ffecd1; 
-    margin-top: 10px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    text-shadow: 0 0 10px #ffae00, 0 0 20px #ff4400, 0 0 30px #ff2200;
-    animation: pulseHint 2s infinite ease-in-out;
-}
-
-@keyframes pulseHint {
-    0%, 100% { opacity: 0.5; } 
-    50% { opacity: 1; }
-}
-
-.nav-overlay {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-color: rgba(20, 5, 38, 0.95);
-    backdrop-filter: blur(10px);
-    z-index: 100;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-    padding: 2rem;
-    overflow-y: auto;
-}
-
-.nav-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.nav-content {
-    width: 100%;
-    max-width: 1000px;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-    text-align: center;
-    transform: scale(0.95);
-    transition: transform 0.3s ease;
-}
-
-.nav-overlay.active .nav-content {
-    transform: scale(1);
-}
-
-@media (min-width: 768px) {
-    .nav-content {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 25px;
-    }
-}
-
-.nav-link {
-    text-decoration: none;
-    color: #ff00ff;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 500;
-    padding: 12px;
-    border: 1px solid rgba(255, 0, 255, 0.2);
-    border-radius: 8px;
-    transition: all 0.2s;
-    text-transform: uppercase;
-    background: rgba(255, 0, 255, 0.05);
-    letter-spacing: 1px;
-}
-
-.nav-link:hover {
-    background-color: #ff00ff;
-    color: #000;
-    box-shadow: 0 0 15px #ff00ff;
-    transform: translateY(-2px);
-    border-color: #ff00ff;
-}
-
-.menu-toggle-btn {
-    position: fixed;
-    top: 20px; left: 20px;
-    z-index: 110;
-    width: 50px; height: 50px;
-    background: rgba(20, 5, 38, 0.9);
-    border: 2px solid #ff00ff;
-    border-radius: 50%;
-    color: #ff00ff;
-    font-family: sans-serif;
-    font-size: 1.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    box-shadow: 0 0 15px rgba(255, 0, 255, 0.5);
-    transition: all 0.3s;
-    user-select: none;
-}
-.menu-toggle-btn:hover { background: #ff00ff; color: #000; transform: rotate(90deg); }
-.menu-active { background: #ff00ff; color: #000; transform: rotate(90deg); border-color: #fff; box-shadow: 0 0 20px #fff;}
-
-@media (max-width: 799px) {
-    .vintageRadio { display: none; }
-
-    /* Ensure the newspaper/photo modal never shows on mobile */
-    .news-modal-overlay {
-        display: none !important;
-    }
-    
-    .neonRadio {
-        width: 90%; 
-        max-width: 380px; 
-        height: 85vh;     
-        max-height: 800px;
-        
-        background: radial-gradient(circle at top right, #2a0a0a 0%, #000000 70%);
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: 40px 20px;
-        box-sizing: border-box;
-        color: #fff;
-        position: relative;
-        overflow: hidden;
-        
-        border: 12px solid #111; 
-        border-radius: 40px; 
-        outline: 2px solid #333; 
-        
-        box-shadow: 0 30px 60px rgba(0,0,0,0.8);
-    }
-
-    .neonRadio::before, .neonRadio::after {
-        content: "";
-        position: absolute;
-        left: 20px; right: 20px;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, #ff3333, transparent);
-        opacity: 0.5;
-    }
-    .neonRadio::before { top: 70px; }
-    .neonRadio::after { bottom: 100px; }
-    
-    .now-playing-text {
-        text-align: center;
-        font-family: 'Orbitron', sans-serif;
-        font-size: 0.9rem;
-        color: #ff3333;
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        margin-bottom: 10px;
-        text-shadow: 0 0 10px #ff3333;
-        opacity: 0.8;
-    }
-
-    .stereo-indicator {
-        position: absolute;
-        top: 50%;
-        width: 10px;
-        height: 10px;
-        background: #ff0000;
-        border-radius: 50%;
-        box-shadow: 0 0 15px #ff0000, 0 0 30px #ff0000;
-        opacity: 0; 
-        transition: opacity 0.3s;
-    }
-    .stereo-left { left: 30px; }
-    .stereo-right { right: 30px; }
-    .stereo-on {
-        opacity: 1;
-        animation: pulseStereo 1.5s infinite ease-in-out alternate;
-    }
-    @keyframes pulseStereo {
-        0% { transform: scale(0.8); opacity: 0.7; }
-        100% { transform: scale(1.2); opacity: 1; }
-    }
-
-    .mobile-main-display {
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        z-index: 2;
-        position: relative; 
-    }
-
-    .waveform-bg {
-        position: absolute;
-        top: 20%;
-        left: 0;
-        width: 200%;
-        height: 60%;
-        background: repeating-linear-gradient(
-            90deg,
-            transparent 0%,
-            rgba(255, 51, 51, 0.05) 2%,
-            transparent 4%
-        );
-        opacity: 0;
-        pointer-events: none;
-        z-index: -1;
-    }
-    .waveform-on {
-        opacity: 1;
-        animation: moveWave 10s linear infinite;
-    }
-    @keyframes moveWave {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
-    }
-
-    .big-freq {
-        font-family: 'Orbitron', sans-serif;
-        font-size: 5rem;
-        font-weight: 700;
-        letter-spacing: -2px;
-        color: #ffffff;
-        text-shadow: 
-            0 0 10px rgba(255, 255, 255, 0.8),
-            0 0 20px rgba(255, 51, 51, 0.6),
-            0 0 40px rgba(255, 0, 0, 0.4);
-    }
-    .unit-text {
-        font-family: 'Poppins', sans-serif;
-        font-size: 1.5rem;
-        color: #ff3333;
-        font-weight: 600;
-        margin-left: 10px;
-        text-transform: uppercase;
-        text-shadow: 0 0 10px #ff3333;
-    }
-    
-    .mobile-msg-text {
-        margin-top: 30px;
-        font-size: 1.1rem;
-        color: #ccc;
-        min-height: 60px;
-        padding: 0 15px;
-        line-height: 1.5;
-        font-weight: 300;
-    }
-
-    .visualizer {
-        display: flex;
-        align-items: flex-end;
-        justify-content: center; 
-        gap: 4px;
-        height: 40px;
-        margin-bottom: 20px;
-        opacity: 0.8;
-    }
-    .viz-bar {
-        width: 6px;
-        background: #ff3333;
-        border-radius: 3px;
-        box-shadow: 0 0 10px #ff3333;
-        animation: bounce 0.5s infinite ease-in-out alternate;
-    }
-    .viz-bar:nth-child(1) { height: 20px; animation-delay: 0.1s; }
-    .viz-bar:nth-child(2) { height: 35px; animation-delay: 0.3s; }
-    .viz-bar:nth-child(3) { height: 25px; animation-delay: 0.2s; }
-    .viz-bar:nth-child(4) { height: 15px; animation-delay: 0.4s; }
-    .viz-bar:nth-child(5) { height: 30px; animation-delay: 0.1s; }
-
-    @keyframes bounce {
-        0% { transform: scaleY(0.5); }
-        100% { transform: scaleY(1.2); }
-    }
-
-    .mobile-tuner-container {
-        width: 100%;
-        height: 100px;
-        position: relative;
-        margin-bottom: 30px;
-        overflow: hidden;
-        cursor: grab;
-        background: linear-gradient(180deg, transparent, rgba(255, 51, 51, 0.05), transparent);
-    }
-    .mobile-tuner-container:active {
-        cursor: grabbing;
-    }
-
-    .mobile-ruler-scale {
-        width: 100%;
-        height: 100%;
-        background-image: 
-            linear-gradient(to right, #fff 1px, transparent 1px), 
-            linear-gradient(to right, rgba(255,255,255,0.5) 1px, transparent 1px);
-        background-size: 10% 25px, 2% 12px; 
-        background-position: center bottom 40px, center bottom 40px;
-        background-repeat: repeat-x;
-    }
-    
-    .mobile-ruler-nums {
-        display: flex;
-        justify-content: space-between;
-        padding: 0 2%;
-        margin-top: 15px;
-        font-family: 'Orbitron', sans-serif;
-        font-size: 0.8rem;
-        color: #ff3333;
-        text-shadow: 0 0 5px #ff3333;
-    }
-
-    .mobile-pointer {
-        position: absolute;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 4px;
-        height: 60px;
-        background: #ff0000;
-        border-radius: 2px;
-        box-shadow: 0 0 15px #ff0000, 0 0 30px #ff0000;
-        z-index: 10;
-    }
-
-    .mobile-controls-bar {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 50px;
-        margin-bottom: 40px;
-    }
-
-    .control-btn {
-        background: none;
-        border: none;
-        color: #fff;
-        cursor: pointer;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: transform 0.1s;
-    }
-    .control-btn:active {
-        transform: scale(0.9);
-    }
-    
-    .btn-skip {
-        font-size: 2.5rem;
-        color: #fff;
-        opacity: 0.8;
-        text-shadow: 0 0 10px #ff3333;
-    }
-    
-    .btn-play {
-        width: 80px;
-        height: 80px;
-        background: #ff3333; 
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        box-shadow: 0 0 30px rgba(255, 51, 51, 0.6);
-        border: 4px solid #aa0000;
-    }
-    .play-icon {
-        width: 0; 
-        height: 0; 
-        border-top: 14px solid transparent;
-        border-bottom: 14px solid transparent;
-        border-left: 24px solid #fff;
-        margin-left: 6px;
-    }
-    .pause-icon {
-        width: 20px;
-        height: 24px;
-        border-left: 6px solid #fff;
-        border-right: 6px solid #fff;
-    }
-    
-    .mobile-off-overlay {
-        opacity: 0.2;
-        pointer-events: none;
-        filter: blur(8px) grayscale(100%);
-    }
-    .mobile-off-overlay .visualizer,
-    .mobile-off-overlay .now-playing-text,
-    .mobile-off-overlay .waveform-bg {
-        display: none;
-    }
-}
-
-@media (min-width: 800px) {
-    .nav-overlay {
-        background-color: rgba(62, 39, 35, 0.98); 
-        backdrop-filter: blur(5px);
-    }
-    
-    .nav-link {
-        color: #e8e0d0; 
-        border-color: #8d6e63;
-        background: rgba(255, 255, 255, 0.05);
-        font-family: 'Playfair Display', serif; 
-        letter-spacing: 2px;
-    }
-
-    .nav-link:hover {
-        background-color: #8d6e63; 
-        color: #fff;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        border-color: #a1887f;
-        transform: translateY(-2px);
-    }
-
-    .menu-toggle-btn {
-        background: #5d4037; 
-        border: 2px solid #a1887f;
-        color: #f0e4d4;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-    }
-    .menu-toggle-btn:hover {
-        background: #8d6e63;
-        color: #fff;
-        transform: rotate(90deg);
-    }
-    .menu-active {
-        background: #3e2723;
-        border-color: #f0e4d4;
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-    }
-
+/* ================= MOBILE STYLES (< 1024px) ================= */
+@media (max-width: 1023px) {
     body {
-        background-color: #f0e4d4; 
-        background-image: none;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        overflow: hidden;
-        position: relative;
-    }
-
-    body::before {
-        content: "";
-        position: fixed;
-        top: 0; left: 0; right: 0; bottom: 0;
-        z-index: -2;
-        
-        background-color: #f4e4bc;
-        background-image: 
-            radial-gradient(circle at 100% 50%, transparent 20%, rgba(160, 130, 100, 0.05) 21%, rgba(160, 130, 100, 0.05) 34%, transparent 35%, transparent),
-            radial-gradient(circle at 0% 50%, transparent 20%, rgba(160, 130, 100, 0.05) 21%, rgba(160, 130, 100, 0.05) 34%, transparent 35%, transparent),
-            repeating-linear-gradient(90deg, rgba(160, 130, 100, 0.03) 0px, transparent 1px, transparent 40px),
-            radial-gradient(circle at center, transparent 30%, rgba(100, 70, 50, 0.1) 100%);
-        
-        background-size: 80px 80px, 80px 80px, 100% 100%, 100% 100%;
+        font-family: 'Crimson Text', serif;
+        background: url('https://images.unsplash.com/photo-1585314062340-f1a5a7c9328d?q=80&w=2070&auto=format&fit=crop') no-repeat center center/cover fixed;
+        min-height: 100vh;
+        color: var(--ink-black);
+        padding-top: 5rem; 
+        overflow-x: hidden;
     }
 
     body::after {
         content: "";
         position: fixed;
-        bottom: 0; left: 0; right: 0;
-        height: 35vh; 
-        z-index: -1;
-        
-        background-color: #5d4037;
-        background-image: 
-            repeating-linear-gradient(90deg, rgba(255,255,255,0.02) 0px, transparent 1px, transparent 10px),
-            linear-gradient(to bottom, #4e342e 0%, #3e2723 100%);
-            
-        border-top: 8px solid #3e2723;
-        box-shadow: 0 -10px 30px rgba(0,0,0,0.3);
-    }
-
-    .neonRadio { display: none; }
-
-    .vintageRadio {
-        width: 720px;
-        height: 440px;
-        border-radius: 40px;
-        background-color: #5c3a21;
-        background-image: 
-            repeating-linear-gradient(45deg, rgba(0,0,0,0.06) 0px, transparent 2px, transparent 4px),
-            linear-gradient(to bottom right, rgba(0,0,0,0) 0%, rgba(0,0,0,0.4) 100%),
-            radial-gradient(ellipse at center, #7d512d 0%, #3e2612 100%),
-            url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.1" numOctaves="3" result="noise"/><feDiffuseLighting in="noise" lighting-color="#a07040" surfaceScale="2"><feDistantLight azimuth="45" elevation="60"/></feDiffuseLighting></filter><rect width="100" height="100" filter="url(#noise)" opacity="0.3"/></svg>');
-        background-size: auto, auto, auto, 200px 200px;
-        
-        border: 8px solid #2b1b0e;
-        border-bottom-width: 12px;
-        box-shadow: 
-            inset 0 0 40px #000,
-            0 30px 50px rgba(60, 40, 20, 0.4), 
-            0 5px 0 #1a1008,
-            0 0 0 10px #3e2612,
-            0 0 0 12px #5c3a21,
-            0 0 20px 12px rgba(0,0,0,0.5);
-        position: relative;
-        padding: 30px;
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: -100px; 
-    }
-
-    .desktop-decorations {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        pointer-events: none;
-        z-index: -1; 
-    }
-    
-    .newspaper {
-        position: absolute;
-        bottom: -30px;
-        left: -120px;
-        width: 200px;
-        height: 140px;
-        background: #e3ddd3;
-        transform: rotate(-15deg);
-        box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-        padding: 15px;
-        box-sizing: border-box;
-        border: 1px solid #c0b0a0;
-        z-index: 10;
-        cursor: pointer;
-        pointer-events: auto;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .newspaper:hover {
-        transform: rotate(-12deg) scale(1.05) translateY(-5px);
-        box-shadow: 0 15px 30px rgba(0,0,0,0.3);
-    }
-
-    .newspaper::before { 
-        content: "";
-        position: absolute;
-        top: 0; right: 0;
-        width: 100%; height: 100%;
-        background: linear-gradient(to right, rgba(0,0,0,0.05) 0%, transparent 10%, transparent 90%, rgba(0,0,0,0.05) 100%);
-    }
-    .news-header {
-        font-family: 'Playfair Display', serif;
-        font-weight: 900;
-        font-size: 1.2rem;
-        border-bottom: 2px solid #333;
-        margin-bottom: 8px;
-        color: #222;
-        text-align: center;
-        letter-spacing: 1px;
-    }
-    .news-body {
-        display: flex; gap: 5px;
-    }
-    .news-col {
-        flex: 1;
-        display: flex; flex-direction: column; gap: 4px;
-    }
-    .news-line {
-        height: 3px;
-        background: #999;
-        width: 100%;
-    }
-
-    .news-modal-overlay {
-        position: fixed;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background: rgba(0,0,0,0.6);
-        backdrop-filter: blur(5px);
-        z-index: 200;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.3s ease;
-    }
-    .news-modal-overlay.open {
-        opacity: 1;
-        pointer-events: auto;
-    }
-    .expanded-paper {
-        width: 600px;
-        height: 80vh;
-        max-height: 800px;
-        background: #fdf5e6; 
-        padding: 40px;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-        transform: scale(0.8) rotate(-2deg);
-        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        overflow-y: auto;
-        font-family: 'Playfair Display', serif;
-        color: #2c1e12;
-        text-align: center;
-        border: 1px solid #c0b0a0;
-        position: relative;
-        background-image: radial-gradient(#d0c0a0 1px, transparent 0);
-        background-size: 20px 20px;
-    }
-    .news-modal-overlay.open .expanded-paper {
-        transform: scale(1) rotate(0deg);
-    }
-    .paper-close-btn {
-        position: absolute;
-        top: 10px; right: 20px;
-        font-size: 2.5rem;
-        cursor: pointer;
-        color: #5d4037;
-        line-height: 1;
-        transition: color 0.2s;
-        z-index: 5;
-    }
-    .paper-close-btn:hover {
-        color: #ff3333;
-    }
-    .news-header-large {
-        font-size: 3rem;
-        font-weight: 900;
-        border-bottom: 4px double #2c1e12;
-        margin-bottom: 5px;
-        line-height: 1;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-    }
-    .news-date {
-        font-family: "Poppins", sans-serif;
-        font-size: 0.9rem;
-        font-weight: 500;
-        text-transform: uppercase;
-        color: #555;
-        margin-bottom: 20px;
-        border-bottom: 1px solid #555;
-        padding-bottom: 10px;
-        letter-spacing: 1px;
-    }
-    .news-headline {
-        font-size: 2.5rem;
-        font-weight: 900;
-        margin: 20px 0;
-        line-height: 1.1;
-        color: #1a1a1a;
-    }
-    .news-image-placeholder {
-        width: 100%;
-        height: 350px;
-        background: #e8e0d0;
-        margin: 20px 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border: 4px double #2c1e12;
-        position: relative;
-        overflow: hidden;
-    }
-    .news-photo {
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
-        object-fit: cover;
-        filter: sepia(0.3) contrast(1.1) grayscale(0.2); 
-        transition: transform 5s ease;
-    }
-    .news-image-placeholder:hover .news-photo {
-        transform: scale(1.05);
-    }
-    
-    .news-columns {
-        text-align: left;
-        column-count: 2;
-        column-gap: 30px;
-        font-family: 'Times New Roman', Times, serif;
-        font-size: 1.1rem;
-        line-height: 1.6;
-    }
-    .news-columns p {
-        margin-bottom: 15px;
-    }
-    .news-columns p:first-child::first-letter {
-        font-size: 3.5rem;
-        float: left;
-        line-height: 0.8;
-        padding-right: 8px;
-        font-weight: bold;
-        font-family: 'Playfair Display', serif;
-    }
-
-    .coffee-wrapper {
-        position: absolute;
-        bottom: -20px;
-        right: -100px;
-        width: 100px; height: 100px;
-        z-index: 10;
-        transform: scale(0.9);
-    }
-    .coffee-saucer {
-        width: 90px; height: 25px;
-        background: #fdfdfd;
-        border-radius: 50%;
-        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        position: absolute;
-        bottom: 0;
-        left: 50%; transform: translateX(-50%);
-        border: 1px solid #dcdcdc;
-    }
-    .coffee-cup {
-        width: 60px; height: 50px;
-        background: #fff;
-        border-radius: 0 0 30px 30px;
-        position: absolute;
-        bottom: 10px;
-        left: 50%; transform: translateX(-50%);
-        box-shadow: inset -5px 0 10px rgba(0,0,0,0.05);
-        border: 1px solid #dcdcdc;
-        z-index: 2;
-    }
-    .coffee-cup::after { 
-        content: "";
-        position: absolute;
-        top: 10px; right: -15px;
-        width: 20px; height: 25px;
-        border: 5px solid #fff;
-        border-radius: 0 15px 15px 0;
-        box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-    }
-    .coffee-liquid {
-        width: 50px; height: 12px;
-        background: #4b3621;
-        border-radius: 50%;
-        position: absolute;
-        top: -6px; left: 50%; transform: translateX(-50%);
-        border: 3px solid #fff;
-        z-index: 3;
-        box-sizing: border-box;
-    }
-    .steam {
-        position: absolute;
-        width: 8px; height: 20px;
-        background: #fff;
-        border-radius: 50%;
-        opacity: 0;
-        filter: blur(4px);
-        animation: rise 3s infinite;
-        bottom: 50px; left: 50%;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.1'/%3E%3C/svg%3E");
         pointer-events: none;
-    }
-    .steam:nth-child(1) { animation-delay: 0s; transform: translateX(-10px); }
-    .steam:nth-child(2) { animation-delay: 1.2s; transform: translateX(0px); }
-    .steam:nth-child(3) { animation-delay: 2.4s; transform: translateX(10px); }
-    
-    @keyframes rise {
-        0% { opacity: 0; transform: translateY(0) scale(1); }
-        50% { opacity: 0.3; }
-        100% { opacity: 0; transform: translateY(-50px) scale(2.5); }
+        z-index: 9999;
+        opacity: 0.4;
+        mix-blend-mode: multiply;
     }
 
-    .vintageRadio::after {
-        content: "";
-        position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-        border-radius: 30px;
-        background: linear-gradient(120deg, rgba(255,255,255,0.1) 0%, transparent 40%);
-        pointer-events: none;
-        z-index: 5;
-    }
-
-    .feet {
-        position: absolute;
-        bottom: -15px;
-        width: 60px;
-        height: 20px;
-        background: #111;
-        border-radius: 0 0 10px 10px;
-        box-shadow: 0 5px 5px rgba(0,0,0,0.5);
-    }
-    .feet.left { left: 80px; }
-    .feet.right { right: 80px; }
-
-    .speakerSection {
-        width: 40%;
-        height: 100%;
-        position: relative;
-        border: 4px solid #3e2612;
-        border-radius: 24px;
-        padding: 5px;
-        box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
-        box-sizing: border-box;
-    }
-
-    .grill {
-        width: 100%;
-        height: 100%;
-        border-radius: 20px;
-        background-color: #d4b585;
-        background-image: 
-            radial-gradient(#4a3826 15%, transparent 16%),
-            radial-gradient(#4a3826 15%, transparent 16%);
-        background-size: 8px 8px;
-        background-position: 0 0, 4px 4px;
-        box-shadow: inset 0 0 30px rgba(0,0,0,0.7);
-        border: 4px solid #4a3018;
-        outline: 2px dashed #8b5a2b;
-        outline-offset: -8px;
-    }
-    
-    .logo-badge {
-        position: absolute;
-        bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: linear-gradient(to bottom, #f7d699, #cfa35d);
-        padding: 4px 15px;
-        border-radius: 4px;
-        font-family: 'Playfair Display', serif;
-        font-weight: bold;
-        font-size: 0.9rem;
-        color: #3e2612;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-        text-transform: uppercase;
-        letter-spacing: 2px;
-    }
-
-    .interfaceSection {
-        width: 55%;
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        position: relative;
-    }
-
-    .displayPanel {
-        background: #111;
-        border-radius: 12px;
-        padding: 10px;
-        height: 140px;
-        position: relative;
-        border: 4px solid #cfa35d;
-        box-shadow: 0 5px 10px rgba(0,0,0,0.5);
-        outline: 3px double #a07040;
-        outline-offset: 4px;
-    }
-
-    .displayLarge {
-        width: 100%;
-        height: 100%;
-        color: #ffdd99;
-        font-family: 'Courier New', monospace;
-        font-weight: bold;
-        font-size: 1.15rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        text-shadow: 0 0 8px #ffcc80, 0 0 15px #ffaa55;
-        line-height: 1.5;
-        position: relative;
-        z-index: 2;
-        transition: opacity 0.5s, filter 0.5s;
-        will-change: opacity, filter;
-    }
-    
-    .displayPanel::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(110deg, rgba(255,255,255,0.05) 30%, rgba(255,255,255,0) 31%);
-        z-index: 3;
-        pointer-events: none;
-    }
-
-    .tunerArea {
-        background: #1a1008;
-        border-radius: 8px;
-        height: 80px;
-        position: relative;
-        border-top: 2px solid #332211;
-        border-bottom: 2px solid #554433;
-        overflow: hidden;
-        box-shadow: inset 0 0 15px #000;
-        cursor: text; 
-        cursor: grab;
-    }
-    .tunerArea:active {
-        cursor: grabbing;
-    }
-
-    .tunerScale {
-        position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
-        background: repeating-linear-gradient(90deg, 
-            transparent 0, transparent 19px, 
-            rgba(255, 204, 128, 0.3) 20px
-        );
-        opacity: 0.5;
-        pointer-events: none;
-    }
-    .freq-nums {
-        position: absolute;
-        width: 100%;
-        top: 45px;
-        display: flex;
-        justify-content: space-between;
-        padding: 0 20px;
-        font-family: sans-serif;
-        font-size: 10px;
-        color: #cfa35d;
-        box-sizing: border-box;
-        pointer-events: none;
-    }
-
-    .fmPointer {
-        position: absolute;
-        top: 10px;
-        height: 60px;
-        width: 4px;
-        background: #ff4444;
-        border-radius: 2px;
-        box-shadow: 0 0 15px #ff0000, 0 0 30px #ff3300, 0 0 45px #ff5500;
-        z-index: 10;
-        left: 5%; 
-        pointer-events: none; 
-    }
-
-    .controls {
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-        height: 100px;
-    }
-
-    .knob-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        cursor: grab;
-    }
-    .knob-container:active {
-        cursor: grabbing;
-    }
-
-    .knob {
-        width: 70px;
-        height: 70px;
-        border-radius: 50%;
-        background: radial-gradient(circle at 30% 30%, #5e4b35, #2b1b0e);
-        box-shadow: 
-            0 10px 20px rgba(0,0,0,0.6),
-            inset 0 0 0 2px #1a1008,
-            0 0 0 4px #3e2612,
-            0 0 5px 4px rgba(0,0,0,0.3);
-        position: relative;
-        transition: transform 0.3s ease;
-        will-change: transform;
-    }
-
-    .knob::before {
-        content: "";
-        position: absolute;
-        top: 5px; left: 5px; right: 5px; bottom: 5px;
-        border-radius: 50%;
-        background: repeating-conic-gradient(#3e2612 0% 2%, #4a3018 2% 4%);
-        box-shadow: inset 0 2px 5px rgba(0,0,0,0.5);
-    }
-    
-    .knob::after {
-        content: "";
-        position: absolute;
-        top: 10px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 6px;
-        height: 6px;
-        background: #fff;
-        border-radius: 50%;
-        box-shadow: 0 0 5px rgba(255,255,255,0.8);
-        transition: background 0.3s, box-shadow 0.3s;
-    }
-
-    .knob-label {
-        text-align: center;
-        color: #d8b078;
-        font-size: 0.8rem;
-        margin-top: 10px;
-        font-family: sans-serif;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        text-shadow: 0 1px 2px #000;
-        user-select: none;
+    body.navs-open {
+        padding-left: 80px; 
+        padding-right: 80px;
     }
 }
 
-.fadeText {
-    animation: fade 0.8s ease;
-}
-@keyframes fade {
-    from { opacity: 0; transform: translateY(5px); }
-    to { opacity: 1; transform: translateY(0); }
+/* ================= DESKTOP STYLES (>= 1024px) ================= */
+@media (min-width: 1024px) {
+    body {
+        background-color: var(--wiki-bg);
+        font-family: 'Noto Sans', sans-serif;
+        color: var(--wiki-text);
+        padding: 0;
+        overflow-y: scroll;
+    }
+    body::after { display: none; }
+    /* Ensure symbols are hidden via CSS as a backup */
+    .float-symbol { display: none !important; }
 }
 
-.off {
-    opacity: 0.1 !important;
+/* Typography & Components */
+.font-newspaper-title { font-family: 'Abril Fatface', cursive; letter-spacing: 0.05em; font-weight: 400; }
+.font-serif-display { font-family: 'Cinzel', serif; font-weight: 700; }
+.font-newspaper-body { font-family: 'Crimson Text', serif; font-size: 1.1rem; line-height: 1.6; }
+.font-typewriter { font-family: 'Special Elite', monospace; }
+
+/* Desktop Wiki Specifics */
+.mw-body {
+    background-color: #ffffff;
+    border: 1px solid #a7d7f9;
+    border-right-width: 0;
+    margin-top: -1px;
+    padding: 1.25em 1.5em 1.5em 1.5em;
+}
+.firstHeading {
+    border-bottom: 1px solid #a2a9b1;
+    font-family: 'Linux Libertine','Georgia','Times','serif';
+    font-size: 1.8em;
+    font-weight: normal;
+    padding-bottom: 0.25em;
+    margin-bottom: 0.25em;
+}
+.mw-headline {
+    font-family: 'Linux Libertine','Georgia','Times','serif';
+    font-weight: bold;
+    font-size: 1.2em;
+    padding-top: 0.5em;
+    margin-top: 1em;
+    border-bottom: 1px solid #a2a9b1;
+    width: 100%;
+    display: block;
+}
+.toc {
+    background-color: #f8f9fa;
+    border: 1px solid #a2a9b1;
+    padding: 10px;
+    display: inline-block;
+    min-width: 200px;
+    margin-bottom: 1em;
+}
+.toc-title { font-weight: bold; text-align: center; margin-bottom: 0.5em; }
+.toc ul { list-style: none; padding-left: 0; }
+.toc li { font-size: 0.9em; margin-bottom: 0.2em; }
+.toc a { color: #0645ad; text-decoration: none; }
+.toc a:hover { text-decoration: underline; }
+
+/* Bouncy Button - Mobile/Interactive */
+.bouncy-button {
+    background-color: transparent;
+    color: var(--ink-black);
+    border-radius: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border: 2px solid var(--ink-black);
+    box-shadow: 4px 4px 0px var(--ink-black);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+}
+.bouncy-button:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--ink-black); background-color: rgba(26, 26, 26, 0.05); }
+.bouncy-button:active { transform: translate(4px, 4px); box-shadow: none; }
+.bouncy-button:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; transform: translate(2px, 2px); }
+
+/* Tic Tac Toe */
+#tictactoe-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    width: 240px; 
+    height: 240px;
+    margin: 2rem auto;
+    border: 3px solid var(--ink-black);
+    gap: 0;
+    background: transparent;
+}
+.cell {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem; font-weight: 400; cursor: pointer;
+    border: 1px solid var(--ink-black); transition: background-color 0.2s;
+    color: var(--ink-black); font-family: 'Special Elite', monospace; line-height: 1;
+}
+.cell:hover:not(:empty) { background-color: rgba(0,0,0,0.03); }
+.cell.O { color: var(--accent-red); }
+.cell:nth-child(3n) { border-right: none; }
+.cell:nth-child(n + 7) { border-bottom: none; }
+.cell:nth-child(3n-2) { border-left: none; }
+.cell:nth-child(n + 1):nth-child(-n + 3) { border-top: none; }
+
+/* Animations */
+@keyframes float-up {
+    0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0; }
+    20% { opacity: 0.6; } 80% { opacity: 0.6; }
+    100% { transform: translateY(-100vh) scale(1.2) rotate(360deg); opacity: 0; }
+}
+.float-symbol {
+    position: fixed; bottom: -50px; font-size: 24px;
+    font-family: 'Special Elite', monospace; color: #2a2a2a; 
+    pointer-events: none; animation: float-up 12s infinite linear;
+    z-index: 10; opacity: 0.7;
+}
+
+/* Nav */
+.nav-panel { transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); position: fixed; z-index: 200; }
+#leftNav, #rightNav { width: 60px; }
+.nav-link:hover { background-color: rgba(255, 255, 255, 0.1); transform: scale(1.05); }
+
+/* Fireworks */
+.fireworks-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; }
+.final-display-container {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 101; pointer-events: none; color: white; 
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+    opacity: 0; transition: opacity 2s ease-in-out; background-color: rgba(0, 0, 0, 0.95); 
+}
+
+/* Desktop Sidebar Links */
+.wiki-sidebar-link { display: block; padding: 6px 10px; color: #0645ad; text-decoration: none; font-size: 0.85rem; }
+.wiki-sidebar-link:hover { text-decoration: underline; }
+
+/* Wiki Components */
+.wiki-logo {
+    width: 135px; height: 135px;
+    background: url('https://upload.wikimedia.org/wikipedia/en/8/80/Wikipedia-logo-v2.svg') no-repeat center center;
+    background-size: contain; margin: 0 auto 1em auto;
+}
+.wiki-infobox {
+    float: right; clear: right; width: 300px; margin: 0 0 1em 1em;
+    border: 1px solid #a2a9b1; background-color: #f8f9fa;
+    padding: 0.2em; font-size: 88%; line-height: 1.5em;
+}
+.wiki-infobox-header { background-color: #b0c4de; text-align: center; font-weight: bold; padding: 0.2em; }
+.wiki-infobox-image { padding: 10px 0; text-align: center; }
+.wiki-infobox-data { display: flex; justify-content: space-between; padding: 4px 8px; border-bottom: 1px solid #eaecf0; }
+
+.wiki-tab {
+    padding: 8px 16px; border: 1px solid #a7d7f9; border-bottom: none;
+    background: #fff; margin-right: 4px; font-size: 0.85rem; color: #0645ad;
+}
+.wiki-tab.active {
+    font-weight: bold; color: #000; background: white;
+    padding-bottom: 9px; margin-bottom: -1px; z-index: 10; position: relative;
 }
 </style>
 </head>
+
 <body>
 
-<div class="news-modal-overlay" id="newsModal" onclick="closeNews(event)">
-    <div class="expanded-paper" onclick="event.stopPropagation()">
-        <div class="paper-close-btn" onclick="closeNews(event)">&times;</div>
-        <div class="news-header-large">THE DAILY CELEBRATION</div>
-        <div class="news-date">Special Edition • Vol. 21</div>
-        <hr class="news-divider" style="border: 0; border-top: 1px solid #333; margin: 0 0 10px 0;">
-        <h1 class="news-headline">JUHI TURNS 21 TODAY!</h1>
-        
-        <div class="news-image-placeholder">
-             <img src="https://placehold.co/600x400/e8e0d0/2c1e12?text=Insert+Juhi's+Photo" alt="Portrait of Juhi" class="news-photo">
-        </div>
+<!-- Mobile Navs -->
+<button id="navToggle" class="fixed top-4 left-4 z-[210] p-3 bg-[#1a1a1a] text-[#f4f1ea] rounded-full shadow-xl hover:bg-black transition-transform duration-200 ease-in-out bouncy-button border-none lg:hidden" style="padding: 0.75rem; border-radius: 9999px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);">
+    <svg id="navToggleIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-8 6h8"></path></svg>
+    <svg id="navToggleX" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+</button>
 
-        <div class="news-columns">
-             <p>Dateline: The Universe.</p>
-             <p>Reports are flooding in from all corners of the globe: it is officially the 21st birthday of Juhi. Scientists confirm that the world is approximately 100% brighter today.</p>
-             <p>"It's a phenomenon," says one astronomer. "Just like the moon reflects the sun, we all reflect the joy Juhi brings."</p>
-             <p>As the festivities commence, experts advise preparing for cake, laughter, and a year ahead filled with magic, growth, and endless possibilities.</p>
-             <p>Happy 21st Birthday, Juhi! The world is yours to explore.</p>
+<nav id="topNav" class="nav-panel fixed top-0 left-0 right-0 h-16 bg-[#1a1a1a] text-[#f4f1ea] shadow-xl flex items-center justify-center space-x-6 -translate-y-full border-b-2 border-[#f4f1ea]/10 lg:hidden">
+    <a href="index.html" class="nav-link px-3 py-2 text-sm font-newspaper-body tracking-widest uppercase">Home</a>
+    <a href="Special.html" class="nav-link px-3 py-2 text-sm font-newspaper-body tracking-widest uppercase">Special</a>
+    <a href="letter.html" class="nav-link px-3 py-2 text-sm font-newspaper-body tracking-widest uppercase">Letter</a>
+</nav>
+<nav id="bottomNav" class="nav-panel fixed bottom-0 left-0 right-0 h-16 bg-[#1a1a1a] text-[#f4f1ea] shadow-xl flex items-center justify-center space-x-6 translate-y-full border-t-2 border-[#f4f1ea]/10 lg:hidden">
+    <a href="anatomy.html" class="nav-link px-3 py-2 text-sm font-newspaper-body tracking-widest uppercase">Anatomy</a>
+    <a href="chat.html" class="nav-link px-3 py-2 text-sm font-newspaper-body tracking-widest uppercase">Heaven</a>
+    <a href="you.html" class="nav-link px-3 py-2 text-sm font-newspaper-body tracking-widest uppercase">You</a>
+</nav>
+<nav id="leftNav" class="nav-panel fixed left-0 top-0 bottom-0 bg-[#1a1a1a] text-[#f4f1ea] shadow-xl flex flex-col items-center space-y-6 overflow-y-auto py-20 -translate-x-full border-r-2 border-[#f4f1ea]/10 lg:hidden">
+    <a href="Diary.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Diary</a>
+    <a href="Universe.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Universe</a>
+    <a href="Box.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Box</a>
+    <a href="color.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Color</a>
+    <a href="Teacher.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Teacher</a>
+    <a href="The_River.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">River</a>
+    <a href="Mountain.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Mountain</a>
+    <a href="Paper_Star.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Paper Star</a>
+    <a href="Carttoon.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Cartoon</a>
+    <a href="Santa.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Santa</a>
+    <a href="Cloud.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Cloud</a>
+    <a href="Ink.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Ink</a>
+    <a href="Butterfly.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Butterfly</a>
+    <a href="Weather.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Weather</a>
+</nav>
+<nav id="rightNav" class="nav-panel fixed right-0 top-0 bottom-0 bg-[#1a1a1a] text-[#f4f1ea] shadow-xl flex flex-col items-center space-y-6 overflow-y-auto py-20 translate-x-full border-l-2 border-[#f4f1ea]/10 lg:hidden">
+    <a href="Skill.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Skill</a>
+    <a href="Msg.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Message</a>
+    <a href="21_Wish.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">21 Door</a>
+    <a href="Cake.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Cake</a>
+    <a href="Periodik_table.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Table</a>
+    <a href="Presence.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Presence</a>
+    <a href="Concept.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Concept</a>
+    <a href="Calender.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Calender</a>
+    <a href="Perspective.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">View</a>
+    <a href="Spotlight.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Spotlight</a>
+    <a href="Room.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Room</a>
+    <a href="Radio.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Radio</a>
+    <a href="Food.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Food</a>
+    <a href="Music.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Music</a>
+</nav>
+
+<!-- Mobile View Wrapper -->
+<div id="mobile-view-wrapper" class="lg:hidden">
+    <div class="flex items-center justify-center min-h-[80vh] w-full px-4">
+        <div id="main-card" class="w-full max-w-md bg-[#f4f1ea] border-2 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] p-6 text-center z-20 relative transition-all duration-1000 ease-in-out transform scale-100 opacity-100 my-8">
+            <div class="border-b-2 border-black pb-3 mb-6">
+                <h1 class="font-newspaper-title text-4xl text-black">Puzzle Corner</h1>
+                <div class="flex justify-between text-[11px] font-typewriter uppercase tracking-[0.2em] mt-2">
+                    <span>Daily Edition</span>
+                    <span>Vol. 21</span>
+                </div>
+            </div>
+            <h2 id="card-title-header" class="text-3xl font-newspaper-title text-black mb-6 uppercase tracking-wide leading-tight"></h2>
+            <section id="card-content" class="space-y-4 p-1 font-newspaper-body text-lg leading-relaxed text-left text-black">
+                <!-- Mobile card content goes here -->
+            </section>
+            <div class="flex justify-center w-full mt-8 pt-6 border-t border-black"> 
+                <button id="next-button" class="bouncy-button">Start Journey</button>
+            </div>
         </div>
     </div>
 </div>
 
-<div id="radioWrapper">
-
-    <div id="mainNavOverlay" class="nav-overlay">
-        <div class="nav-content">
-            <a href="index.html" class="nav-link">Home</a>
-            <a href="Special.html" class="nav-link">Special</a>
-            <a href="letter.html" class="nav-link">Letter</a>
-            <a href="anatomy.html" class="nav-link">Anatomy</a>
-            <a href="chat.html" class="nav-link">Heaven</a>
-            <a href="you.html" class="nav-link">You</a>
-            <a href="Diary.html" class="nav-link">Diary</a>
-            <a href="Universe.html" class="nav-link">Universe</a>
-            <a href="Box.html" class="nav-link">Box</a>
-            <a href="color.html" class="nav-link">Color</a>
-            <a href="Teacher.html" class="nav-link">Teacher</a>
-            <a href="The_River.html" class="nav-link">River</a>
-            <a href="Mountain.html" class="nav-link">Mountain</a>
-            <a href="Paper_Star.html" class="nav-link">Paper Star</a>
-            <a href="Carttoon.html" class="nav-link">Cartoon</a>
-            <a href="Santa.html" class="nav-link">Santa</a>
-            <a href="Cloud.html" class="nav-link">Cloud</a>
-            <a href="Ink.html" class="nav-link">Paint</a>
-            <a href="Butterfly.html" class="nav-link">Butterfly</a>
-            <a href="Weather.html" class="nav-link">Weather</a>
-            <a href="Skill.html" class="nav-link">Skill</a>
-            <a href="Msg.html" class="nav-link">Message</a>
-            <a href="21_Wish.html" class="nav-link">21_Door</a>
-            <a href="Cake.html" class="nav-link">Cake</a>
-            <a href="Periodik_table.html" class="nav-link">Table</a>
-            <a href="Presence.html" class="nav-link">Presence</a>
-            <a href="Concept.html" class="nav-link">Concept</a>
-            <a href="Calender.html" class="nav-link">Calendar</a>
-            <a href="Perspective.html" class="nav-link">View</a>
-            <a href="Spotlight.html" class="nav-link">Spotlight</a>
-            <a href="Room.html" class="nav-link">Room</a>
-            <a href="Radio.html" class="nav-link">Radio</a>
-            <a href="Food.html" class="nav-link">Food</a>
-            <a href="Music.html" class="nav-link">Music</a>
-        </div>
-    </div>
-
-    <div class="menu-toggle-btn" id="menuToggleBtn" onclick="toggleNav()">&#9776;</div>
-
-
-    <div class="neonRadio" id="mobileRadio">
+<!-- Desktop View Wrapper (Single Scrollable Page) -->
+<div id="desktop-wiki-view" class="hidden lg:flex w-full min-h-screen bg-[#f6f6f6] text-[#202122]">
+    
+    <!-- Sidebar -->
+    <aside class="w-44 pt-6 pl-4 pr-2 border-r border-transparent">
+        <div class="wiki-logo"></div>
         
-        <div class="stereo-indicator stereo-left" id="mobStereoLeft"></div>
-        <div class="stereo-indicator stereo-right" id="mobStereoRight"></div>
-
-        <div class="visualizer" id="mobVisualizer">
-            <div class="viz-bar"></div>
-            <div class="viz-bar"></div>
-            <div class="viz-bar"></div>
-            <div class="viz-bar"></div>
-            <div class="viz-bar"></div>
+        <!-- Main Nav -->
+        <div class="mb-6">
+            <h3 class="text-xs text-[#54595d] border-b border-[#eaecf0] mb-2 pb-1 font-normal uppercase tracking-wide">Main</h3>
+            <nav class="space-y-1">
+                <a href="index.html" class="wiki-sidebar-link">Home</a>
+                <a href="Special.html" class="wiki-sidebar-link">Special</a>
+                <a href="letter.html" class="wiki-sidebar-link">Letter</a>
+                <a href="anatomy.html" class="wiki-sidebar-link">Anatomy</a>
+                <a href="chat.html" class="wiki-sidebar-link">Heaven</a>
+                <a href="you.html" class="wiki-sidebar-link">You</a>
+            </nav>
         </div>
 
-        <div class="mobile-main-display" id="mobileScreen">
-            <div class="waveform-bg" id="mobWaveform"></div>
+        <!-- Chronicles (Left Nav Items) -->
+        <div class="mb-6">
+            <h3 class="text-xs text-[#54595d] border-b border-[#eaecf0] mb-2 pb-1 font-normal uppercase tracking-wide">Chronicles</h3>
+            <nav class="space-y-1">
+                <a href="Diary.html" class="wiki-sidebar-link">Diary</a>
+                <a href="Universe.html" class="wiki-sidebar-link">Universe</a>
+                <a href="Box.html" class="wiki-sidebar-link">Box</a>
+                <a href="color.html" class="wiki-sidebar-link">Color</a>
+                <a href="Teacher.html" class="wiki-sidebar-link">Teacher</a>
+                <a href="The_River.html" class="wiki-sidebar-link">River</a>
+                <a href="Mountain.html" class="wiki-sidebar-link">Mountain</a>
+                <a href="Paper_Star.html" class="wiki-sidebar-link">Paper Star</a>
+                <a href="Carttoon.html" class="wiki-sidebar-link">Cartoon</a>
+                <a href="Santa.html" class="wiki-sidebar-link">Santa</a>
+                <a href="Cloud.html" class="wiki-sidebar-link">Cloud</a>
+                <a href="Ink.html" class="wiki-sidebar-link">Ink</a>
+                <a href="Butterfly.html" class="wiki-sidebar-link">Butterfly</a>
+                <a href="Weather.html" class="wiki-sidebar-link">Weather</a>
+            </nav>
+        </div>
+
+        <!-- Artifacts (Right Nav Items) -->
+        <div class="mb-6">
+            <h3 class="text-xs text-[#54595d] border-b border-[#eaecf0] mb-2 pb-1 font-normal uppercase tracking-wide">Artifacts</h3>
+            <nav class="space-y-1">
+                <a href="Skill.html" class="wiki-sidebar-link">Skill</a>
+                <a href="Msg.html" class="wiki-sidebar-link">Message</a>
+                <a href="21_Wish.html" class="wiki-sidebar-link">21 Door</a>
+                <a href="Cake.html" class="wiki-sidebar-link">Cake</a>
+                <a href="Periodik_table.html" class="wiki-sidebar-link">Table</a>
+                <a href="Presence.html" class="wiki-sidebar-link">Presence</a>
+                <a href="Concept.html" class="wiki-sidebar-link">Concept</a>
+                <a href="Calender.html" class="wiki-sidebar-link">Calender</a>
+                <a href="Perspective.html" class="wiki-sidebar-link">View</a>
+                <a href="Spotlight.html" class="wiki-sidebar-link">Spotlight</a>
+                <a href="Room.html" class="wiki-sidebar-link">Room</a>
+                <a href="Radio.html" class="wiki-sidebar-link">Radio</a>
+                <a href="Food.html" class="wiki-sidebar-link">Food</a>
+                <a href="Music.html" class="wiki-sidebar-link">Music</a>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 p-6 relative">
+        
+        <!-- Wiki Header Links -->
+        <div class="flex justify-end border-b border-[#a7d7f9] mb-[-1px]">
+            <div class="flex space-x-1">
+                <span class="text-xs pt-2 px-2">Not logged in</span>
+                <a href="#" class="text-xs text-[#0645ad] pt-2 px-2 hover:underline">Talk</a>
+                <a href="#" class="text-xs text-[#0645ad] pt-2 px-2 hover:underline">Contributions</a>
+                <a href="#" class="text-xs text-[#0645ad] pt-2 px-2 hover:underline">Create account</a>
+                <a href="#" class="text-xs text-[#0645ad] pt-2 px-2 hover:underline">Log in</a>
+            </div>
+        </div>
+
+        <!-- Wiki Tabs -->
+        <div class="flex mt-8 items-end border-b border-[#a7d7f9]">
+            <div class="wiki-tab active">Article</div>
+            <div class="wiki-tab">Talk</div>
+            <div class="flex-1"></div>
+            <div class="wiki-tab active">Read</div>
+            <div class="wiki-tab">Edit</div>
+            <div class="wiki-tab">View history</div>
+            <div class="relative ml-4 mb-1">
+                <input type="text" placeholder="Search Wikipedia" class="border border-[#a2a9b1] px-2 py-1 text-sm w-48 shadow-inner">
+                <button class="absolute right-0 top-0 h-full px-2 text-[#54595d] font-bold">🔍</button>
+            </div>
+        </div>
+
+        <!-- Wiki Content Container -->
+        <div class="mw-body shadow-sm">
             
-            <div class="now-playing-text" id="mobNowPlaying">Now Playing</div>
+            <h1 class="firstHeading">The Birthday Star (2025)</h1>
+            <div class="text-[0.85em] mb-4">From Wikipedia, the free encyclopedia</div>
 
-            <div style="display:flex; align-items:baseline;">
-                <span class="big-freq" id="mobFreq">92.0</span>
-                <span class="unit-text">MHz</span>
+            <!-- Infobox -->
+            <div class="wiki-infobox">
+                <div class="wiki-infobox-header">The Birthday Star</div>
+                <div class="wiki-infobox-image">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=300" alt="Star Profile" class="w-full h-auto border border-gray-300 p-1">
+                    <div class="text-xs mt-1">Fig 1. The subject of the celebration</div>
+                </div>
+                <div class="wiki-infobox-data"><span class="font-bold">Born</span><span>October 24, 2025</span></div>
+                <div class="wiki-infobox-data"><span class="font-bold">Status</span><span>Most Loved</span></div>
+                <div class="wiki-infobox-data"><span class="font-bold">Occupation</span><span>Being Amazing</span></div>
+                <div class="wiki-infobox-data"><span class="font-bold">Known For</span><span>Kindness, Silence</span></div>
             </div>
-            <div class="mobile-msg-text fadeText" id="mobMsg">
-                Turn On...
+
+            <!-- Introduction -->
+            <div id="wiki-full-article" class="pr-4 max-w-4xl text-justify text-[#202122] font-sans text-[0.95rem] leading-[1.6]">
+                <p class="mb-4">
+                    <b>The Birthday Star</b> is a celestial phenomenon observed annually on October 24. It is characterized by an increase in global happiness levels and a series of mysterious puzzles that unlock heartfelt messages.
+                </p>
+                <p class="mb-4">
+                    The phenomenon was first documented in the <b>London Edition</b> of the daily chronicle. Observers note that the subject possesses a rare quality of "shining bright" regardless of atmospheric conditions.
+                </p>
+
+                <!-- Table of Contents -->
+                <div class="toc">
+                    <div class="toc-title">Contents <span class="font-normal text-xs">[<a href="#" class="text-[#0645ad]">hide</a>]</span></div>
+                    <ul>
+                        <li><a href="#section-0">1 Introduction</a></li>
+                        <li><a href="#section-1">2 The Challenge of Destiny</a></li>
+                        <li><a href="#section-2">3 Mathematical Anomalies</a></li>
+                        <li><a href="#section-3">4 Linguistic Analysis</a></li>
+                        <li><a href="#section-4">5 Public Reception</a></li>
+                        <li><a href="#section-5">6 The Manuscript</a></li>
+                        <li><a href="#section-ref">7 References</a></li>
+                    </ul>
+                </div>
+
+                <!-- Dynamic Content Will Be Injected Here via JS -->
+                <div id="wiki-sections-container"></div>
+
+                <!-- References / Final Footer -->
+                <h2 id="section-ref" class="mw-headline">7. References <span class="text-sm font-normal ml-2">[<a href="#" class="text-[#0645ad]">edit</a>]</span></h2>
+                <div class="text-sm mt-2 mb-8">
+                    1. <i>The Book of Life</i>, Vol 21, Page 365.<br>
+                    2. <i>Universal Truths</i>, Chapter: "You are my whole universe".
+                </div>
             </div>
         </div>
+    </main>
+</div>
 
-        <div class="mobile-tuner-container" id="mobTuner">
-            <div class="mobile-ruler-scale"></div>
-            <div class="mobile-ruler-nums">
-                <span>88</span><span>92</span><span>96</span><span>100</span><span>104</span><span>108</span>
-            </div>
-            <div class="mobile-pointer" id="mobPointer"></div>
+<!-- Shared Final Elements -->
+<canvas id="fireworks-canvas" class="fireworks-canvas hidden"></canvas>
+<div id="final-display-elements" class="final-display-container hidden">
+    <div class="flex flex-col items-center justify-center gap-6 w-full h-full p-4">
+        <div id="final-photo-container" class="w-60 h-60 md:w-80 md:h-80 bg-gray-200 rounded-none overflow-hidden shadow-[12px_12px_0px_#f4f1ea] border-4 border-[#f4f1ea] flex items-center justify-center text-black text-center text-lg italic font-newspaper-body grayscale contrast-125 sepia-[.2]">
+            YOUR FINAL PHOTO HERE
         </div>
-
-        <div class="mobile-controls-bar">
-            <button class="control-btn btn-skip" onclick="manualChange(-1)">&#8249;&#8249;</button>
-            <div class="control-btn btn-play" id="mobPowerBtn" onclick="togglePowerMobile()">
-                <div class="play-icon" id="mobPlayIcon"></div>
-            </div>
-            <button class="control-btn btn-skip" onclick="manualChange(1)">&#8250;&#8250;</button>
-        </div>
-    </div>
-
-    <div class="vintageRadio" id="desktopRadio">
-        <div class="desktop-decorations">
-            <div class="newspaper" onclick="openNews()">
-                <div class="news-header">DAILY NEWS</div>
-                <div class="news-body">
-                    <div class="news-col">
-                        <div class="news-line"></div>
-                        <div class="news-line" style="width: 80%"></div>
-                        <div class="news-line"></div>
-                        <div class="news-line" style="width: 60%"></div>
-                    </div>
-                    <div class="news-col">
-                        <div class="news-line"></div>
-                        <div class="news-line"></div>
-                        <div class="news-line" style="width: 90%"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="coffee-wrapper">
-                <div class="steam-container">
-                    <div class="steam"></div>
-                    <div class="steam"></div>
-                    <div class="steam"></div>
-                </div>
-                <div class="coffee-cup">
-                    <div class="coffee-liquid"></div>
-                </div>
-                <div class="coffee-saucer"></div>
-            </div>
-        </div>
-
-        <div class="feet left"></div>
-        <div class="feet right"></div>
-
-        <div class="speakerSection">
-            <div class="grill">
-                <div class="logo-badge">Classic FM</div>
-            </div>
-        </div>
-
-        <div class="interfaceSection">
-            <div class="displayPanel">
-                <div class="displayLarge fadeText" id="displayLarge">
-                    <span class="freq-readout">--- FM</span>
-                    Radio OFF
-                </div>
-            </div>
-
-            <div class="tunerArea" id="tunerArea">
-                <div class="tunerScale"></div>
-                <div class="freq-nums">
-                    <span>88</span><span>92</span><span>96</span><span>100</span><span>104</span><span>108</span>
-                </div>
-                <div class="fmPointer" id="fmPointer"></div>
-            </div>
-
-            <div class="controls">
-                
-                <div class="knob-container" id="volContainer">
-                    <div class="knob" id="volKnob"></div>
-                    <div class="knob-label">Power / Vol</div>
-                </div>
-
-                <div class="knob-container" id="tuneContainer">
-                    <div class="knob" id="tuneKnob"></div>
-                    <div class="knob-label">Tuning</div>
-                </div>
-            </div>
+        <div id="final-message-box" class="text-center mt-8">
+            <h1 class="font-newspaper-title text-5xl md:text-8xl text-[#f4f1ea] tracking-wider mb-4">HAPPY BIRTHDAY!</h1>
+            <h2 class="font-serif-display text-2xl md:text-4xl mt-2 text-[#f4f1ea] italic tracking-wide">You are my whole universe.</h2>
         </div>
     </div>
-
 </div>
 
 <script>
-function openNews() {
-    const modal = document.getElementById('newsModal');
-    if(modal) modal.classList.add('open');
-}
+let currentCardIndex = 0;
+let symbolInterval; 
+let mainCard;
 
-function closeNews(e) {
-    const modal = document.getElementById('newsModal');
-    if(modal) modal.classList.remove('open');
-}
+const cards = [
+    { 
+        title: "Editorial Note",
+        desktopTitle: "1. Introduction",
+        mobileHtml: `
+            <div class="space-y-6 text-left">
+                <p class="text-xl font-bold font-serif-display text-black uppercase border-b-2 border-black pb-2 inline-block tracking-widest">A Special Delivery</p>
+                <div class="text-lg text-black font-newspaper-body text-justify leading-relaxed">
+                    <p class="mb-4"><span class="float-left text-6xl font-newspaper-title mr-3 leading-none mt-[-8px]">B</span>efore the grand finale, there are few special cards waiting just for you.</p>
+                    <p>Each card holds a small message, a riddle, or a challenge that you need to complete to unlock the next one. Only when you complete the final card will the surprise be revealed.</p>
+                    <p class="mt-6 italic font-serif text-gray-800 border-l-2 border-black pl-4">Tap below to start your personalized adventure. Shine bright.</p>
+                </div>
+            </div>
+        `,
+        wikiHtml: `
+            <div class="space-y-4 text-left">
+                <p class="text-lg font-newspaper-body text-justify leading-relaxed">
+                    <span class="float-left text-5xl font-newspaper-title mr-2 leading-none mt-[-4px]">B</span>efore the grand finale, there are few special cards waiting just for you. Each card holds a small message, a riddle, or a challenge that you need to complete to unlock the next one. Only when you complete the final card will the surprise be revealed.
+                </p>
+                <p class="italic text-gray-700 border-l-2 border-[#a2a9b1] pl-4">Tap below to start your personalized adventure. Shine bright.</p>
+            </div>
+        `,
+        buttonText: "Turn Page",
+        callback: null 
+    },
+    { 
+        title: "Puzzle: Destiny",
+        desktopTitle: "2. The Challenge of Destiny",
+        mobileHtml: `
+            <div class="flex flex-col items-center">
+                <p class="text-lg font-newspaper-body italic mb-6">You play as 'X'. Win this simple game to open the first door.</p>
+                <div class="relative p-2 border-2 border-black bg-white shadow-lg">
+                    <div id="tictactoe-grid" class="mx-auto my-0">
+                        <div class="cell" data-index="0"></div><div class="cell" data-index="1"></div><div class="cell" data-index="2"></div>
+                        <div class="cell" data-index="3"></div><div class="cell" data-index="4"></div><div class="cell" data-index="5"></div>
+                        <div class="cell" data-index="6"></div><div class="cell" data-index="7"></div><div class="cell" data-index="8"></div>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center mt-6">
+                    <p id="game-status" class="text-xl font-bold font-serif-display uppercase tracking-widest">Your move</p>
+                    <button id="restart-game-btn" class="hidden mt-2 bouncy-button px-4 py-2 text-xs" onclick="initializeTicTacToe()">Try Again</button>
+                </div>
+                <p id="card-msg-1" class="text-2xl font-newspaper-body italic mt-4 hidden text-[#8b0000]">"You have won my heart."</p>
+            </div>
+        `,
+        wikiHtml: `
+            <div class="flex flex-col items-start">
+                <p class="mb-4">This section represents the interactive component of the celebration. You play as 'X'.</p>
+                <div class="relative p-2 border border-gray-300 bg-white mb-4">
+                    <div id="tictactoe-grid" class="mx-auto my-0">
+                        <div class="cell" data-index="0"></div><div class="cell" data-index="1"></div><div class="cell" data-index="2"></div>
+                        <div class="cell" data-index="3"></div><div class="cell" data-index="4"></div><div class="cell" data-index="5"></div>
+                        <div class="cell" data-index="6"></div><div class="cell" data-index="7"></div><div class="cell" data-index="8"></div>
+                    </div>
+                </div>
+                <div class="w-full flex flex-col items-center">
+                    <p id="game-status" class="font-bold text-gray-700">Your move</p>
+                    <button id="restart-game-btn" class="hidden mt-2 px-3 py-1 bg-gray-200 border border-gray-400 text-sm hover:bg-gray-300" onclick="initializeTicTacToe()">Try Again</button>
+                </div>
+                <p id="card-msg-1" class="text-lg italic mt-4 hidden text-[#8b0000]">"You have won my heart."</p>
+            </div>
+        `,
+        buttonText: "Next Section",
+        callback: initializeTicTacToe,
+        isLocked: true 
+    },
+    { 
+        title: "The Number Puzzle",
+        desktopTitle: "3. Mathematical Anomalies",
+        mobileHtml: `
+            <div class="space-y-6 text-center">
+                <p class="text-2xl font-bold font-serif-display">What is this called?</p>
+                <p class="text-5xl font-newspaper-title tracking-widest border-y-2 border-black py-4 my-4">(12.99999)</p>
+                <div class="flex justify-center">
+                     <button class="bouncy-button px-6 py-2 text-xs" onclick="document.getElementById('card-msg-2').classList.remove('hidden'); unlockCurrentCard()">Reveal Answer</button>
+                </div>
+                <p id="card-msg-2" class="text-xl font-newspaper-body mt-6 hidden transition-all duration-500">
+                    <span class="text-3xl font-bold font-serif-display block mb-2">13</span> (tera) hone laga huu
+                </p>
+            </div>
+        `,
+        wikiHtml: `
+            <div class="space-y-4">
+                <p>Researchers have discovered a unique numerical anomaly:</p>
+                <div class="p-4 bg-[#f8f9fa] border border-[#eaecf0] text-center font-mono text-xl">
+                    (12.99999)
+                </div>
+                <p>What is this value colloquially known as?</p>
+                <div class="flex justify-start">
+                     <button class="px-4 py-2 bg-[#f8f9fa] border border-[#a2a9b1] text-sm hover:bg-[#e2e2e2]" onclick="document.getElementById('card-msg-2').classList.remove('hidden')">Reveal Answer</button>
+                </div>
+                <p id="card-msg-2" class="text-lg mt-4 hidden">
+                    <span class="font-bold">13</span> (tera) hone laga huu. <span class="italic text-sm text-gray-600">- A common pun involving the number 13 (tera) in Hindi.</span>
+                </p>
+            </div>
+        `,
+        buttonText: "Next Section",
+        callback: null,
+        isLocked: true 
+    },
+    { 
+        title: "The Word Riddle",
+        desktopTitle: "4. Linguistic Analysis",
+        mobileHtml: `
+            <div class="space-y-6 text-center">
+                <p class="text-2xl font-bold font-serif-display">Do you know what will last forever in this world?</p>
+                 <div class="flex justify-center mt-6">
+                    <button class="bouncy-button px-6 py-2 text-xs" onclick="document.getElementById('card-msg-3').classList.remove('hidden'); unlockCurrentCard()">Show Me The Hint</button>
+                </div>
+                <p id="card-msg-3" class="text-xl font-newspaper-body italic mt-8 hidden border-l-4 border-black pl-4 text-left">
+                    On your keyboard look at the letters between Y and O.
+                </p>
+            </div>
+        `,
+        wikiHtml: `
+            <div class="space-y-4">
+                <p>A query regarding permanence in the physical realm:</p>
+                <blockquote class="border-l-4 border-[#eaecf0] pl-4 italic bg-[#f8f9fa] py-2">
+                    "Do you know what will last forever in this world?"
+                </blockquote>
+                 <div class="flex justify-start mt-2">
+                    <button class="px-4 py-2 bg-[#f8f9fa] border border-[#a2a9b1] text-sm hover:bg-[#e2e2e2]" onclick="document.getElementById('card-msg-3').classList.remove('hidden')">Show Hint</button>
+                </div>
+                <p id="card-msg-3" class="text-lg italic mt-4 hidden text-gray-800">
+                    Observation: On standard QWERTY keyboards, the keys between 'Y' and 'O' represent the answer.
+                </p>
+            </div>
+        `,
+        buttonText: "I Know The Answer",
+        callback: null,
+        isLocked: true
+    },
+    { 
+        title: "Opinion Poll",
+        desktopTitle: "5. Public Reception",
+        mobileHtml: `
+            <div class="space-y-6 text-center">
+                <p class="text-xl font-newspaper-body font-bold leading-relaxed">Which one of these single words resonates with your soul today?</p>
+                <div class="flex justify-center gap-6 mt-6">
+                    <button class="bouncy-button px-8 py-3" onclick="chooseWord('serenity')">Serenity</button>
+                    <button class="bouncy-button px-8 py-3" onclick="chooseWord('radiant')">Radiant</button>
+                </div>
+                <p id="word-status" class="text-lg font-newspaper-body italic mt-8 hidden text-gray-800">
+                    A beautiful choice, just like you. The card is now unlocked.
+                </p>
+            </div>
+        `,
+        wikiHtml: `
+            <div class="space-y-4">
+                <p>Which one of these descriptors resonates with the subject's soul today?</p>
+                <div class="flex gap-4 mt-2">
+                    <button class="px-4 py-2 bg-[#f8f9fa] border border-[#a2a9b1] text-sm hover:bg-[#e2e2e2]" onclick="chooseWord('serenity')">Serenity</button>
+                    <button class="px-4 py-2 bg-[#f8f9fa] border border-[#a2a9b1] text-sm hover:bg-[#e2e2e2]" onclick="chooseWord('radiant')">Radiant</button>
+                </div>
+                <p id="word-status" class="text-lg italic mt-4 hidden text-gray-800">
+                    A beautiful choice.
+                </p>
+            </div>
+        `,
+        buttonText: "Almost There",
+        callback: initializeWordCard,
+        isLocked: true 
+    },
+    { 
+        title: "Access Granted",
+        desktopTitle: null, 
+        mobileHtml: `
+            <div class="space-y-6 text-center">
+                <p class="text-5xl font-newspaper-title mb-6">Congratulations</p>
+                <div class="border-t-2 border-b-2 border-black py-8">
+                    <p class="text-xl font-newspaper-body leading-relaxed">You successfully completed all five challenges.</p>
+                    <p class="text-xl font-newspaper-body mt-4 leading-relaxed">You have unlocked the most important message of all, prepared with every ounce of my heart.</p>
+                </div>
+                <p class="text-xs font-typewriter uppercase tracking-[0.2em] mt-6 font-bold">Click below to read the cover story</p>
+            </div>
+        `,
+        wikiHtml: `...`,
+        buttonText: "Read Cover Story",
+        callback: () => { cards[5].isLocked = false; }
+    },
+    { 
+        title: "Cover Story: The Wish",
+        desktopTitle: "6. The Manuscript",
+        mobileHtml: `
+            <div class="space-y-4 text-center h-full flex flex-col">
+                <div class="text-base font-newspaper-body leading-relaxed text-justify p-2 rounded-none pr-4 lg:grid lg:grid-cols-2 lg:gap-10 lg:content-start">
+                    <div class="col-span-2 mb-6 border-b-2 border-black pb-6">
+                        <p class="text-5xl font-newspaper-title text-center mb-4">Happy Birthday</p>
+                        <p class="italic text-center text-lg mb-4 font-serif text-gray-700">"To the girl who doesn’t even realise how special she truly is..."</p>
+                        <p class="first-letter:text-6xl first-letter:font-newspaper-title first-letter:float-left first-letter:mr-3 first-letter:mt-[-10px]">
+                           Today isn’t just your birthday, it’s the day the universe quietly created someone who would one day change the world without even trying. You don’t have to do anything extraordinary… your smile already does more than you can imagine. My only wish today is simple: May God keep you happy, peaceful and loved today and always.
+                        </p>
+                    </div>
+                    <div class="lg:col-span-1 border-r border-gray-300 pr-6">
+                        <h4 class="font-bold border-b border-black mb-2 uppercase tracking-widest text-sm font-sans">I. Why me?</h4>
+                        <p class="text-sm mb-6">
+                            I saw you with my heart, not my eyes, and trust me, you are the most beautiful person I have ever seen. You matter to me more than you think and more than I show. Every story begins with your smile and ends in your eyes.. I tried to describe you, but every metaphor fell short, even the stars felt ordinary when I looked into your eyes, and the moon hid behind the clouds when you walked through that door. Every poem I wrote ended up sounding like your name, how can I define someone who makes the universe feel small? You are not just beautiful, you are the reason why poetry exists. There may be billions, but none of them are you. If I had to pick between your happiness and mine, I’d choose yours without a second thought, because when you’re happy, I automatically become happy too. My relation with you isn’t like rain that comes and goes, it’s like air, always around you even when silent. You will always be loved by me, no matter what happens, in a world full of doubt, you’re the one I’m sure about. You’re special to me because you’re the only person I genuinely want to see happy from the bottom of my heart, and every time I look at you, something inside me whispers, “God, please keep her happy at any cost.” I’ve never felt this way for anyone before, that’s why you’ll always be special. And I don’t love you for how you look, talk, or walk, I love you for your soul, your softness, calmness, and silent strength. That’s the part of you I fell for, and that’s the part no one else can replace.
+                        </p>
+                        <h4 class="font-bold border-b border-black mb-2 uppercase tracking-widest text-sm font-sans">II. You chose the wrong girl</h4>
+                        <p class="text-sm mb-6">
+                            No matter what you think about yourself, you are the sweetest, greatest, and most amazing person in my eyes. I’m glad I found you in this lifetime, in this chaos, in a world full of passing faces. You’re not just someone I met, you’re someone I feel safe with. When you’re near, the noise fades, time slows down, and everything feels right. You are the only one I always mention in my prayers. And if you think you’re the “wrong girl,” let me tell you something… you are not wrong, youre real. Youre genuine. Youre pure hearted. You feel deeply even when you hide it. You care silently even when you pretend you dont. You carry a softness inside you that the world rarely understands. People made you doubt yourself not because youre wrong, but because youre rare, and rare things are often misunderstood. Youre the girl who gives more than she receives, who holds pain but still smiles, who stays strong even when shes tired. You think youre “too much” or “not enough,”. I didnt choose you because youre perfect, I chose you because youre you and thats more than enough. I care about your heart, your soul, your silence, and your softness. Youre not the wrong girl youre the right one… you just dont see it yet.
+                        </p>
+                    </div>
+                    <div class="lg:col-span-1 pl-2">
+                        <h4 class="font-bold border-b border-black mb-2 uppercase tracking-widest text-sm font-sans">III. You will find someone better?</h4>
+                        <p class="text-sm mb-6">
+                            Im not searching for “better.” Im searching for you, your thoughts, your kindness, your calmness, your smile that makes even the hardest day feel lighter. “Better” isnt a person; “Better” is a feeling. And the feeling I get with you doesnt happen twice. Youre not replaceable. Not comparable. Not someone I can forget.
+                        </p>
 
-const lines = [
-"Many can say you look like the moon or you are a part of the moon. But no — the moon looks like you because the moon is a part of you.",
-"Many can say you shine like the stars or you are a part of the stars. But no — the stars shine like you because the stars are a part of you.",
-"Many can say you glow like sunrise or you are a part of the sunrise. But no — the sunrise glows like you because the sunrise is a part of you.",
-"Many can say you calm like the ocean or you are a part of the ocean. But no — the ocean calms like you because the ocean is a part of you.",
-"Many can say you feel like poetry or you are a part of poetry. But no — poetry feels like you because poetry is a part of you.",
-"Many can say you shine like gold or you are a part of gold. But no — gold shines like you because gold is a part of you.",
-"Many can say you rise like the sun or you are a part of the sun. But no — the sun rises like you because the sun is a part of you.",
-"Many can say you’re rare like diamonds or you are a part of diamonds. But no — diamonds shine like you because diamonds are a part of you.",
-"Many can say you’re peaceful like the sky or you are a part of the sky. But no — the sky feels like you because the sky is a part of you.",
-"Many can say you’re deep like the night or you are a part of the night. But no — the night feels like you because the night is a part of you.",
-"Many can say you’re bright like fire or you are a part of fire. But no — fire glows like you because fire is a part of you.",
-"Many can say you’re soft like clouds or you are a part of clouds. But no — clouds look like you because clouds are a part of you.",
-"Many can say you’re steady like mountains or you are a part of mountains. But no — mountains stand like you because mountains are a part of you.",
-"Many can say you’re clear like water or you are a part of water. But no — water reflects you because water is a part of you.",
-"Many can say you’re warm like summer or you are a part of summer. But no — summer feels like you because summer is a part of you.",
-"Many can say you’re calm like winter or you are a part of winter. But no — winter settles like you because winter is a part of you.",
-"Many can say you’re colorful like autumn or you are a part of autumn. But no — autumn looks like you because autumn is a part of you.",
-"Many can say you bloom like spring or you are a part of spring. But no — spring blooms like you because spring is a part of you.",
-"Many can say you shine like lanterns or you are a part of lanterns. But no — lanterns glow like you because lanterns are a part of you.",
-"Many can say you’re magical like rain or you are a part of rain. But no — rain feels like you because rain is a part of you.",
-"Many can say you guide like stars or you are a part of stars. But no — stars guide like you because stars are a part of you.",
-"Many can say you’re precious like pearls or you are a part of pearls. But no — pearls shine like you because pearls are a part of you.",
-"Many can say you sparkle like crystals or you are a part of crystals. But no — crystals sparkle like you because crystals are a part of you.",
-"Many can say you’re rare like meteors or you are a part of meteors. But no — meteors glow like you because meteors are a part of you.",
-"Many can say you’re bright like lightning or you are a part of lightning. But no — lightning shines like you because lightning is a part of you.",
-"Many can say you’re soothing like rivers or you are a part of rivers. But no — rivers flow like you because rivers are a part of you.",
-"Many can say you sound like music or you are a part of music. But no — music feels like you because music is a part of you.",
-"Many can say you’re vibrant like colors or you are a part of colors. But no — colors brighten like you because colors are a part of you.",
-"Many can say you’re rare like eclipses or you are a part of eclipses. But no — eclipses look like you because eclipses are a part of you.",
-"Many can say you’re graceful like feathers or you are a part of feathers. But no — feathers move like you because feathers are a part of you.",
-"Many can say you glow like lantern light or you are a part of lantern light. But no — lantern light glows like you because lantern light is a part of you.",
-"Many can say you feel like harmony or you are a part of harmony. But no — harmony sounds like you because harmony is a part of you.",
-"Many can say you’re sharp like lightning strikes or you are a part of lightning strikes. But no — lightning strikes like you because lightning is a part of you.",
-"Many can say you’re pure like snow or you are a part of snow. But no — snow reflects you because snow is a part of you.",
-"Many can say you’re refreshing like drizzle or you are a part of drizzle. But no — drizzle feels like you because drizzle is a part of you.",
-"Many can say you shine like city lights or you are a part of city lights. But no — city lights glow like you because city lights are a part of you.",
-"Many can say you’re timeless like monuments or you are a part of monuments. But no — monuments stand like you because monuments are a part of you.",
-"Many can say you’re serene like lakes or you are a part of lakes. But no — lakes reflect you because lakes are a part of you.",
-"Many can say you’re rare like art or you are a part of art. But no — art resembles you because art is a part of you.",
-"Many can say you’re bright like neon or you are a part of neon. But no — neon glows like you because neon is a part of you.",
-"Many can say you’re majestic like mountains or you are a part of mountains. But no — mountains rise like you because mountains are a part of you.",
-"Many can say you’re soft like stardust or you are a part of stardust. But no — stardust shines like you because stardust is a part of you.",
-"Many can say you’re calm like twilight or you are a part of twilight. But no — twilight settles like you because twilight is a part of you.",
-"Many can say you’re brilliant like constellations or you are a part of constellations. But no — constellations glow like you because constellations are a part of you.",
-"Many can say you’re unique like galaxies or you are a part of galaxies. But no — galaxies swirl like you because galaxies are a part of you.",
-"Many can say you shine like morning frost or you are a part of morning frost. But no — morning frost sparkles like you because morning frost is a part of you.",
-"Many can say you’re soothing like wind or you are a part of wind. But no — the wind moves like you because the wind is a part of you.",
-"Many can say you’re rare like comets or you are a part of comets. But no — comets glow like you because comets are a part of you.",
-"Many can say you’re bright like lantern fire or you are a part of lantern fire. But no — lantern fire burns like you because lantern fire is a part of you.",
-"Many can say you’re powerful like waves or you are a part of waves. But no — waves rise like you because waves are a part of you."
+                        <h4 class="font-bold border-b border-black mb-2 uppercase tracking-widest text-sm font-sans">IV. Why you wait so long?</h4>
+                        <p class="text-sm mb-6">
+                            Waiting is the best part of any story, anticipation makes every moment more meaningful. When you truly love someone, you can wait for them without expectations or conditions. Love is not like “Subha jaha lander, samne Delhi , yeh nahi to koi aur sahi.” Thats not how love works. Love is like a dharma, a duty to care, to do good, and to never think bad, no matter the situation. Even Lord Krishna had to wait for Radha, so who am I? Just a normal person waiting for someone extraordinary. Ive seen you go quiet many times, your eyes still, thinking deeply, searching for answers. Your eyes speak more than your words ever could. If youre busy, Ill wait. If youre sad, Ill listen. If you need help, Ill be there. No matter what happens, youre never alone. I know I may not be perfect, but one thing is certain, I will never leave your side. If you need help, Ill be Doraemon, if you need a smile, Ill be Shinchan, if you need strength, Ill be Chhota Bheem, if youre bored, Ill be Jerry.
+                        </p>
+
+                        <h4 class="font-bold border-b border-black mb-2 uppercase tracking-widest text-sm font-sans">V. What do I want from you?</h4>
+                        <p class="text-sm mb-6">
+                            I dont want you to change a single thing about yourself. I dont ask for perfection, because your imperfections are what make you real. All I want is your time, your honesty, and your trust. I want to be the person you share your silence with. I want to be the one who makes you laugh when you want to cry. I just want you—your happy days, your messy days, your tired days. Just be with me, and that is enough.
+                        </p>
+
+                        <h4 class="font-bold border-b border-black mb-2 uppercase tracking-widest text-sm font-sans">VI. My promise to you</h4>
+                        <p class="text-sm mb-6">
+                            I cant promise that life will always be easy, or that I can solve every problem. But I promise that you wont have to face any of it alone. I promise to be your calm in the storm, your safe place when the world gets too loud. I promise to respect you, cherish you, and remind you of your worth every single day. No matter where life takes us, my hand will always be holding yours.
+                        </p>
+                        <div class="border-2 border-black p-4 mt-6 bg-[#eae8e0]">
+                            <p class="text-center font-bold italic font-serif-display text-base">
+                                "At the end of everything, theres only one truth: Im grateful you exist. I will always pray for your happiness first. Thank you for being someone worth admiring, someone worth waiting for, someone who unknowingly made the world softer. Once again, Happy Birthday. You deserve every gentle, peaceful, beautiful thing in this world."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-xs font-typewriter uppercase tracking-[0.2em] mt-4 font-bold">Proceed to Grand Finale</p>
+            </div>
+        `,
+        wikiHtml: `
+            <div class="space-y-4 text-justify">
+                <div class="p-4 bg-[#f9f9f9] border border-[#eee] mb-6">
+                    <p class="text-2xl font-serif text-center mb-2">Happy Birthday</p>
+                    <p class="italic text-center text-gray-600 mb-4">"To the girl who doesn’t even realise how special she truly is..."</p>
+                    <p class="leading-relaxed">
+                       Today isn’t just your birthday, it’s the day the universe quietly created someone who would one day change the world without even trying. You don’t have to do anything extraordinary… your smile already does more than you can imagine. My only wish today is simple: May God keep you happy, peaceful and loved today and always.
+                    </p>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h4 class="font-bold border-b border-[#a2a9b1] mb-2">6.1 Why me?</h4>
+                        <p class="text-sm mb-4">
+                            I saw you with my heart, not my eyes, and trust me, you are the most beautiful person I have ever seen. You matter to me more than you think and more than I show. Every story begins with your smile and ends in your eyes.. I tried to describe you, but every metaphor fell short, even the stars felt ordinary when I looked into your eyes, and the moon hid behind the clouds when you walked through that door. Every poem I wrote ended up sounding like your name, how can I define someone who makes the universe feel small? You are not just beautiful, you are the reason why poetry exists. There may be billions, but none of them are you. If I had to pick between your happiness and mine, I’d choose yours without a second thought, because when you’re happy, I automatically become happy too. My relation with you isn’t like rain that comes and goes, it’s like air, always around you even when silent. You will always be loved by me, no matter what happens, in a world full of doubt, you’re the one I’m sure about. You’re special to me because you’re the only person I genuinely want to see happy from the bottom of my heart, and every time I look at you, something inside me whispers, “God, please keep her happy at any cost.” I’ve never felt this way for anyone before, that’s why you’ll always be special. And I don’t love you for how you look, talk, or walk, I love you for your soul, your softness, calmness, and silent strength. That’s the part of you I fell for, and that’s the part no one else can replace.
+                        </p>
+                        
+                        <h4 class="font-bold border-b border-[#a2a9b1] mb-2">6.2 The Hypothesis of Error</h4>
+                        <p class="text-sm mb-4">
+                            No matter what you think about yourself, you are the sweetest, greatest, and most amazing person in my eyes. I’m glad I found you in this lifetime, in this chaos, in a world full of passing faces. You’re not just someone I met, you’re someone I feel safe with. When you’re near, the noise fades, time slows down, and everything feels right. You are the only one I always mention in my prayers. And if you think you’re the “wrong girl,” let me tell you something… you are not wrong, youre real. Youre genuine. Youre pure hearted. You feel deeply even when you hide it. You care silently even when you pretend you dont. You carry a softness inside you that the world rarely understands. People made you doubt yourself not because youre wrong, but because youre rare, and rare things are often misunderstood. Youre the girl who gives more than she receives, who holds pain but still smiles, who stays strong even when shes tired. You think youre “too much” or “not enough,”. I didnt choose you because youre perfect, I chose you because youre you and thats more than enough. I care about your heart, your soul, your silence, and your softness. Youre not the wrong girl youre the right one… you just dont see it yet.
+                        </p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-bold border-b border-[#a2a9b1] mb-2">6.3 Comparative Analysis</h4>
+                        <p class="text-sm mb-4">
+                            Im not searching for “better.” Im searching for you, your thoughts, your kindness, your calmness, your smile that makes even the hardest day feel lighter. “Better” isnt a person; “Better” is a feeling. And the feeling I get with you doesnt happen twice. Youre not replaceable. Not comparable. Not someone I can forget.
+                        </p>
+
+                        <h4 class="font-bold border-b border-[#a2a9b1] mb-2">6.4 The Wait</h4>
+                        <p class="text-sm mb-4">
+                            Waiting is the best part of any story, anticipation makes every moment more meaningful. When you truly love someone, you can wait for them without expectations or conditions. Love is not like “Subha jaha lander, samne Delhi , yeh nahi to koi aur sahi.” Thats not how love works. Love is like a dharma, a duty to care, to do good, and to never think bad, no matter the situation. Even Lord Krishna had to wait for Radha, so who am I? Just a normal person waiting for someone extraordinary. Ive seen you go quiet many times, your eyes still, thinking deeply, searching for answers. Your eyes speak more than your words ever could. If youre busy, Ill wait. If youre sad, Ill listen. If you need help, Ill be there. No matter what happens, youre never alone. I know I may not be perfect, but one thing is certain, I will never leave your side. If you need help, Ill be Doraemon, if you need a smile, Ill be Shinchan, if you need strength, Ill be Chhota Bheem, if youre bored, Ill be Jerry.
+                        </p>
+
+                        <h4 class="font-bold border-b border-[#a2a9b1] mb-2">6.5 Requirements</h4>
+                        <p class="text-sm mb-4">
+                            I dont want you to change a single thing about yourself. I dont ask for perfection, because your imperfections are what make you real. All I want is your time, your honesty, and your trust. I want to be the person you share your silence with. I want to be the one who makes you laugh when you want to cry. I just want you—your happy days, your messy days, your tired days. Just be with me, and that is enough.
+                        </p>
+
+                        <h4 class="font-bold border-b border-[#a2a9b1] mb-2">6.6 The Promise</h4>
+                        <p class="text-sm mb-4">
+                            I cant promise that life will always be easy, or that I can solve every problem. But I promise that you wont have to face any of it alone. I promise to be your calm in the storm, your safe place when the world gets too loud. I promise to respect you, cherish you, and remind you of your worth every single day. No matter where life takes us, my hand will always be holding yours.
+                        </p>
+                        
+                        <div class="border border-[#a2a9b1] bg-[#f8f9fa] p-4 mt-6">
+                            <p class="text-center italic text-sm">
+                                "At the end of everything, theres only one truth: Im grateful you exist. I will always pray for your happiness first. Thank you for being someone worth admiring, someone worth waiting for, someone who unknowingly made the world softer. Once again, Happy Birthday. You deserve every gentle, peaceful, beautiful thing in this world."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `,
+        buttonText: "See Final Surprise",
+        callback: () => { cards[6].isLocked = false; }
+    },
 ];
 
-let currentIndex = 0;
-let isPowered = true;
-let tuneRotation = 0;
-let volRotation = 75;
-let isMenuOpen = false;
-
-const DEG_PER_STATION = 20;
-
-function toggleNav() {
-    isMenuOpen = !isMenuOpen;
-    const overlay = document.getElementById('mainNavOverlay');
-    const btn = document.getElementById('menuToggleBtn');
-
-    if (isMenuOpen) {
-        overlay.classList.add('active');
-        btn.classList.add('menu-active');
-        btn.innerHTML = "&#10005;"; 
-    } else {
-        overlay.classList.remove('active');
-        btn.classList.remove('menu-active');
-        btn.innerHTML = "&#9776;"; 
+function unlockCurrentCard() {
+    // Only used for mobile flow logic
+    cards[currentCardIndex].isLocked = false;
+    const button = document.getElementById('next-button');
+    if (button) {
+        button.disabled = false;
+        button.classList.remove('opacity-50', 'cursor-not-allowed');
     }
 }
 
-function updateDisplay(opacity = null, blur = null) {
-    const txtLarge = document.getElementById("displayLarge");
-    const pointer = document.getElementById("fmPointer");
-    
-    const volKnob = document.getElementById("volKnob");
-    if (volKnob) volKnob.className = "knob"; 
+// Function to render the full desktop article at once
+function renderDesktopWiki() {
+    const container = document.getElementById('wiki-sections-container');
+    container.innerHTML = ''; // Clear previous content if any
 
-    const mobFreq = document.getElementById("mobFreq");
-    const mobMsg = document.getElementById("mobMsg");
-    const mobScreen = document.getElementById("mobileScreen");
-    const mobPointer = document.getElementById("mobPointer");
-    const mobPlayIcon = document.getElementById("mobPlayIcon");
-    const mobVisualizer = document.getElementById("mobVisualizer");
-    const mobStereoLeft = document.getElementById("mobStereoLeft");
-    const mobStereoRight = document.getElementById("mobStereoRight");
-    const mobWaveform = document.getElementById("mobWaveform");
+    cards.forEach((card, index) => {
+        // Skip the "Access Granted" transition card on desktop
+        if (card.desktopTitle === null) return;
 
-    const text = lines[currentIndex];
-    let freqVal = (88 + (currentIndex / (lines.length - 1)) * (108 - 88)).toFixed(1);
-    let freqHTML = `<span class="freq-readout">${freqVal} FM</span>`;
+        // Create Section Header
+        const h2 = document.createElement('h2');
+        h2.id = `section-${index}`;
+        h2.className = "mw-headline";
+        h2.innerHTML = `${card.desktopTitle} <span class="text-sm font-normal ml-2">[<a href="#" class="text-[#0645ad]">edit</a>]</span>`;
+        
+        // Create Body Div
+        const div = document.createElement('div');
+        div.className = "mt-4 mb-8 text-[#202122]";
+        div.innerHTML = card.wikiHtml;
 
-    if (mobScreen) {
-        if (!isPowered) {
-            mobScreen.classList.add("mobile-off-overlay");
-            if(mobMsg) mobMsg.innerText = "OFF";
-            if(mobPlayIcon) mobPlayIcon.className = "play-icon"; 
-            if(mobVisualizer) mobVisualizer.style.opacity = 0;
-            if(mobStereoLeft) mobStereoLeft.classList.remove("stereo-on");
-            if(mobStereoRight) mobStereoRight.classList.remove("stereo-on");
-            if(mobWaveform) mobWaveform.classList.remove("waveform-on");
-        } else {
-            mobScreen.classList.remove("mobile-off-overlay");
-            if(mobFreq) mobFreq.innerText = freqVal;
-            if(mobMsg && mobMsg.innerText !== text) {
-                mobMsg.innerText = text;
-                triggerFade(mobMsg);
-            }
-            if(mobPlayIcon) mobPlayIcon.className = "pause-icon"; 
-            if(mobVisualizer) mobVisualizer.style.opacity = 0.8;
-            if(mobStereoLeft) mobStereoLeft.classList.add("stereo-on");
-            if(mobStereoRight) mobStereoRight.classList.add("stereo-on");
-            if(mobWaveform) mobWaveform.classList.add("waveform-on");
+        container.appendChild(h2);
+        container.appendChild(div);
+    });
+
+    // Initialize interactive elements after injection
+    setTimeout(() => {
+        initializeTicTacToe();
+        initializeWordCard();
+    }, 100);
+}
+
+function renderCard(index) {
+    const isDesktop = window.innerWidth >= 1024;
+
+    if (isDesktop) {
+        // Only render once if not already rendered or if needed
+        if(document.getElementById('wiki-sections-container').children.length === 0) {
+            renderDesktopWiki();
         }
-    }
-    
-    if (mobPointer) {
-        const percent = (currentIndex / lines.length) * 100;
-        const safePercent = 5 + (percent * 0.9);
-        mobPointer.style.left = `${safePercent}%`;
-    }
+    } else {
+        // Mobile Card Logic
+        const contentDiv = document.getElementById('card-content');
+        const button = document.getElementById('next-button');
+        const mainCard = document.getElementById('main-card');
+        const card = cards[index];
 
-    if (txtLarge) {
-        if (!isPowered) {
-            txtLarge.innerHTML = '<span class="freq-readout">--- FM</span>OFF<div class="hint-text">ROTATE POWER KNOB TO TURN ON</div>';
-            txtLarge.classList.add("off");
-            txtLarge.style.opacity = "";
-            txtLarge.style.filter = "";
-        } else {
-            txtLarge.classList.remove("off");
-            let fullContent = freqHTML + text;
-            if (!txtLarge.innerHTML.includes(text)) {
-                txtLarge.innerHTML = fullContent;
-            }
-            let volFactor = Math.min(volRotation, 300) / 300;
-            volFactor = Math.max(0.3, volFactor);
-            if (opacity !== null && blur !== null) {
-                txtLarge.style.opacity = opacity * volFactor;
-                txtLarge.style.filter = `blur(${blur}px)`;
+        mainCard.style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('card-title-header').textContent = card.title;
+            contentDiv.innerHTML = card.mobileHtml;
+            button.textContent = card.buttonText;
+            button.onclick = () => handleNext(index);
+            
+            // Execute callback for specific cards (e.g. init TicTacToe)
+            if (card.callback) card.callback();
+            
+            if (card.isLocked) {
+                button.disabled = true;
+                button.classList.add('opacity-50', 'cursor-not-allowed');
             } else {
-                txtLarge.style.opacity = 1 * volFactor;
-                txtLarge.style.filter = "blur(0px)";
+                button.disabled = false;
+                button.classList.remove('opacity-50', 'cursor-not-allowed');
             }
+            mainCard.style.opacity = '1';
+        }, 300);
+    }
+}
+
+function handleNext(currentIndex) {
+    const nextIndex = currentIndex + 1;
+    if (nextIndex < cards.length) {
+        currentCardIndex = nextIndex;
+        renderCard(currentCardIndex);
+    } else {
+        window.finalShowdown();
+    }
+}
+
+function initializeTicTacToe() {
+    const grid = document.getElementById('tictactoe-grid');
+    if(!grid) return; 
+    
+    const status = document.getElementById('game-status');
+    const message = document.getElementById('card-msg-1');
+    const restartBtn = document.getElementById('restart-game-btn');
+    
+    if(restartBtn) restartBtn.classList.add('hidden');
+    if(message) message.classList.add('hidden');
+    if(status) status.innerHTML = "Your move";
+
+    let board = ["", "", "", "", "", "", "", "", ""];
+    let gameActive = true;
+    const winningConditions = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]
+    ];
+
+    const handleCellPlayed = (clickedCell, clickedCellIndex) => {
+        board[clickedCellIndex] = "X";
+        clickedCell.innerHTML = 'X';
+    };
+
+    const handleResultValidation = () => {
+        let roundWon = false;
+        let winningPlayer = '';
+        
+        for (let i = 0; i < winningConditions.length; i++) {
+            const winCondition = winningConditions[i];
+            let a = board[winCondition[0]];
+            let b = board[winCondition[1]];
+            let c = board[winCondition[2]];
+            if (a === '' || b === '' || c === '') continue;
+            if (a === b && b === c) {
+                roundWon = true; 
+                winningPlayer = a;
+                break;
+            }
+        }
+
+        if (roundWon) {
+            gameActive = false;
+            if (winningPlayer === 'X') {
+                status.innerHTML = `You Win!`;
+                if(message) message.classList.remove('hidden');
+                // Unlock mobile button if on mobile
+                if (window.innerWidth < 1024) unlockCurrentCard();
+            } else {
+                status.innerHTML = `You Lost! Restarting...`;
+                setTimeout(initializeTicTacToe, 1500); 
+            }
+            return true;
+        }
+
+        if (!board.includes("")) {
+            status.innerHTML = `It's a Draw! Restarting...`;
+            gameActive = false;
+            setTimeout(initializeTicTacToe, 1500);
+            return true;
+        }
+        
+        return false;
+    };
+
+    const handleCellClick = (e) => {
+        const clickedCell = e.target;
+        const clickedCellIndex = parseInt(clickedCell.dataset.index);
+        if (board[clickedCellIndex] !== "" || !gameActive) return;
+        handleCellPlayed(clickedCell, clickedCellIndex);
+        if (!handleResultValidation()) {
+            setTimeout(handleAIClick, 500);
+        }
+    };
+    
+    const handleAIClick = () => {
+        if (!gameActive) return;
+        let move = -1;
+        let emptyIndices = board.map((val, idx) => val === "" ? idx : -1).filter(idx => idx !== -1);
+        if (emptyIndices.length > 0) move = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+
+        if (move !== -1 && board[move] === "") {
+            const cell = document.querySelector(`.cell[data-index="${move}"]`);
+            board[move] = "O";
+            cell.innerHTML = 'O';
+            cell.classList.add('O'); 
+            handleResultValidation();
         }
     }
 
-    if (pointer) {
-        const percent = (currentIndex / lines.length) * 100;
-        const safePercent = 5 + (percent * 0.9);
-        pointer.style.left = `${safePercent}%`;
-    }
-}
-
-function triggerFade(el) {
-    el.classList.remove("fadeText");
-    void el.offsetWidth; 
-    el.classList.add("fadeText");
-}
-
-function manualChange(direction) {
-    if (!isPowered) return;
-    currentIndex = (currentIndex + direction + lines.length) % lines.length;
-    tuneRotation += (direction * DEG_PER_STATION);
-    
-    const knob = document.getElementById("tuneKnob");
-    if(knob) knob.style.transform = `rotate(${tuneRotation}deg)`;
-
-    updateDisplay();
-}
-
-function togglePowerMobile() {
-    isPowered = !isPowered;
-    if (isPowered) {
-        volRotation = 75; 
-    } else {
-        volRotation = 0; 
-    }
-    const volKnob = document.getElementById("volKnob");
-    if(volKnob) volKnob.style.transform = `rotate(${volRotation}deg)`;
-    updateDisplay();
-}
-
-const tuneContainer = document.getElementById("tuneContainer");
-const tuneKnob = document.getElementById("tuneKnob");
-const volContainer = document.getElementById("volContainer");
-const volKnob = document.getElementById("volKnob");
-const displayLarge = document.getElementById("displayLarge");
-const fmPointer = document.getElementById("fmPointer");
-const tunerArea = document.getElementById("tunerArea");
-const mobTuner = document.getElementById("mobTuner");
-
-let isDragging = false;
-let dragSource = ''; 
-let knobCenter = { x: 0, y: 0 };
-let lastAngle = 0;
-let currentRotation = 0;
-let startX = 0;
-let startY = 0;
-
-if(volKnob) volKnob.style.transform = `rotate(${volRotation}deg)`;
-updateDisplay();
-
-
-if (tuneContainer) {
-    tuneContainer.addEventListener('mousedown', (e) => {
-        if (!isPowered) return;
-        isDragging = true;
-        dragSource = 'knob';
-        startKnobDrag(e, tuneKnob);
-    });
-}
-
-if (volContainer) {
-    volContainer.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        dragSource = 'vol';
-        startX = e.clientX;
-        startY = e.clientY;
-        startKnobDrag(e, volKnob);
-    });
-}
-
-if (tunerArea) {
-    tunerArea.addEventListener('mousedown', (e) => {
-        if (!isPowered) return;
-        isDragging = true;
-        dragSource = 'tuner';
-        document.body.style.cursor = 'grabbing';
-        handleTunerDrag(e.clientX, tunerArea);
-        e.preventDefault();
-        requestAnimationFrame(dragLoop);
-    });
-}
-
-if (mobTuner) {
-    mobTuner.addEventListener('mousedown', (e) => {
-        if (!isPowered) return;
-        isDragging = true;
-        dragSource = 'mobTuner'; 
-        document.body.style.cursor = 'grabbing';
-        handleTunerDrag(e.clientX, mobTuner);
-        e.preventDefault();
-        requestAnimationFrame(dragLoop);
+    grid.querySelectorAll('.cell').forEach(cell => {
+        cell.innerHTML = "";
+        cell.classList.remove('O');
+        cell.replaceWith(cell.cloneNode(true)); 
     });
     
-    mobTuner.addEventListener('touchstart', (e) => {
-        if (!isPowered) return;
-        isDragging = true;
-        dragSource = 'mobTuner';
-        handleTunerDrag(e.touches[0].clientX, mobTuner);
-        e.preventDefault(); 
-        requestAnimationFrame(dragLoop);
-    }, {passive: false});
+    document.querySelectorAll('#tictactoe-grid .cell').forEach(cell => {
+         cell.addEventListener('click', handleCellClick, { once: true });
+    });
 }
 
-function startKnobDrag(e, element) {
-    const rect = element.getBoundingClientRect();
-    knobCenter = {
-        x: rect.left + rect.width / 2,
-        y: rect.top + rect.height / 2
+function initializeWordCard() {
+    window.chooseWord = (word) => {
+        const status = document.getElementById('word-status');
+        if(status) {
+            status.textContent = `You chose '${word}'. A beautiful choice, just like you.`;
+            status.classList.remove('hidden');
+        }
+        // Unlock mobile button if on mobile
+        if (window.innerWidth < 1024) unlockCurrentCard();
     };
-    lastAngle = Math.atan2(e.clientY - knobCenter.y, e.clientX - knobCenter.x);
-    document.body.style.cursor = 'grabbing';
-    
-    if(tuneKnob) tuneKnob.style.transition = 'none';
-    if(volKnob) volKnob.style.transition = 'none';
-    if(displayLarge) displayLarge.style.transition = 'none';
-
-    e.preventDefault();
-    requestAnimationFrame(dragLoop);
 }
 
-function handleTunerDrag(clientX, element) {
-    const rect = element.getBoundingClientRect();
-    let rawPercent = (clientX - rect.left) / rect.width;
-    rawPercent = Math.max(0, Math.min(1, rawPercent));
+window.finalShowdown = function() {
+    clearInterval(symbolInterval);
+    document.querySelectorAll('.float-symbol').forEach(el => el.remove());
+
+    document.getElementById('mobile-view-wrapper').classList.add('hidden');
+    document.getElementById('desktop-wiki-view').classList.add('hidden');
     
-    let visualPercent = rawPercent * 100;
-    let logicalPercent = (visualPercent - 5) / 90; 
-    logicalPercent = Math.max(0, Math.min(1, logicalPercent));
+    document.body.style.transition = 'background-color 1.5s ease';
+    document.body.style.backgroundColor = '#000000'; 
     
-    let targetRotation = logicalPercent * (lines.length * DEG_PER_STATION);
-    tuneRotation = targetRotation;
-    currentRotation = tuneRotation;
-    lastAngle = 0; 
+    setTimeout(() => {
+        const finalDisplayElements = document.getElementById('final-display-elements');
+        finalDisplayElements.classList.remove('hidden');
+        setTimeout(() => {
+            finalDisplayElements.style.opacity = '1';
+        }, 100); 
+        const fireworksCanvas = document.getElementById('fireworks-canvas');
+        fireworksCanvas.classList.remove('hidden');
+        resizeCanvas();
+        running = true;
+        setTimeout(() => { loop(); }, 1500); 
+    }, 1000); 
 }
 
+function resizeCanvas() {
+    const fireworksCanvas = document.getElementById('fireworks-canvas');
+    fireworksCanvas.width = window.innerWidth;
+    fireworksCanvas.height = window.innerHeight;
+}
+function Particle(x, y, color) {
+    this.x = x; this.y = y; this.color = color;
+    this.velocity = { x: Math.random() * 6 - 3, y: Math.random() * 6 - 3 };
+    this.alpha = 1; this.friction = 0.98; this.gravity = 0.08;
+    this.radius = Math.random() * 3 + 1;
+}
+Particle.prototype.update = function() {
+    this.velocity.x *= this.friction; this.velocity.y *= this.friction;
+    this.velocity.y += this.gravity; this.x += this.velocity.x;
+    this.y += this.velocity.y; this.alpha -= 0.015;
+    if (this.alpha < 0) this.alpha = 0;
+}
+Particle.prototype.draw = function() {
+    const ctx = document.getElementById('fireworks-canvas').getContext('2d');
+    ctx.save(); ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+    ctx.fillStyle = this.color; ctx.globalAlpha = this.alpha;
+    ctx.fill(); ctx.restore();
+}
+function createFirework(x, y, color) {
+    for (let i = 0; i < 60; i++) { particles.push(new Particle(x, y, color)); }
+}
+let particles = [];
+let running = false;
+function loop() {
+    if (!running) return;
+    const fireworksCanvas = document.getElementById('fireworks-canvas');
+    const ctx = fireworksCanvas.getContext('2d');
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.08)'; 
+    ctx.fillRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
+    for (let i = particles.length - 1; i >= 0; i--) {
+        let p = particles[i]; p.update(); p.draw();
+        if (p.alpha <= 0 || p.y > fireworksCanvas.height) particles.splice(i, 1);
+    }
+    if (particles.length < 500 && Math.random() < 0.06) { 
+        const x = Math.random() * fireworksCanvas.width;
+        const y = Math.random() * fireworksCanvas.height * 0.7;
+        const color = `hsl(${Math.random() * 360}, 100%, 65%)`;
+        createFirework(x, y, color);
+    }
+    requestAnimationFrame(loop);
+}
 
-function dragLoop() {
-    if (!isDragging) return;
+let areNavsOpen = false;
+const navPanels = {
+    top: document.getElementById('topNav'),
+    bottom: document.getElementById('bottomNav'),
+    left: document.getElementById('leftNav'),
+    right: document.getElementById('rightNav')
+};
+const navToggle = document.getElementById('navToggle');
+const navToggleIcon = document.getElementById('navToggleIcon');
+const navToggleX = document.getElementById('navToggleX');
 
-    if (dragSource === 'vol') {
-        if(volKnob) volKnob.style.transform = `rotate(${volRotation}deg)`;
+function openAllNavs() {
+    navPanels.top.classList.remove('-translate-y-full');
+    navPanels.bottom.classList.remove('translate-y-full');
+    navPanels.left.classList.remove('-translate-x-full');
+    navPanels.right.classList.remove('translate-x-full');
+    document.body.classList.add('navs-open');
+    navToggleIcon.classList.add('hidden');
+    navToggleX.classList.remove('hidden');
+    areNavsOpen = true;
+}
+window.closeAllNavs = function() {
+    navPanels.top.classList.add('-translate-y-full');
+    navPanels.bottom.classList.add('translate-y-full');
+    navPanels.left.classList.add('-translate-x-full');
+    navPanels.right.classList.add('translate-x-full');
+    document.body.classList.remove('navs-open');
+    navToggleIcon.classList.remove('hidden');
+    navToggleX.classList.add('hidden');
+    areNavsOpen = false;
+}
+function toggleAllNavs(e) {
+    if (e) e.stopPropagation(); 
+    if (areNavsOpen) window.closeAllNavs(); else openAllNavs();
+}
+
+function startFloatingSymbols() {
+    if (symbolInterval) return;
+    
+    const symbols = ['*', '†', '‡', '§', '✦', '✧', '•', '·', '+'];
+    const createSymbol = () => {
+        const symbol = document.createElement('div');
+        symbol.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
+        symbol.classList.add('float-symbol');
+        symbol.style.left = `${Math.random() * 100}vw`;
+        const duration = 10 + Math.random() * 5; 
+        symbol.style.animationDuration = `${duration}s`;
+        document.body.appendChild(symbol);
+        setTimeout(() => { symbol.remove(); }, duration * 1000); 
+    };
+    symbolInterval = setInterval(createSymbol, 800);
+}
+
+function stopFloatingSymbols() {
+    if (symbolInterval) {
+        clearInterval(symbolInterval);
+        symbolInterval = null;
+    }
+    // Remove existing symbols
+    document.querySelectorAll('.float-symbol').forEach(el => el.remove());
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Initial check
+    if (window.innerWidth < 1024) {
+        startFloatingSymbols();
+        renderCard(currentCardIndex);
+    } else {
+        renderDesktopWiki();
+    }
+
+    navToggle.addEventListener('click', toggleAllNavs);
+
+    // Close navs when clicking outside
+    document.addEventListener('click', (e) => {
+        if (areNavsOpen && !e.target.closest('.nav-panel') && !e.target.closest('#navToggle')) {
+            window.closeAllNavs();
+        }
+    });
+    
+    window.addEventListener('resize', () => {
+        const isDesktop = window.innerWidth >= 1024;
         
-        if (volRotation < 10) {
-            if (isPowered) {
-                isPowered = false;
-                updateDisplay();
+        if (isDesktop) {
+            stopFloatingSymbols();
+            if(document.getElementById('wiki-sections-container').children.length === 0) {
+                renderDesktopWiki();
             }
         } else {
-            if (!isPowered) {
-                isPowered = true;
-                updateDisplay(); 
-            }
+            startFloatingSymbols();
+            renderCard(currentCardIndex);
         }
-    }
-
-    if(tuneKnob) tuneKnob.style.transform = `rotate(${tuneRotation}deg)`;
-
-    let rawIndex = Math.round(tuneRotation / DEG_PER_STATION);
-    let perfectRotation = rawIndex * DEG_PER_STATION;
-    let deviation = Math.abs(tuneRotation - perfectRotation);
-    let maxDeviation = DEG_PER_STATION / 2;
-    let signalStrength = 1 - Math.min(deviation / maxDeviation, 1); 
-    let safeIndex = ((rawIndex % lines.length) + lines.length) % lines.length;
-
-    if (fmPointer) {
-        let exactIndex = tuneRotation / DEG_PER_STATION;
-        let wrappedExactIndex = ((exactIndex % lines.length) + lines.length) % lines.length;
-        const percent = (wrappedExactIndex / lines.length) * 100;
-        const safePercent = 5 + (percent * 0.9);
-        fmPointer.style.left = `${safePercent}%`;
-        
-        const mobPointer = document.getElementById("mobPointer");
-        if (mobPointer) mobPointer.style.left = `${safePercent}%`;
-    }
-    
-    if (safeIndex !== currentIndex) {
-        currentIndex = safeIndex;
-    }
-
-    if (isPowered) {
-        let opacity = 0.2 + (0.8 * signalStrength);
-        let blur = (1 - signalStrength) * 3; 
-        updateDisplay(opacity, blur);
-    } else {
-        updateDisplay();
-    }
-
-    requestAnimationFrame(dragLoop);
-}
-
-window.addEventListener('mousemove', (e) => {
-    if (!isDragging) return;
-    
-    if (dragSource === 'knob' || dragSource === 'vol') {
-        const currentAngle = Math.atan2(e.clientY - knobCenter.y, e.clientX - knobCenter.x);
-        let delta = currentAngle - lastAngle;
-        if (delta > Math.PI) delta -= 2 * Math.PI;
-        if (delta < -Math.PI) delta += 2 * Math.PI;
-        
-        const degDelta = delta * (180 / Math.PI);
-        
-        if (dragSource === 'knob') {
-            tuneRotation += degDelta;
-        } else if (dragSource === 'vol') {
-            volRotation += degDelta;
-            volRotation = Math.max(0, Math.min(300, volRotation));
-        }
-        lastAngle = currentAngle;
-    } 
-    else if (dragSource === 'tuner') {
-        handleTunerDrag(e.clientX, tunerArea);
-    }
-    else if (dragSource === 'mobTuner') {
-        handleTunerDrag(e.clientX, mobTuner);
-    }
+    });
 });
-
-window.addEventListener('touchmove', (e) => {
-    if (!isDragging) return;
-    if (dragSource === 'mobTuner') {
-        handleTunerDrag(e.touches[0].clientX, mobTuner);
-    }
-}, {passive: false});
-
-window.addEventListener('mouseup', endDrag);
-window.addEventListener('touchend', endDrag);
-
-function endDrag() {
-    if (isDragging) {
-        isDragging = false;
-        dragSource = '';
-        
-        if(tuneKnob) tuneKnob.style.transition = 'transform 0.3s ease';
-        if(volKnob) volKnob.style.transition = 'transform 0.1s ease';
-        if(displayLarge) {
-            displayLarge.style.transition = 'opacity 0.5s, filter 0.5s';
-        }
-    }
-}
 </script>
-
 </body>
 </html>
