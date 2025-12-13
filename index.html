@@ -1,1120 +1,1111 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Birthday Star - Wikipedia</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>365 Reasons Why You're Special</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gochi+Hand&family=Inter:wght@400;500;700&family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-<script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url('unnamed.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            transition: background-image 0.5s ease-in-out, color 0.5s ease;
+        }
+        
+        .festive-text { font-family: 'Gochi Hand', cursive; }
+        h1, h2, h3 { font-family: 'Pacifico', cursive; }
 
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Cinzel:wght@400;700&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Special+Elite&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;700&family=Noto+Serif:wght@400;700&display=swap');
+        @keyframes chatFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-:root {
-    --ink-black: #1a1a1a;
-    --paper-white: #f4f1ea;
-    --accent-red: #8b0000;
-    --wiki-bg: #f6f6f6;
-    --wiki-border: #a7d7f9;
-    --wiki-link: #3366cc;
-    --wiki-text: #202122;
-}
+        .nav-panel, #mainContent, #navToggleIcon, #navToggleX { transition: all 0.3s ease-in-out; }
+        #mainContent, .nav-panel { -ms-overflow-style: none; scrollbar-width: none; }
+        #mainContent::-webkit-scrollbar, .nav-panel::-webkit-scrollbar { display: none; }
+        
+        .chat-bubble, #revealButton, #revealCard, #revealButtonDesktop, #revealCardDesktop { 
+            opacity: 0; 
+            animation-fill-mode: forwards; 
+        }
 
-body {
-    transition: background-color 0.5s ease;
-}
+        .desktop-scroll::-webkit-scrollbar { width: 6px; }
+        .desktop-scroll::-webkit-scrollbar-track { background: transparent; }
+        .desktop-scroll::-webkit-scrollbar-thumb { background-color: rgba(0, 0, 0, 0.1); border-radius: 20px; }
 
-/* ================= MOBILE STYLES (< 1024px) ================= */
-@media (max-width: 1023px) {
-    body {
-        font-family: 'Crimson Text', serif;
-        background: url('https://images.unsplash.com/photo-1585314062340-f1a5a7c9328d?q=80&w=2070&auto=format&fit=crop') no-repeat center center/cover fixed;
-        min-height: 100vh;
-        color: var(--ink-black);
-        padding-top: 5rem; 
-        overflow-x: hidden;
-    }
+        .img-fallback {
+            display: flex; align-items: center; justify-content: center;
+            background-color: #f3f4f6; color: #6b7280; font-size: 0.75rem;
+            text-align: center; line-height: 1.2; border: 2px dashed #f9a8d4;
+        }
 
-    body::after {
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.1'/%3E%3C/svg%3E");
-        pointer-events: none;
-        z-index: 9999;
-        opacity: 0.4;
-        mix-blend-mode: multiply;
-    }
+        .insta-bubble {
+            border-radius: 22px;
+            border-bottom-left-radius: 4px;
+        }
 
-    body.navs-open {
-        padding-left: 80px; 
-        padding-right: 80px;
-    }
-}
+        .toast-notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background-color: rgba(255, 255, 255, 0.95);
+            color: #4b5563;
+            padding: 12px 24px;
+            border-radius: 50px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            font-weight: 500;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #e5e7eb;
+        }
 
-/* ================= DESKTOP STYLES (>= 1024px) ================= */
-@media (min-width: 1024px) {
-    body {
-        background-color: var(--wiki-bg);
-        font-family: 'Noto Sans', sans-serif;
-        color: var(--wiki-text);
-        padding: 0;
-        overflow-y: scroll;
-    }
-    body::after { display: none; }
-    /* Ensure symbols are hidden via CSS as a backup */
-    .float-symbol { display: none !important; }
-}
+        .toast-notification.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
 
-/* Typography & Components */
-.font-newspaper-title { font-family: 'Abril Fatface', cursive; letter-spacing: 0.05em; font-weight: 400; }
-.font-serif-display { font-family: 'Cinzel', serif; font-weight: 700; }
-.font-newspaper-body { font-family: 'Crimson Text', serif; font-size: 1.1rem; line-height: 1.6; }
-.font-typewriter { font-family: 'Special Elite', monospace; }
+        /* Desktop Sidebar Transitions */
+        #desktopSidebar { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        #desktopOverlay { transition: opacity 0.3s ease-in-out; }
 
-/* Desktop Wiki Specifics */
-.mw-body {
-    background-color: #ffffff;
-    border: 1px solid #a7d7f9;
-    border-right-width: 0;
-    margin-top: -1px;
-    padding: 1.25em 1.5em 1.5em 1.5em;
-}
-.firstHeading {
-    border-bottom: 1px solid #a2a9b1;
-    font-family: 'Linux Libertine','Georgia','Times','serif';
-    font-size: 1.8em;
-    font-weight: normal;
-    padding-bottom: 0.25em;
-    margin-bottom: 0.25em;
-}
-.mw-headline {
-    font-family: 'Linux Libertine','Georgia','Times','serif';
-    font-weight: bold;
-    font-size: 1.2em;
-    padding-top: 0.5em;
-    margin-top: 1em;
-    border-bottom: 1px solid #a2a9b1;
-    width: 100%;
-    display: block;
-}
-.toc {
-    background-color: #f8f9fa;
-    border: 1px solid #a2a9b1;
-    padding: 10px;
-    display: inline-block;
-    min-width: 200px;
-    margin-bottom: 1em;
-}
-.toc-title { font-weight: bold; text-align: center; margin-bottom: 0.5em; }
-.toc ul { list-style: none; padding-left: 0; }
-.toc li { font-size: 0.9em; margin-bottom: 0.2em; }
-.toc a { color: #0645ad; text-decoration: none; }
-.toc a:hover { text-decoration: underline; }
+        .sidebar-item-active { background-color: #f3f4f6; } /* gray-100 */
 
-/* Bouncy Button - Mobile/Interactive */
-.bouncy-button {
-    background-color: transparent;
-    color: var(--ink-black);
-    border-radius: 2px;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-family: 'Cinzel', serif;
-    font-weight: 700;
-    font-size: 0.9rem;
-    border: 2px solid var(--ink-black);
-    box-shadow: 4px 4px 0px var(--ink-black);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    padding: 0.75rem 1.5rem;
-    cursor: pointer;
-}
-.bouncy-button:hover { transform: translate(2px, 2px); box-shadow: 2px 2px 0px var(--ink-black); background-color: rgba(26, 26, 26, 0.05); }
-.bouncy-button:active { transform: translate(4px, 4px); box-shadow: none; }
-.bouncy-button:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; transform: translate(2px, 2px); }
+        /* Dark Mode Overrides */
+        body.dark-mode {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), url('unnamed.jpg');
+            color: #e5e7eb;
+        }
+        .dark-mode .nav-panel { background-color: #1f2937; color: #e5e7eb; }
+        .dark-mode .nav-link:hover { background-color: #374151; color: #f9a8d4; }
+        .dark-mode .bg-white { background-color: #1f2937; border-color: #374151; color: #e5e7eb; }
+        .dark-mode .bg-gray-100 { background-color: #374151; border-color: #4b5563; }
+        .dark-mode .text-gray-900, .dark-mode .text-gray-800 { color: #e5e7eb; }
+        .dark-mode .text-gray-500, .dark-mode .text-gray-600 { color: #9ca3af; }
+        .dark-mode .border-gray-200, .dark-mode .border-gray-100 { border-color: #374151; }
+        .dark-mode .bg-rose-50 { background-color: #374151; color: #fbcfe8; }
+        .dark-mode #desktopSidebar { background-color: rgba(31, 41, 55, 0.98); border-right-color: #374151; }
+        .dark-mode footer { background-color: rgba(31, 41, 55, 0.95); border-top-color: #374151; }
+        .dark-mode .sidebar-item-active { background-color: #374151; }
 
-/* Tic Tac Toe */
-#tictactoe-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    width: 240px; 
-    height: 240px;
-    margin: 2rem auto;
-    border: 3px solid var(--ink-black);
-    gap: 0;
-    background: transparent;
-}
-.cell {
-    display: flex; align-items: center; justify-content: center;
-    font-size: 3rem; font-weight: 400; cursor: pointer;
-    border: 1px solid var(--ink-black); transition: background-color 0.2s;
-    color: var(--ink-black); font-family: 'Special Elite', monospace; line-height: 1;
-}
-.cell:hover:not(:empty) { background-color: rgba(0,0,0,0.03); }
-.cell.O { color: var(--accent-red); }
-.cell:nth-child(3n) { border-right: none; }
-.cell:nth-child(n + 7) { border-bottom: none; }
-.cell:nth-child(3n-2) { border-left: none; }
-.cell:nth-child(n + 1):nth-child(-n + 3) { border-top: none; }
+        /* Dark Mode Chat Bubbles Fix */
+        .dark-mode .chat-bubble .bg-white\/80 {
+            background-color: rgba(55, 65, 81, 0.9); /* gray-700 */
+            color: #e5e7eb; /* gray-200 */
+        }
+        .dark-mode .chat-bubble .text-gray-800 {
+            color: #e5e7eb !important;
+        }
+        
+        /* Specific color fixes for dark mode bubbles */
+        .dark-mode .bg-blue-50 { background-color: rgba(30, 58, 138, 0.4); border-color: #1e40af; color: #bfdbfe; }
+        .dark-mode .bg-green-50 { background-color: rgba(20, 83, 45, 0.4); border-color: #166534; color: #bbf7d0; }
+        .dark-mode .bg-purple-50 { background-color: rgba(88, 28, 135, 0.4); border-color: #6b21a8; color: #e9d5ff; }
+        .dark-mode .bg-yellow-50 { background-color: rgba(113, 63, 18, 0.4); border-color: #854d0e; color: #fef08a; }
+        .dark-mode .bg-pink-50 { background-color: rgba(131, 24, 67, 0.4); border-color: #9d174d; color: #fbcfe8; }
+        .dark-mode .bg-gray-50 { background-color: rgba(55, 65, 81, 0.4); border-color: #4b5563; color: #e5e7eb; }
+        .dark-mode .bg-teal-50 { background-color: rgba(19, 78, 74, 0.4); border-color: #115e59; color: #99f6e4; }
+        .dark-mode .bg-orange-50 { background-color: rgba(124, 45, 18, 0.4); border-color: #9a3412; color: #fed7aa; }
+        .dark-mode .bg-red-50 { background-color: rgba(127, 29, 29, 0.4); border-color: #991b1b; color: #fecaca; }
+        .dark-mode .bg-indigo-50 { background-color: rgba(49, 46, 129, 0.4); border-color: #3730a3; color: #c7d2fe; }
+        .dark-mode .bg-slate-50 { background-color: rgba(30, 41, 59, 0.4); border-color: #334155; color: #cbd5e1; }
 
-/* Animations */
-@keyframes float-up {
-    0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 0; }
-    20% { opacity: 0.6; } 80% { opacity: 0.6; }
-    100% { transform: translateY(-100vh) scale(1.2) rotate(360deg); opacity: 0; }
-}
-.float-symbol {
-    position: fixed; bottom: -50px; font-size: 24px;
-    font-family: 'Special Elite', monospace; color: #2a2a2a; 
-    pointer-events: none; animation: float-up 12s infinite linear;
-    z-index: 10; opacity: 0.7;
-}
-
-/* Nav */
-.nav-panel { transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); position: fixed; z-index: 200; }
-#leftNav, #rightNav { width: 60px; }
-.nav-link:hover { background-color: rgba(255, 255, 255, 0.1); transform: scale(1.05); }
-
-/* Fireworks */
-.fireworks-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 100; }
-.final-display-container {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    z-index: 101; pointer-events: none; color: white; 
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
-    opacity: 0; transition: opacity 2s ease-in-out; background-color: rgba(0, 0, 0, 0.95); 
-}
-
-/* Desktop Sidebar Links */
-.wiki-sidebar-link { display: block; padding: 6px 10px; color: #0645ad; text-decoration: none; font-size: 0.85rem; }
-.wiki-sidebar-link:hover { text-decoration: underline; }
-
-/* Wiki Components */
-.wiki-logo {
-    width: 135px; height: 135px;
-    background: url('https://upload.wikimedia.org/wikipedia/en/8/80/Wikipedia-logo-v2.svg') no-repeat center center;
-    background-size: contain; margin: 0 auto 1em auto;
-}
-.wiki-infobox {
-    float: right; clear: right; width: 300px; margin: 0 0 1em 1em;
-    border: 1px solid #a2a9b1; background-color: #f8f9fa;
-    padding: 0.2em; font-size: 88%; line-height: 1.5em;
-}
-.wiki-infobox-header { background-color: #b0c4de; text-align: center; font-weight: bold; padding: 0.2em; }
-.wiki-infobox-image { padding: 10px 0; text-align: center; }
-.wiki-infobox-data { display: flex; justify-content: space-between; padding: 4px 8px; border-bottom: 1px solid #eaecf0; }
-
-.wiki-tab {
-    padding: 8px 16px; border: 1px solid #a7d7f9; border-bottom: none;
-    background: #fff; margin-right: 4px; font-size: 0.85rem; color: #0645ad;
-}
-.wiki-tab.active {
-    font-weight: bold; color: #000; background: white;
-    padding-bottom: 9px; margin-bottom: -1px; z-index: 10; position: relative;
-}
-</style>
+        /* Override text colors inside specific bubbles in dark mode */
+        .dark-mode .bg-blue-50 .text-gray-800,
+        .dark-mode .bg-green-50 .text-gray-800,
+        .dark-mode .bg-purple-50 .text-gray-800,
+        .dark-mode .bg-yellow-50 .text-gray-800,
+        .dark-mode .bg-pink-50 .text-gray-800,
+        .dark-mode .bg-gray-50 .text-gray-800,
+        .dark-mode .bg-teal-50 .text-gray-800,
+        .dark-mode .bg-orange-50 .text-gray-800,
+        .dark-mode .bg-red-50 .text-gray-800,
+        .dark-mode .bg-indigo-50 .text-gray-800,
+        .dark-mode .bg-slate-50 .text-gray-800 {
+            color: inherit !important;
+        }
+        
+    </style>
 </head>
+<body class="antialiased text-gray-800 overflow-hidden h-screen w-screen">
 
-<body>
-
-<!-- Mobile Navs -->
-<button id="navToggle" class="fixed top-4 left-4 z-[210] p-3 bg-[#1a1a1a] text-[#f4f1ea] rounded-full shadow-xl hover:bg-black transition-transform duration-200 ease-in-out bouncy-button border-none lg:hidden" style="padding: 0.75rem; border-radius: 9999px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);">
-    <svg id="navToggleIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-8 6h8"></path></svg>
-    <svg id="navToggleX" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-</button>
-
-<nav id="topNav" class="nav-panel fixed top-0 left-0 right-0 h-16 bg-[#1a1a1a] text-[#f4f1ea] shadow-xl flex items-center justify-center space-x-6 -translate-y-full border-b-2 border-[#f4f1ea]/10 lg:hidden">
-    <a href="index.html" class="nav-link px-3 py-2 text-sm font-newspaper-body tracking-widest uppercase">Home</a>
-    <a href="Special.html" class="nav-link px-3 py-2 text-sm font-newspaper-body tracking-widest uppercase">Special</a>
-    <a href="letter.html" class="nav-link px-3 py-2 text-sm font-newspaper-body tracking-widest uppercase">Letter</a>
-</nav>
-<nav id="bottomNav" class="nav-panel fixed bottom-0 left-0 right-0 h-16 bg-[#1a1a1a] text-[#f4f1ea] shadow-xl flex items-center justify-center space-x-6 translate-y-full border-t-2 border-[#f4f1ea]/10 lg:hidden">
-    <a href="anatomy.html" class="nav-link px-3 py-2 text-sm font-newspaper-body tracking-widest uppercase">Anatomy</a>
-    <a href="chat.html" class="nav-link px-3 py-2 text-sm font-newspaper-body tracking-widest uppercase">Heaven</a>
-    <a href="you.html" class="nav-link px-3 py-2 text-sm font-newspaper-body tracking-widest uppercase">You</a>
-</nav>
-<nav id="leftNav" class="nav-panel fixed left-0 top-0 bottom-0 bg-[#1a1a1a] text-[#f4f1ea] shadow-xl flex flex-col items-center space-y-6 overflow-y-auto py-20 -translate-x-full border-r-2 border-[#f4f1ea]/10 lg:hidden">
-    <a href="Diary.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Diary</a>
-    <a href="Universe.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Universe</a>
-    <a href="Box.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Box</a>
-    <a href="color.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Color</a>
-    <a href="Teacher.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Teacher</a>
-    <a href="The_River.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">River</a>
-    <a href="Mountain.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Mountain</a>
-    <a href="Paper_Star.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Paper Star</a>
-    <a href="Carttoon.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Cartoon</a>
-    <a href="Santa.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Santa</a>
-    <a href="Cloud.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Cloud</a>
-    <a href="Ink.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Ink</a>
-    <a href="Butterfly.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Butterfly</a>
-    <a href="Weather.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Weather</a>
-</nav>
-<nav id="rightNav" class="nav-panel fixed right-0 top-0 bottom-0 bg-[#1a1a1a] text-[#f4f1ea] shadow-xl flex flex-col items-center space-y-6 overflow-y-auto py-20 translate-x-full border-l-2 border-[#f4f1ea]/10 lg:hidden">
-    <a href="Skill.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Skill</a>
-    <a href="Msg.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Message</a>
-    <a href="21_Wish.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">21 Door</a>
-    <a href="Cake.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Cake</a>
-    <a href="Periodik_table.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Table</a>
-    <a href="Presence.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Presence</a>
-    <a href="Concept.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Concept</a>
-    <a href="Calender.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Calender</a>
-    <a href="Perspective.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">View</a>
-    <a href="Spotlight.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Spotlight</a>
-    <a href="Room.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Room</a>
-    <a href="Radio.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Radio</a>
-    <a href="Food.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Food</a>
-    <a href="Music.html" class="nav-link p-2 text-xs font-newspaper-body tracking-widest uppercase">Music</a>
-</nav>
-
-<!-- Mobile View Wrapper -->
-<div id="mobile-view-wrapper" class="lg:hidden">
-    <div class="flex items-center justify-center min-h-[80vh] w-full px-4">
-        <div id="main-card" class="w-full max-w-md bg-[#f4f1ea] border-2 border-black shadow-[8px_8px_0px_rgba(0,0,0,1)] p-6 text-center z-20 relative transition-all duration-1000 ease-in-out transform scale-100 opacity-100 my-8">
-            <div class="border-b-2 border-black pb-3 mb-6">
-                <h1 class="font-newspaper-title text-4xl text-black">Puzzle Corner</h1>
-                <div class="flex justify-between text-[11px] font-typewriter uppercase tracking-[0.2em] mt-2">
-                    <span>Daily Edition</span>
-                    <span>Vol. 21</span>
-                </div>
-            </div>
-            <h2 id="card-title-header" class="text-3xl font-newspaper-title text-black mb-6 uppercase tracking-wide leading-tight"></h2>
-            <section id="card-content" class="space-y-4 p-1 font-newspaper-body text-lg leading-relaxed text-left text-black">
-                <!-- Mobile card content goes here -->
-            </section>
-            <div class="flex justify-center w-full mt-8 pt-6 border-t border-black"> 
-                <button id="next-button" class="bouncy-button">Start Journey</button>
-            </div>
-        </div>
+    <div id="infoToast" class="toast-notification shadow-2xl">
+        <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span>This is the point of view of god from heaven</span>
     </div>
-</div>
 
-<!-- Desktop View Wrapper (Single Scrollable Page) -->
-<div id="desktop-wiki-view" class="hidden lg:flex w-full min-h-screen bg-[#f6f6f6] text-[#202122]">
-    
-    <!-- Sidebar -->
-    <aside class="w-44 pt-6 pl-4 pr-2 border-r border-transparent">
-        <div class="wiki-logo"></div>
+    <button id="themeToggle" class="fixed top-6 right-6 z-[70] p-2 bg-white/90 text-purple-600 rounded-full shadow-lg hover:bg-yellow-100 transition-all duration-300 ring-1 ring-purple-100">
+        <svg id="moonIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+        <svg id="sunIcon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+    </button>
+
+    <!-- MOBILE VIEW (md:hidden) -->
+    <div class="block md:hidden h-full w-full relative overflow-hidden bg-pink-50/80 transition-colors duration-500">
         
-        <!-- Main Nav -->
-        <div class="mb-6">
-            <h3 class="text-xs text-[#54595d] border-b border-[#eaecf0] mb-2 pb-1 font-normal uppercase tracking-wide">Main</h3>
-            <nav class="space-y-1">
-                <a href="index.html" class="wiki-sidebar-link">Home</a>
-                <a href="Special.html" class="wiki-sidebar-link">Special</a>
-                <a href="letter.html" class="wiki-sidebar-link">Letter</a>
-                <a href="anatomy.html" class="wiki-sidebar-link">Anatomy</a>
-                <a href="chat.html" class="wiki-sidebar-link">Heaven</a>
-                <a href="you.html" class="wiki-sidebar-link">You</a>
-            </nav>
-        </div>
+        <button id="navToggle" class="fixed top-6 left-6 z-[70] p-2 bg-yellow-100 text-purple-600 rounded-full shadow-lg hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:ring-offset-2">
+            <svg id="navToggleIcon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-8 6h8"></path></svg>
+            <svg id="navToggleX" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
 
-        <!-- Chronicles (Left Nav Items) -->
-        <div class="mb-6">
-            <h3 class="text-xs text-[#54595d] border-b border-[#eaecf0] mb-2 pb-1 font-normal uppercase tracking-wide">Chronicles</h3>
-            <nav class="space-y-1">
-                <a href="Diary.html" class="wiki-sidebar-link">Diary</a>
-                <a href="Universe.html" class="wiki-sidebar-link">Universe</a>
-                <a href="Box.html" class="wiki-sidebar-link">Box</a>
-                <a href="color.html" class="wiki-sidebar-link">Color</a>
-                <a href="Teacher.html" class="wiki-sidebar-link">Teacher</a>
-                <a href="The_River.html" class="wiki-sidebar-link">River</a>
-                <a href="Mountain.html" class="wiki-sidebar-link">Mountain</a>
-                <a href="Paper_Star.html" class="wiki-sidebar-link">Paper Star</a>
-                <a href="Carttoon.html" class="wiki-sidebar-link">Cartoon</a>
-                <a href="Santa.html" class="wiki-sidebar-link">Santa</a>
-                <a href="Cloud.html" class="wiki-sidebar-link">Cloud</a>
-                <a href="Ink.html" class="wiki-sidebar-link">Ink</a>
-                <a href="Butterfly.html" class="wiki-sidebar-link">Butterfly</a>
-                <a href="Weather.html" class="wiki-sidebar-link">Weather</a>
-            </nav>
-        </div>
+        <nav id="topNav" class="nav-panel fixed top-0 left-0 right-0 z-[60] h-16 bg-yellow-100 text-purple-600 shadow-md flex items-center justify-center space-x-6 -translate-y-full">
+            <a href="index.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Home</a>
+            <a href="Special.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Special</a>
+            <a href="letter.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Letter</a>
+        </nav>
 
-        <!-- Artifacts (Right Nav Items) -->
-        <div class="mb-6">
-            <h3 class="text-xs text-[#54595d] border-b border-[#eaecf0] mb-2 pb-1 font-normal uppercase tracking-wide">Artifacts</h3>
-            <nav class="space-y-1">
-                <a href="Skill.html" class="wiki-sidebar-link">Skill</a>
-                <a href="Msg.html" class="wiki-sidebar-link">Message</a>
-                <a href="21_Wish.html" class="wiki-sidebar-link">21 Door</a>
-                <a href="Cake.html" class="wiki-sidebar-link">Cake</a>
-                <a href="Periodik_table.html" class="wiki-sidebar-link">Table</a>
-                <a href="Presence.html" class="wiki-sidebar-link">Presence</a>
-                <a href="Concept.html" class="wiki-sidebar-link">Concept</a>
-                <a href="Calender.html" class="wiki-sidebar-link">Calender</a>
-                <a href="Perspective.html" class="wiki-sidebar-link">View</a>
-                <a href="Spotlight.html" class="wiki-sidebar-link">Spotlight</a>
-                <a href="Room.html" class="wiki-sidebar-link">Room</a>
-                <a href="Radio.html" class="wiki-sidebar-link">Radio</a>
-                <a href="Food.html" class="wiki-sidebar-link">Food</a>
-                <a href="Music.html" class="wiki-sidebar-link">Music</a>
-            </nav>
-        </div>
-    </aside>
+        <nav id="bottomNav" class="nav-panel fixed bottom-0 left-0 right-0 z-[60] h-16 bg-yellow-100 text-purple-600 shadow-md flex items-center justify-center space-x-6 translate-y-full">
+            <a href="anatomy.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Anatomy</a>
+            <a href="chat.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Heaven</a>
+            <a href="you.html" class="nav-link px-3 py-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">You</a>
+        </nav>
 
-    <!-- Main Content Area -->
-    <main class="flex-1 p-6 relative">
-        
-        <!-- Wiki Header Links -->
-        <div class="flex justify-end border-b border-[#a7d7f9] mb-[-1px]">
-            <div class="flex space-x-1">
-                <span class="text-xs pt-2 px-2">Not logged in</span>
-                <a href="#" class="text-xs text-[#0645ad] pt-2 px-2 hover:underline">Talk</a>
-                <a href="#" class="text-xs text-[#0645ad] pt-2 px-2 hover:underline">Contributions</a>
-                <a href="#" class="text-xs text-[#0645ad] pt-2 px-2 hover:underline">Create account</a>
-                <a href="#" class="text-xs text-[#0645ad] pt-2 px-2 hover:underline">Log in</a>
-            </div>
-        </div>
+        <nav id="leftNav" class="nav-panel fixed left-0 top-0 bottom-0 z-[60] w-20 bg-yellow-100 text-purple-800 shadow-md flex flex-col items-center space-y-6 -translate-x-full overflow-y-auto py-20">
+            <a href="Diary.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Diary</a>
+            <a href="Universe.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Universe</a>
+            <a href="Box.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Box</a>
+            <a href="color.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Color</a>
+            <a href="Teacher.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Teacher</a>
+            <a href="The_River.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">River</a>
+            <a href="Mountain.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Mountain</a>
+            <a href="Paper_Star.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Paper Star</a>
+            <a href="Carttoon.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Cartoon</a>
+            <a href="Santa.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Santa</a>
+            <a href="Cloud.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Cloud</a>
+            <a href="Ink.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Paint</a>
+            <a href="Butterfly.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Butterfly</a>
+            <a href="Weather.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Weather</a>
+        </nav>
 
-        <!-- Wiki Tabs -->
-        <div class="flex mt-8 items-end border-b border-[#a7d7f9]">
-            <div class="wiki-tab active">Article</div>
-            <div class="wiki-tab">Talk</div>
-            <div class="flex-1"></div>
-            <div class="wiki-tab active">Read</div>
-            <div class="wiki-tab">Edit</div>
-            <div class="wiki-tab">View history</div>
-            <div class="relative ml-4 mb-1">
-                <input type="text" placeholder="Search Wikipedia" class="border border-[#a2a9b1] px-2 py-1 text-sm w-48 shadow-inner">
-                <button class="absolute right-0 top-0 h-full px-2 text-[#54595d] font-bold">🔍</button>
-            </div>
-        </div>
+        <nav id="rightNav" class="nav-panel fixed right-0 top-0 bottom-0 z-[60] w-22 bg-yellow-100 text-purple-800 shadow-md flex flex-col items-center space-y-6 translate-x-full overflow-y-auto py-20">
+            <a href="Skill.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Skill</a>
+            <a href="Msg.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Massege</a>
+            <a href="21_Wish.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">21_Door</a>
+            <a href="Cake.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Cake</a>
+            <a href="Periodik_table.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Periodik_table</a>
+            <a href="Presence.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Presence</a>
+            <a href="Concept.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Concept</a>
+            <a href="Calender.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Calender</a>
+            <a href="Perspective.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Perspective</a>
+            <a href="Spotlight.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Spotlight</a>
+            <a href="Room.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Room</a>
+            <a href="Radio.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Radio</a>
+            <a href="Food.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Food</a>
+            <a href="Music.html" class="nav-link p-2 rounded-md text-sm font-medium hover:bg-yellow-200 transition-colors duration-200 festive-text">Music</a>
+        </nav>
 
-        <!-- Wiki Content Container -->
-        <div class="mw-body shadow-sm">
-            
-            <h1 class="firstHeading">The Birthday Star (2025)</h1>
-            <div class="text-[0.85em] mb-4">From Wikipedia, the free encyclopedia</div>
-
-            <!-- Infobox -->
-            <div class="wiki-infobox">
-                <div class="wiki-infobox-header">The Birthday Star</div>
-                <div class="wiki-infobox-image">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=300" alt="Star Profile" class="w-full h-auto border border-gray-300 p-1">
-                    <div class="text-xs mt-1">Fig 1. The subject of the celebration</div>
-                </div>
-                <div class="wiki-infobox-data"><span class="font-bold">Born</span><span>October 24, 2025</span></div>
-                <div class="wiki-infobox-data"><span class="font-bold">Status</span><span>Most Loved</span></div>
-                <div class="wiki-infobox-data"><span class="font-bold">Occupation</span><span>Being Amazing</span></div>
-                <div class="wiki-infobox-data"><span class="font-bold">Known For</span><span>Kindness, Silence</span></div>
-            </div>
-
-            <!-- Introduction -->
-            <div id="wiki-full-article" class="pr-4 max-w-4xl text-justify text-[#202122] font-sans text-[0.95rem] leading-[1.6]">
-                <p class="mb-4">
-                    <b>The Birthday Star</b> is a celestial phenomenon observed annually on October 24. It is characterized by an increase in global happiness levels and a series of mysterious puzzles that unlock heartfelt messages.
-                </p>
-                <p class="mb-4">
-                    The phenomenon was first documented in the <b>London Edition</b> of the daily chronicle. Observers note that the subject possesses a rare quality of "shining bright" regardless of atmospheric conditions.
-                </p>
-
-                <!-- Table of Contents -->
-                <div class="toc">
-                    <div class="toc-title">Contents <span class="font-normal text-xs">[<a href="#" class="text-[#0645ad]">hide</a>]</span></div>
-                    <ul>
-                        <li><a href="#section-0">1 Introduction</a></li>
-                        <li><a href="#section-1">2 The Challenge of Destiny</a></li>
-                        <li><a href="#section-2">3 Mathematical Anomalies</a></li>
-                        <li><a href="#section-3">4 Linguistic Analysis</a></li>
-                        <li><a href="#section-4">5 Public Reception</a></li>
-                        <li><a href="#section-5">6 The Manuscript</a></li>
-                        <li><a href="#section-ref">7 References</a></li>
-                    </ul>
-                </div>
-
-                <!-- Dynamic Content Will Be Injected Here via JS -->
-                <div id="wiki-sections-container"></div>
-
-                <!-- References / Final Footer -->
-                <h2 id="section-ref" class="mw-headline">7. References <span class="text-sm font-normal ml-2">[<a href="#" class="text-[#0645ad]">edit</a>]</span></h2>
-                <div class="text-sm mt-2 mb-8">
-                    1. <i>The Book of Life</i>, Vol 21, Page 365.<br>
-                    2. <i>Universal Truths</i>, Chapter: "You are my whole universe".
-                </div>
-            </div>
-        </div>
-    </main>
-</div>
-
-<!-- Shared Final Elements -->
-<canvas id="fireworks-canvas" class="fireworks-canvas hidden"></canvas>
-<div id="final-display-elements" class="final-display-container hidden">
-    <div class="flex flex-col items-center justify-center gap-6 w-full h-full p-4">
-        <div id="final-photo-container" class="w-60 h-60 md:w-80 md:h-80 bg-gray-200 rounded-none overflow-hidden shadow-[12px_12px_0px_#f4f1ea] border-4 border-[#f4f1ea] flex items-center justify-center text-black text-center text-lg italic font-newspaper-body grayscale contrast-125 sepia-[.2]">
-            YOUR FINAL PHOTO HERE
-        </div>
-        <div id="final-message-box" class="text-center mt-8">
-            <h1 class="font-newspaper-title text-5xl md:text-8xl text-[#f4f1ea] tracking-wider mb-4">HAPPY BIRTHDAY!</h1>
-            <h2 class="font-serif-display text-2xl md:text-4xl mt-2 text-[#f4f1ea] italic tracking-wide">You are my whole universe.</h2>
-        </div>
-    </div>
-</div>
-
-<script>
-let currentCardIndex = 0;
-let symbolInterval; 
-let mainCard;
-
-const cards = [
-    { 
-        title: "Editorial Note",
-        desktopTitle: "1. Introduction",
-        mobileHtml: `
-            <div class="space-y-6 text-left">
-                <p class="text-xl font-bold font-serif-display text-black uppercase border-b-2 border-black pb-2 inline-block tracking-widest">A Special Delivery</p>
-                <div class="text-lg text-black font-newspaper-body text-justify leading-relaxed">
-                    <p class="mb-4"><span class="float-left text-6xl font-newspaper-title mr-3 leading-none mt-[-8px]">B</span>efore the grand finale, there are few special cards waiting just for you.</p>
-                    <p>Each card holds a small message, a riddle, or a challenge that you need to complete to unlock the next one. Only when you complete the final card will the surprise be revealed.</p>
-                    <p class="mt-6 italic font-serif text-gray-800 border-l-2 border-black pl-4">Tap below to start your personalized adventure. Shine bright.</p>
-                </div>
-            </div>
-        `,
-        wikiHtml: `
-            <div class="space-y-4 text-left">
-                <p class="text-lg font-newspaper-body text-justify leading-relaxed">
-                    <span class="float-left text-5xl font-newspaper-title mr-2 leading-none mt-[-4px]">B</span>efore the grand finale, there are few special cards waiting just for you. Each card holds a small message, a riddle, or a challenge that you need to complete to unlock the next one. Only when you complete the final card will the surprise be revealed.
-                </p>
-                <p class="italic text-gray-700 border-l-2 border-[#a2a9b1] pl-4">Tap below to start your personalized adventure. Shine bright.</p>
-            </div>
-        `,
-        buttonText: "Turn Page",
-        callback: null 
-    },
-    { 
-        title: "Puzzle: Destiny",
-        desktopTitle: "2. The Challenge of Destiny",
-        mobileHtml: `
-            <div class="flex flex-col items-center">
-                <p class="text-lg font-newspaper-body italic mb-6">You play as 'X'. Win this simple game to open the first door.</p>
-                <div class="relative p-2 border-2 border-black bg-white shadow-lg">
-                    <div id="tictactoe-grid" class="mx-auto my-0">
-                        <div class="cell" data-index="0"></div><div class="cell" data-index="1"></div><div class="cell" data-index="2"></div>
-                        <div class="cell" data-index="3"></div><div class="cell" data-index="4"></div><div class="cell" data-index="5"></div>
-                        <div class="cell" data-index="6"></div><div class="cell" data-index="7"></div><div class="cell" data-index="8"></div>
+        <main id="mainContent" class="absolute inset-0 pt-28 overflow-y-auto pb-20">
+            <div class="container mx-auto p-4 md:p-8 max-w-2xl">
+                <div class="bg-white rounded-xl shadow-xl overflow-hidden flex flex-col h-[600px] md:h-[650px] relative">
+                    <!-- Insta Style Header -->
+                    <div class="bg-white p-3 border-b border-gray-100 flex items-center justify-between sticky top-0 z-10">
+                        <div class="flex items-center space-x-3">
+                            <button class="text-gray-800">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                            </button>
+                            <div class="flex items-center space-x-2">
+                                <div class="relative">
+                                    <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 p-[2px]">
+                                        <div class="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
+                                            <span class="text-xs font-bold text-gray-600">✨</span>
+                                        </div>
+                                    </div>
+                                    <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                                </div>
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-bold text-gray-900 leading-none">Heaven ✨</span>
+                                    <span class="text-[10px] text-gray-500">Active now</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-4 text-gray-800">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        </div>
                     </div>
-                </div>
-                <div class="flex flex-col items-center mt-6">
-                    <p id="game-status" class="text-xl font-bold font-serif-display uppercase tracking-widest">Your move</p>
-                    <button id="restart-game-btn" class="hidden mt-2 bouncy-button px-4 py-2 text-xs" onclick="initializeTicTacToe()">Try Again</button>
-                </div>
-                <p id="card-msg-1" class="text-2xl font-newspaper-body italic mt-4 hidden text-[#8b0000]">"You have won my heart."</p>
-            </div>
-        `,
-        wikiHtml: `
-            <div class="flex flex-col items-start">
-                <p class="mb-4">This section represents the interactive component of the celebration. You play as 'X'.</p>
-                <div class="relative p-2 border border-gray-300 bg-white mb-4">
-                    <div id="tictactoe-grid" class="mx-auto my-0">
-                        <div class="cell" data-index="0"></div><div class="cell" data-index="1"></div><div class="cell" data-index="2"></div>
-                        <div class="cell" data-index="3"></div><div class="cell" data-index="4"></div><div class="cell" data-index="5"></div>
-                        <div class="cell" data-index="6"></div><div class="cell" data-index="7"></div><div class="cell" data-index="8"></div>
-                    </div>
-                </div>
-                <div class="w-full flex flex-col items-center">
-                    <p id="game-status" class="font-bold text-gray-700">Your move</p>
-                    <button id="restart-game-btn" class="hidden mt-2 px-3 py-1 bg-gray-200 border border-gray-400 text-sm hover:bg-gray-300" onclick="initializeTicTacToe()">Try Again</button>
-                </div>
-                <p id="card-msg-1" class="text-lg italic mt-4 hidden text-[#8b0000]">"You have won my heart."</p>
-            </div>
-        `,
-        buttonText: "Next Section",
-        callback: initializeTicTacToe,
-        isLocked: true 
-    },
-    { 
-        title: "The Number Puzzle",
-        desktopTitle: "3. Mathematical Anomalies",
-        mobileHtml: `
-            <div class="space-y-6 text-center">
-                <p class="text-2xl font-bold font-serif-display">What is this called?</p>
-                <p class="text-5xl font-newspaper-title tracking-widest border-y-2 border-black py-4 my-4">(12.99999)</p>
-                <div class="flex justify-center">
-                     <button class="bouncy-button px-6 py-2 text-xs" onclick="document.getElementById('card-msg-2').classList.remove('hidden'); unlockCurrentCard()">Reveal Answer</button>
-                </div>
-                <p id="card-msg-2" class="text-xl font-newspaper-body mt-6 hidden transition-all duration-500">
-                    <span class="text-3xl font-bold font-serif-display block mb-2">13</span> (tera) hone laga huu
-                </p>
-            </div>
-        `,
-        wikiHtml: `
-            <div class="space-y-4">
-                <p>Researchers have discovered a unique numerical anomaly:</p>
-                <div class="p-4 bg-[#f8f9fa] border border-[#eaecf0] text-center font-mono text-xl">
-                    (12.99999)
-                </div>
-                <p>What is this value colloquially known as?</p>
-                <div class="flex justify-start">
-                     <button class="px-4 py-2 bg-[#f8f9fa] border border-[#a2a9b1] text-sm hover:bg-[#e2e2e2]" onclick="document.getElementById('card-msg-2').classList.remove('hidden')">Reveal Answer</button>
-                </div>
-                <p id="card-msg-2" class="text-lg mt-4 hidden">
-                    <span class="font-bold">13</span> (tera) hone laga huu. <span class="italic text-sm text-gray-600">- A common pun involving the number 13 (tera) in Hindi.</span>
-                </p>
-            </div>
-        `,
-        buttonText: "Next Section",
-        callback: null,
-        isLocked: true 
-    },
-    { 
-        title: "The Word Riddle",
-        desktopTitle: "4. Linguistic Analysis",
-        mobileHtml: `
-            <div class="space-y-6 text-center">
-                <p class="text-2xl font-bold font-serif-display">Do you know what will last forever in this world?</p>
-                 <div class="flex justify-center mt-6">
-                    <button class="bouncy-button px-6 py-2 text-xs" onclick="document.getElementById('card-msg-3').classList.remove('hidden'); unlockCurrentCard()">Show Me The Hint</button>
-                </div>
-                <p id="card-msg-3" class="text-xl font-newspaper-body italic mt-8 hidden border-l-4 border-black pl-4 text-left">
-                    On your keyboard look at the letters between Y and O.
-                </p>
-            </div>
-        `,
-        wikiHtml: `
-            <div class="space-y-4">
-                <p>A query regarding permanence in the physical realm:</p>
-                <blockquote class="border-l-4 border-[#eaecf0] pl-4 italic bg-[#f8f9fa] py-2">
-                    "Do you know what will last forever in this world?"
-                </blockquote>
-                 <div class="flex justify-start mt-2">
-                    <button class="px-4 py-2 bg-[#f8f9fa] border border-[#a2a9b1] text-sm hover:bg-[#e2e2e2]" onclick="document.getElementById('card-msg-3').classList.remove('hidden')">Show Hint</button>
-                </div>
-                <p id="card-msg-3" class="text-lg italic mt-4 hidden text-gray-800">
-                    Observation: On standard QWERTY keyboards, the keys between 'Y' and 'O' represent the answer.
-                </p>
-            </div>
-        `,
-        buttonText: "I Know The Answer",
-        callback: null,
-        isLocked: true
-    },
-    { 
-        title: "Opinion Poll",
-        desktopTitle: "5. Public Reception",
-        mobileHtml: `
-            <div class="space-y-6 text-center">
-                <p class="text-xl font-newspaper-body font-bold leading-relaxed">Which one of these single words resonates with your soul today?</p>
-                <div class="flex justify-center gap-6 mt-6">
-                    <button class="bouncy-button px-8 py-3" onclick="chooseWord('serenity')">Serenity</button>
-                    <button class="bouncy-button px-8 py-3" onclick="chooseWord('radiant')">Radiant</button>
-                </div>
-                <p id="word-status" class="text-lg font-newspaper-body italic mt-8 hidden text-gray-800">
-                    A beautiful choice, just like you. The card is now unlocked.
-                </p>
-            </div>
-        `,
-        wikiHtml: `
-            <div class="space-y-4">
-                <p>Which one of these descriptors resonates with the subject's soul today?</p>
-                <div class="flex gap-4 mt-2">
-                    <button class="px-4 py-2 bg-[#f8f9fa] border border-[#a2a9b1] text-sm hover:bg-[#e2e2e2]" onclick="chooseWord('serenity')">Serenity</button>
-                    <button class="px-4 py-2 bg-[#f8f9fa] border border-[#a2a9b1] text-sm hover:bg-[#e2e2e2]" onclick="chooseWord('radiant')">Radiant</button>
-                </div>
-                <p id="word-status" class="text-lg italic mt-4 hidden text-gray-800">
-                    A beautiful choice.
-                </p>
-            </div>
-        `,
-        buttonText: "Almost There",
-        callback: initializeWordCard,
-        isLocked: true 
-    },
-    { 
-        title: "Access Granted",
-        desktopTitle: null, 
-        mobileHtml: `
-            <div class="space-y-6 text-center">
-                <p class="text-5xl font-newspaper-title mb-6">Congratulations</p>
-                <div class="border-t-2 border-b-2 border-black py-8">
-                    <p class="text-xl font-newspaper-body leading-relaxed">You successfully completed all five challenges.</p>
-                    <p class="text-xl font-newspaper-body mt-4 leading-relaxed">You have unlocked the most important message of all, prepared with every ounce of my heart.</p>
-                </div>
-                <p class="text-xs font-typewriter uppercase tracking-[0.2em] mt-6 font-bold">Click below to read the cover story</p>
-            </div>
-        `,
-        wikiHtml: `...`,
-        buttonText: "Read Cover Story",
-        callback: () => { cards[5].isLocked = false; }
-    },
-    { 
-        title: "Cover Story: The Wish",
-        desktopTitle: "6. The Manuscript",
-        mobileHtml: `
-            <div class="space-y-4 text-center h-full flex flex-col">
-                <div class="text-base font-newspaper-body leading-relaxed text-justify p-2 rounded-none pr-4 lg:grid lg:grid-cols-2 lg:gap-10 lg:content-start">
-                    <div class="col-span-2 mb-6 border-b-2 border-black pb-6">
-                        <p class="text-5xl font-newspaper-title text-center mb-4">Happy Birthday</p>
-                        <p class="italic text-center text-lg mb-4 font-serif text-gray-700">"To the girl who doesn’t even realise how special she truly is..."</p>
-                        <p class="first-letter:text-6xl first-letter:font-newspaper-title first-letter:float-left first-letter:mr-3 first-letter:mt-[-10px]">
-                           Today isn’t just your birthday, it’s the day the universe quietly created someone who would one day change the world without even trying. You don’t have to do anything extraordinary… your smile already does more than you can imagine. My only wish today is simple: May God keep you happy, peaceful and loved today and always.
-                        </p>
-                    </div>
-                    <div class="lg:col-span-1 border-r border-gray-300 pr-6">
-                        <h4 class="font-bold border-b border-black mb-2 uppercase tracking-widest text-sm font-sans">I. Why me?</h4>
-                        <p class="text-sm mb-6">
-                            I saw you with my heart, not my eyes, and trust me, you are the most beautiful person I have ever seen. You matter to me more than you think and more than I show. Every story begins with your smile and ends in your eyes.. I tried to describe you, but every metaphor fell short, even the stars felt ordinary when I looked into your eyes, and the moon hid behind the clouds when you walked through that door. Every poem I wrote ended up sounding like your name, how can I define someone who makes the universe feel small? You are not just beautiful, you are the reason why poetry exists. There may be billions, but none of them are you. If I had to pick between your happiness and mine, I’d choose yours without a second thought, because when you’re happy, I automatically become happy too. My relation with you isn’t like rain that comes and goes, it’s like air, always around you even when silent. You will always be loved by me, no matter what happens, in a world full of doubt, you’re the one I’m sure about. You’re special to me because you’re the only person I genuinely want to see happy from the bottom of my heart, and every time I look at you, something inside me whispers, “God, please keep her happy at any cost.” I’ve never felt this way for anyone before, that’s why you’ll always be special. And I don’t love you for how you look, talk, or walk, I love you for your soul, your softness, calmness, and silent strength. That’s the part of you I fell for, and that’s the part no one else can replace.
-                        </p>
-                        <h4 class="font-bold border-b border-black mb-2 uppercase tracking-widest text-sm font-sans">II. You chose the wrong girl</h4>
-                        <p class="text-sm mb-6">
-                            No matter what you think about yourself, you are the sweetest, greatest, and most amazing person in my eyes. I’m glad I found you in this lifetime, in this chaos, in a world full of passing faces. You’re not just someone I met, you’re someone I feel safe with. When you’re near, the noise fades, time slows down, and everything feels right. You are the only one I always mention in my prayers. And if you think you’re the “wrong girl,” let me tell you something… you are not wrong, youre real. Youre genuine. Youre pure hearted. You feel deeply even when you hide it. You care silently even when you pretend you dont. You carry a softness inside you that the world rarely understands. People made you doubt yourself not because youre wrong, but because youre rare, and rare things are often misunderstood. Youre the girl who gives more than she receives, who holds pain but still smiles, who stays strong even when shes tired. You think youre “too much” or “not enough,”. I didnt choose you because youre perfect, I chose you because youre you and thats more than enough. I care about your heart, your soul, your silence, and your softness. Youre not the wrong girl youre the right one… you just dont see it yet.
-                        </p>
-                    </div>
-                    <div class="lg:col-span-1 pl-2">
-                        <h4 class="font-bold border-b border-black mb-2 uppercase tracking-widest text-sm font-sans">III. You will find someone better?</h4>
-                        <p class="text-sm mb-6">
-                            Im not searching for “better.” Im searching for you, your thoughts, your kindness, your calmness, your smile that makes even the hardest day feel lighter. “Better” isnt a person; “Better” is a feeling. And the feeling I get with you doesnt happen twice. Youre not replaceable. Not comparable. Not someone I can forget.
-                        </p>
 
-                        <h4 class="font-bold border-b border-black mb-2 uppercase tracking-widest text-sm font-sans">IV. Why you wait so long?</h4>
-                        <p class="text-sm mb-6">
-                            Waiting is the best part of any story, anticipation makes every moment more meaningful. When you truly love someone, you can wait for them without expectations or conditions. Love is not like “Subha jaha lander, samne Delhi , yeh nahi to koi aur sahi.” Thats not how love works. Love is like a dharma, a duty to care, to do good, and to never think bad, no matter the situation. Even Lord Krishna had to wait for Radha, so who am I? Just a normal person waiting for someone extraordinary. Ive seen you go quiet many times, your eyes still, thinking deeply, searching for answers. Your eyes speak more than your words ever could. If youre busy, Ill wait. If youre sad, Ill listen. If you need help, Ill be there. No matter what happens, youre never alone. I know I may not be perfect, but one thing is certain, I will never leave your side. If you need help, Ill be Doraemon, if you need a smile, Ill be Shinchan, if you need strength, Ill be Chhota Bheem, if youre bored, Ill be Jerry.
-                        </p>
+                    <!-- Chat Area -->
+                    <div id="chatContainerMobile" class="flex-1 p-4 space-y-4 overflow-y-auto bg-white">
+                        <div id="mobileMessagesList" class="space-y-4"></div>
+                        
+                        <div id="revealButton" class="text-center py-4 mt-2">
+                            <button class="bg-rose-500 text-white font-bold py-2.5 px-5 rounded-full shadow-lg hover:bg-rose-600 transition-all transform hover:scale-105 text-sm">
+                                Thanks a ton for being in the Universe.
+                            </button>
+                        </div>
 
-                        <h4 class="font-bold border-b border-black mb-2 uppercase tracking-widest text-sm font-sans">V. What do I want from you?</h4>
-                        <p class="text-sm mb-6">
-                            I dont want you to change a single thing about yourself. I dont ask for perfection, because your imperfections are what make you real. All I want is your time, your honesty, and your trust. I want to be the person you share your silence with. I want to be the one who makes you laugh when you want to cry. I just want you—your happy days, your messy days, your tired days. Just be with me, and that is enough.
-                        </p>
+                        <div id="revealCard" class="hidden mt-4 mx-4 bg-gray-50 border border-gray-100 rounded-2xl p-4 text-center">
+                            <h3 class="text-xl font-bold text-rose-600 mb-2 font-pacific">It's You!</h3>
+                            <p class="text-sm text-gray-600 mb-4">Happy Birthday to the one who has it all!</p>
+                            <img src="Image.jpg" alt="The Birthday Star!" class="w-full h-auto rounded-lg shadow-sm object-cover" onerror="this.onerror=null; this.outerHTML='<div class=\'w-full h-48 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400 text-xs\'>It\'s You!</div>';">
+                        </div>
+                    </div>
 
-                        <h4 class="font-bold border-b border-black mb-2 uppercase tracking-widest text-sm font-sans">VI. My promise to you</h4>
-                        <p class="text-sm mb-6">
-                            I cant promise that life will always be easy, or that I can solve every problem. But I promise that you wont have to face any of it alone. I promise to be your calm in the storm, your safe place when the world gets too loud. I promise to respect you, cherish you, and remind you of your worth every single day. No matter where life takes us, my hand will always be holding yours.
-                        </p>
-                        <div class="border-2 border-black p-4 mt-6 bg-[#eae8e0]">
-                            <p class="text-center font-bold italic font-serif-display text-base">
-                                "At the end of everything, theres only one truth: Im grateful you exist. I will always pray for your happiness first. Thank you for being someone worth admiring, someone worth waiting for, someone who unknowingly made the world softer. Once again, Happy Birthday. You deserve every gentle, peaceful, beautiful thing in this world."
-                            </p>
+                    <!-- Insta Style Input Footer -->
+                    <div class="p-3 bg-white border-t border-gray-100 flex items-center space-x-3">
+                        <div class="bg-blue-600 p-1.5 rounded-full text-white">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </div>
+                        <div class="flex-1 bg-gray-100 rounded-full h-10 px-4 flex items-center justify-between">
+                            <span class="text-gray-400 text-sm">Message...</span>
+                            <div class="flex items-center space-x-2 text-gray-500">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                        </div>
+                        <div class="text-gray-800">
+                            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
                         </div>
                     </div>
                 </div>
-                <p class="text-xs font-typewriter uppercase tracking-[0.2em] mt-4 font-bold">Proceed to Grand Finale</p>
             </div>
-        `,
-        wikiHtml: `
-            <div class="space-y-4 text-justify">
-                <div class="p-4 bg-[#f9f9f9] border border-[#eee] mb-6">
-                    <p class="text-2xl font-serif text-center mb-2">Happy Birthday</p>
-                    <p class="italic text-center text-gray-600 mb-4">"To the girl who doesn’t even realise how special she truly is..."</p>
-                    <p class="leading-relaxed">
-                       Today isn’t just your birthday, it’s the day the universe quietly created someone who would one day change the world without even trying. You don’t have to do anything extraordinary… your smile already does more than you can imagine. My only wish today is simple: May God keep you happy, peaceful and loved today and always.
-                    </p>
+            
+            <footer class="text-center py-6 mt-16 bg-white/80 backdrop-blur-md border-t border-gray-200">
+                <p class="text-gray-600">Made with ❤️ just for you.</p>
+            </footer>
+        </main>
+    </div>
+
+    <!-- DESKTOP VIEW (hidden md:flex) - Updated Navigation -->
+    <div class="hidden md:flex h-screen w-full bg-cover bg-center overflow-hidden relative" style="background-image: url('unnamed.jpg');">
+        
+        <!-- Toggle Button for Desktop Nav -->
+        <button id="desktopNavToggle" class="absolute top-6 left-6 z-[60] p-3 bg-white/90 text-rose-600 rounded-full shadow-lg hover:bg-rose-50 transition-all duration-300 ring-1 ring-rose-200 group">
+            <svg class="w-6 h-6 transform group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+
+        <!-- Overlay Backdrop -->
+        <div id="desktopOverlay" class="fixed inset-0 bg-black/20 backdrop-blur-sm z-[55] hidden opacity-0 cursor-pointer"></div>
+
+        <!-- Sliding Sidebar Nav -->
+        <div id="desktopSidebar" class="fixed top-0 left-0 bottom-0 w-[450px] bg-white/95 backdrop-blur-xl border-r border-white/50 z-[60] transform -translate-x-full shadow-2xl flex flex-col">
+            <div class="p-6 border-b border-rose-100 bg-rose-50/50 flex justify-between items-center">
+                <div>
+                    <h2 class="text-3xl text-rose-600 font-pacific">365 Reasons</h2>
+                    <p class="text-sm text-gray-500 mt-1">Explore your special universe</p>
                 </div>
+                <button id="desktopNavClose" class="p-2 text-gray-500 hover:text-rose-600 hover:bg-rose-100 rounded-full transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <nav class="flex-1 overflow-y-auto desktop-scroll p-6">
+                <div class="grid grid-cols-2 gap-3">
+                    <!-- 34 Navigation Links -->
+                    <a href="index.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-rose-300 hover:bg-rose-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-rose-700">Home</a>
+                    <a href="Special.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-rose-300 hover:bg-rose-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-rose-700">Special</a>
+                    <a href="letter.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-rose-300 hover:bg-rose-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-rose-700">Letter</a>
+                    <a href="anatomy.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-rose-300 hover:bg-rose-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-rose-700">Anatomy</a>
+                    <a href="chat.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-rose-300 hover:bg-rose-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-rose-700">Heaven Chat</a>
+                    <a href="you.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-rose-300 hover:bg-rose-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-rose-700">You</a>
+                    <a href="Diary.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-blue-300 hover:bg-blue-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-blue-700">Diary</a>
+                    <a href="Universe.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-blue-300 hover:bg-blue-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-blue-700">Universe</a>
+                    <a href="Box.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-blue-300 hover:bg-blue-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-blue-700">Box</a>
+                    <a href="color.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-purple-300 hover:bg-purple-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-purple-700">Color</a>
+                    <a href="Teacher.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-blue-300 hover:bg-blue-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-blue-700">Teacher</a>
+                    <a href="The_River.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-teal-300 hover:bg-teal-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-teal-700">River</a>
+                    <a href="Mountain.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-gray-700">Mountain</a>
+                    <a href="Paper_Star.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-yellow-300 hover:bg-yellow-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-yellow-700">Paper Star</a>
+                    <a href="Carttoon.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-pink-300 hover:bg-pink-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-pink-700">Cartoon</a>
+                    <a href="Santa.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-red-300 hover:bg-red-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-red-700">Santa</a>
+                    <a href="Cloud.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-sky-300 hover:bg-sky-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-sky-700">Cloud</a>
+                    <a href="Ink.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-indigo-300 hover:bg-indigo-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-indigo-700">Paint</a>
+                    <a href="Butterfly.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-pink-300 hover:bg-pink-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-pink-700">Butterfly</a>
+                    <a href="Weather.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-blue-300 hover:bg-blue-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-blue-700">Weather</a>
+                    <a href="Skill.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-orange-300 hover:bg-orange-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-orange-700">Skill</a>
+                    <a href="Msg.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-green-300 hover:bg-green-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-green-700">Message</a>
+                    <a href="21_Wish.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-yellow-300 hover:bg-yellow-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-yellow-700">21 Door</a>
+                    <a href="Cake.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-rose-300 hover:bg-rose-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-rose-700">Cake</a>
+                    <a href="Periodik_table.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-green-300 hover:bg-green-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-green-700">Periodic Table</a>
+                    <a href="Presence.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-purple-300 hover:bg-purple-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-purple-700">Presence</a>
+                    <a href="Concept.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-indigo-300 hover:bg-indigo-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-indigo-700">Concept</a>
+                    <a href="Calender.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-red-300 hover:bg-red-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-red-700">Calendar</a>
+                    <a href="Perspective.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-teal-300 hover:bg-teal-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-teal-700">Perspective</a>
+                    <a href="Spotlight.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-yellow-300 hover:bg-yellow-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-yellow-700">Spotlight</a>
+                    <a href="Room.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-gray-300 hover:bg-gray-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-gray-700">Room</a>
+                    <a href="Radio.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-orange-300 hover:bg-orange-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-orange-700">Radio</a>
+                    <a href="Food.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-green-300 hover:bg-green-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-green-700">Food</a>
+                    <a href="Music.html" class="p-3 rounded-xl bg-white border border-gray-100 shadow-sm hover:shadow-md hover:border-purple-300 hover:bg-purple-50 transition-all duration-200 flex items-center justify-center text-center text-sm font-semibold text-gray-700 hover:text-purple-700">Music</a>
+                </div>
+            </nav>
+        </div>
+
+        <div class="absolute inset-0 bg-white/30 backdrop-blur-sm z-0"></div>
+
+        <main class="relative z-10 flex-1 flex flex-col h-full overflow-hidden p-8 pt-20">
+            <div class="flex-1 flex gap-8 max-w-7xl mx-auto w-full h-full">
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                        <h4 class="font-bold border-b border-[#a2a9b1] mb-2">6.1 Why me?</h4>
-                        <p class="text-sm mb-4">
-                            I saw you with my heart, not my eyes, and trust me, you are the most beautiful person I have ever seen. You matter to me more than you think and more than I show. Every story begins with your smile and ends in your eyes.. I tried to describe you, but every metaphor fell short, even the stars felt ordinary when I looked into your eyes, and the moon hid behind the clouds when you walked through that door. Every poem I wrote ended up sounding like your name, how can I define someone who makes the universe feel small? You are not just beautiful, you are the reason why poetry exists. There may be billions, but none of them are you. If I had to pick between your happiness and mine, I’d choose yours without a second thought, because when you’re happy, I automatically become happy too. My relation with you isn’t like rain that comes and goes, it’s like air, always around you even when silent. You will always be loved by me, no matter what happens, in a world full of doubt, you’re the one I’m sure about. You’re special to me because you’re the only person I genuinely want to see happy from the bottom of my heart, and every time I look at you, something inside me whispers, “God, please keep her happy at any cost.” I’ve never felt this way for anyone before, that’s why you’ll always be special. And I don’t love you for how you look, talk, or walk, I love you for your soul, your softness, calmness, and silent strength. That’s the part of you I fell for, and that’s the part no one else can replace.
-                        </p>
-                        
-                        <h4 class="font-bold border-b border-[#a2a9b1] mb-2">6.2 The Hypothesis of Error</h4>
-                        <p class="text-sm mb-4">
-                            No matter what you think about yourself, you are the sweetest, greatest, and most amazing person in my eyes. I’m glad I found you in this lifetime, in this chaos, in a world full of passing faces. You’re not just someone I met, you’re someone I feel safe with. When you’re near, the noise fades, time slows down, and everything feels right. You are the only one I always mention in my prayers. And if you think you’re the “wrong girl,” let me tell you something… you are not wrong, youre real. Youre genuine. Youre pure hearted. You feel deeply even when you hide it. You care silently even when you pretend you dont. You carry a softness inside you that the world rarely understands. People made you doubt yourself not because youre wrong, but because youre rare, and rare things are often misunderstood. Youre the girl who gives more than she receives, who holds pain but still smiles, who stays strong even when shes tired. You think youre “too much” or “not enough,”. I didnt choose you because youre perfect, I chose you because youre you and thats more than enough. I care about your heart, your soul, your silence, and your softness. Youre not the wrong girl youre the right one… you just dont see it yet.
-                        </p>
-                    </div>
+                <div class="flex-1 bg-white rounded-xl shadow-2xl flex overflow-hidden border border-gray-200 max-w-5xl mx-auto w-full">
                     
-                    <div>
-                        <h4 class="font-bold border-b border-[#a2a9b1] mb-2">6.3 Comparative Analysis</h4>
-                        <p class="text-sm mb-4">
-                            Im not searching for “better.” Im searching for you, your thoughts, your kindness, your calmness, your smile that makes even the hardest day feel lighter. “Better” isnt a person; “Better” is a feeling. And the feeling I get with you doesnt happen twice. Youre not replaceable. Not comparable. Not someone I can forget.
-                        </p>
+                    <!-- LEFT SIDEBAR (Chats List) -->
+                    <div class="w-80 border-r border-gray-200 flex-col hidden md:flex bg-white">
+                        <!-- Sidebar Header -->
+                        <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-white sticky top-0 z-10">
+                            <span class="font-bold text-lg text-gray-800 flex items-center gap-1">
+                                juhi_007 <svg class="w-4 h-4 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </span>
+                            <svg class="w-6 h-6 text-gray-800 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        </div>
+                        <!-- Overflow List -->
+                        <div id="desktopSidebarList" class="flex-1 overflow-y-auto desktop-scroll">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
 
-                        <h4 class="font-bold border-b border-[#a2a9b1] mb-2">6.4 The Wait</h4>
-                        <p class="text-sm mb-4">
-                            Waiting is the best part of any story, anticipation makes every moment more meaningful. When you truly love someone, you can wait for them without expectations or conditions. Love is not like “Subha jaha lander, samne Delhi , yeh nahi to koi aur sahi.” Thats not how love works. Love is like a dharma, a duty to care, to do good, and to never think bad, no matter the situation. Even Lord Krishna had to wait for Radha, so who am I? Just a normal person waiting for someone extraordinary. Ive seen you go quiet many times, your eyes still, thinking deeply, searching for answers. Your eyes speak more than your words ever could. If youre busy, Ill wait. If youre sad, Ill listen. If you need help, Ill be there. No matter what happens, youre never alone. I know I may not be perfect, but one thing is certain, I will never leave your side. If you need help, Ill be Doraemon, if you need a smile, Ill be Shinchan, if you need strength, Ill be Chhota Bheem, if youre bored, Ill be Jerry.
-                        </p>
-
-                        <h4 class="font-bold border-b border-[#a2a9b1] mb-2">6.5 Requirements</h4>
-                        <p class="text-sm mb-4">
-                            I dont want you to change a single thing about yourself. I dont ask for perfection, because your imperfections are what make you real. All I want is your time, your honesty, and your trust. I want to be the person you share your silence with. I want to be the one who makes you laugh when you want to cry. I just want you—your happy days, your messy days, your tired days. Just be with me, and that is enough.
-                        </p>
-
-                        <h4 class="font-bold border-b border-[#a2a9b1] mb-2">6.6 The Promise</h4>
-                        <p class="text-sm mb-4">
-                            I cant promise that life will always be easy, or that I can solve every problem. But I promise that you wont have to face any of it alone. I promise to be your calm in the storm, your safe place when the world gets too loud. I promise to respect you, cherish you, and remind you of your worth every single day. No matter where life takes us, my hand will always be holding yours.
-                        </p>
+                    <!-- RIGHT CHAT AREA -->
+                    <div class="flex-1 flex flex-col h-full relative bg-white">
                         
-                        <div class="border border-[#a2a9b1] bg-[#f8f9fa] p-4 mt-6">
-                            <p class="text-center italic text-sm">
-                                "At the end of everything, theres only one truth: Im grateful you exist. I will always pray for your happiness first. Thank you for being someone worth admiring, someone worth waiting for, someone who unknowingly made the world softer. Once again, Happy Birthday. You deserve every gentle, peaceful, beautiful thing in this world."
-                            </p>
+                        <div class="bg-white p-3 border-b border-gray-100 flex items-center justify-between z-10">
+                            <div class="flex items-center space-x-3">
+                                <button class="text-gray-800 lg:hidden">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                                </button>
+                                <div class="flex items-center space-x-2" id="chatHeaderInfo">
+                                    <!-- Dynamic Header Content -->
+                                    <div class="relative">
+                                        <div class="w-9 h-9 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 p-[2px]">
+                                            <div class="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden">
+                                                <span class="text-xs font-bold text-gray-600">✨</span>
+                                            </div>
+                                        </div>
+                                        <div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <span class="text-sm font-bold text-gray-900 leading-none">Heaven ✨</span>
+                                        <span class="text-[10px] text-gray-500">Active now</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex items-center space-x-4 text-gray-800">
+                                <svg class="w-6 h-6 hover:text-gray-600 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                <svg class="w-6 h-6 hover:text-gray-600 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <div id="chatInfoBtn" class="p-2 text-gray-800 rounded-full hover:bg-gray-100 cursor-pointer transition-colors">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="chatContainerDesktop" class="flex-1 p-6 overflow-y-auto desktop-scroll space-y-4 bg-white">
+                            <div id="desktopMessagesList" class="space-y-4"></div>
+                            
+                            <div id="revealButtonDesktop" class="text-center py-4 mt-2 hidden">
+                                <button class="bg-rose-500 text-white font-bold py-3 px-6 rounded-full shadow-lg hover:bg-rose-600 transition-all transform hover:scale-105 text-sm">
+                                    Thanks a ton for being in the Universe.
+                                </button>
+                            </div>
+
+                            <div id="revealCardDesktop" class="hidden mt-4 mx-12 bg-gray-50 border border-gray-100 rounded-2xl p-6 text-center max-w-md mx-auto">
+                                <h3 class="text-2xl font-bold text-rose-600 mb-2 font-pacific">It's You!</h3>
+                                <p class="text-base text-gray-600 mb-4">Happy Birthday to the one who has it all!</p>
+                                <img src="Image.jpg" alt="The Birthday Star!" class="w-full h-auto rounded-lg shadow-sm object-cover" onerror="this.onerror=null; this.outerHTML='<div class=\'w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center text-gray-400\'>It\'s You!</div>';">
+                            </div>
+                        </div>
+
+                        <div class="p-4 bg-white border-t border-gray-200">
+                            <div class="flex items-center space-x-3 bg-white p-1">
+                                 <div class="bg-blue-600 p-2 rounded-full text-white cursor-pointer hover:bg-blue-700 transition">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                 </div>
+                                 <div class="flex-1 bg-gray-100 rounded-full h-12 px-5 flex items-center justify-between">
+                                    <span class="text-gray-400 text-sm">Message...</span>
+                                    <div class="flex items-center space-x-3 text-gray-500">
+                                        <svg class="w-6 h-6 hover:text-gray-700 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"></path></svg>
+                                        <svg class="w-6 h-6 hover:text-gray-700 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        <svg class="w-6 h-6 hover:text-gray-700 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                    </div>
+                                 </div>
+                                 <div class="text-gray-800 p-2 hover:bg-gray-100 rounded-full cursor-pointer transition">
+                                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                                 </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        `,
-        buttonText: "See Final Surprise",
-        callback: () => { cards[6].isLocked = false; }
-    },
-];
+        </main>
+    </div>
 
-function unlockCurrentCard() {
-    // Only used for mobile flow logic
-    cards[currentCardIndex].isLocked = false;
-    const button = document.getElementById('next-button');
-    if (button) {
-        button.disabled = false;
-        button.classList.remove('opacity-50', 'cursor-not-allowed');
-    }
-}
+    <script>
+        const chatMessages = [
+            { role: "Bhagwan Brahma", color: "blue", text: "Arre, aaj maine prithvi par ek kamaal ki rachna dekhi. Ek ladki hai, naam hai Juhi. Usko banate waqt, maine usme gyan aur kala ki gazab samajh daali hai. Pakka woh apni buddhi se duniya mein bahut naam kamaegi" },
+            { role: "Bhagwan Vishnu", color: "green", text: "Bilkul sahi kaha. Maine uske karmon ki rekha dekhi hai. Uske dil mein dharam aur apni duty poori karne ki gazab ki taakat hai." },
+            { role: "Bhagwan Maheshwar", color: "purple", text: "Hmmm. Us ladki ki aatma mein ek alag hi aag hai. Yeh aag mehnat ki hai, badlaav ki hai. Jab bhi koi mushkil aayegi, uski yahi taakat use aur nikhaar degi. Woh strong banegi." },
+            { role: "Mata Parvati", color: "yellow", text: "Aapne bilkul sahi kaha, Mahadev. Usme taakat bhi hai aur dil ki narmi bhi. Par uska dil ekdum phool jaisa narm hai. Usme ek maa, ek behen, aur ek beti, sabka roop dikhta hai. Aur pata hai? Aaj prithvi par uska birthday hai. Is mauke par, main use dher saara aashirvaad dena chahti hoon. 🔥" },
+            { role: "Devi Radha", color: "pink", text: "Uska birthday. Kitna pyaara din hai! Uske pyaar mein toh ek alag hi jaadu hai, sab pareshaniya mita deta hai. Aaj uske birthday par, hum sabki taraf se yeh message us tak zaroor jaana chahiye." },
+            { role: "Devi Radha", color: "pink", isPoem: true, text: `✨ Happy Birthday Juhi ✨\n\nTumhari Kanti ki roshni,\nDe Shanti ka sukoon.\nShraddha aur Buddhi tumhari,\nJeet ka har kaaran ho yun.\n\nSmriti meethi yaadon ki,\nVritti hamesha sahi.\nShakti aur Chetana,\nTumhe banaye anmol wahi.\n\nDayā  komal hriday ki,\nKsanti sabr ki pehchan.\nLajja tumhari sajawat,\nHar pal ka shringar pradhan.\n\nLakshmi ka ho saath sada,\nTusti bane muskaan.\nTrishna sahi disha de,\nSapno ka ho udaan.\n\nKsudha ho vikas ki,\nNidra ho chain bhari.\nChhaya rakhe surakshit,\nMatr ke pyaar si pyaari.\n\nJati tumhari pratibha,\nBhranti kabhi roke nahi.\nVishnumaya bhi haar maan,\nTumhari chamak ke aage kahin.\n\nHar pal rahe khushiyo se bhara,\nDil me rahe utsav ka pyaar.\nHappy Birthday, o pyaari si roshni,\nTum ho hum sabka sansar ✨🎂💐` },
+            { role: "Bhagwan Brahma", color: "blue", text: "Waah waah Bahut khoob, Devi Radha! Yeh blessings uski life ko successful bana degi." },
+            { role: "Bhagwan Vishnu", color: "green", text: "Mera aashirvaad hai ki Juhi hamesha sach aur achhai ke raaste par chale. Aur uski life mein hamesha santosh (satisfaction) bana rahe." },
+            { role: "Bhagwan Maheshwar", color: "purple", text: "Tathastu. Use kisi cheez ka darr na ho aur uski aatma aur bhi jaagruk ho." },
+            { role: "Mata Parvati", color: "yellow", text: "Mera aashirvaad hamesha uske saath hai. Woh shakti ban kar sabka bhala kare." },
+            { role: "Bhagwan Brahma", color: "blue", text: "Aur uski muskaan Maine toh phoolon ko bhi uski muskaan dekh kar khilte hue dekha hai. Kitni pyaari hai!" },
+            { role: "Bhagwan Vishnu", color: "green", text: "Satya hai. Aur uski aankhein... uski aankhon mein ek aisi chamak hai jo sabke dil ko sukoon deti hai. Bahut nirmal." },
+            { role: "Devi Radha", color: "pink", text: "Hahaha, Narayan Aap bhi uske fan ho gaye! Sach kahoon toh, uski har baat hi niraali hai. Woh jab hasti hai, toh lagta hai poora Devlok roshan ho gaya 🥰" },
+            { role: "Bhagwan Maheshwar", color: "purple", text: "Hmmm. Uske jaisa anmol ratna... maine bhi kam hi dekha hai. Uska hona hi ek blessing hai." },
+            { role: "Mata Parvati", color: "yellow", text: "Sach hai Uska dil itna saaf hai ki woh doosron ke dukh ko bhi apna samajh leti hai. Aisi dayālu aatma ko dekh kar mujhe garv hota hai. ❤️" },
+            { role: "Bhagwan Vishnu", color: "green", text: "Aur uski vajah se kitne chehron par muskaan aati hai... woh jahan jaati hai, khushiyan phailati hai. Yeh toh sakshat Lakshmi ka roop hai." },
+            { role: "Devi Radha", color: "pink", text: "Aha Aur uski adaa... Uski har chhoti chhoti baat mein itna charm hai ki koi bhi uspe fida ho jaaye Us jaisi toh koi doosri hai hi nahi 😉" },
+            { role: "Bhagwan Brahma", color: "blue", text: "Maine bahut si rachnayein ki hain, par Juhi ko banakar mujhe jo santosh mila hai, woh alag hai. She is... truly one of my best works. 🌟" },
+            { role: "Bhagwan Maheshwar", color: "purple", text: "Aur uski shaanti... Badi se badi toofan mein bhi, uske andar ek thehraav hai. Yahi uski asli shakti hai. Bahut durlabh hai yeh." },
+            { role: "Mata Parvati", color: "yellow", text: "Log uske paas aakar hi apni saari chinta bhool jaate hain. Uska saath... ek sukoon bhara ehsaas hai. Bilkul ek maa ke aanchal jaisa. 💖" },
+            { role: "Bhagwan Vishnu", color: "green", text: "Uska hona hi kaafi hai. Poori srishti ka balance bana rehta hai jab woh khush rehti hai. Uska wajood hi ek varadaan hai." },
+            { role: "Devi Radha", color: "pink", text: "Dekha Hum sab uske deewane hain! Sach mein, Juhi jaisi special roshni poore brahmaand mein nahi hai. Kaash woh dekh paati ki woh kitni amazing hai ✨" },
+            { role: "Bhagwan Brahma", color: "blue", text: "Uski creativity bhi toh dekho. Har cheez ko ek naye nazariye se dekhti hai. Uska dimaag bahut alag chalta hai." },
+            { role: "Bhagwan Vishnu", color: "green", text: "Aur kitni kind hai Chhote bade, sabse ek jaisa pyaar se pesh aati hai. Yahi toh uski khaasiyat hai." },
+            { role: "Mata Parvati", color: "yellow", text: "Aur apne logon ke liye... unke liye toh woh kuch bhi kar sakti hai. Ekdum protective shield ban jaati hai." },
+            { role: "Bhagwan Maheshwar", color: "purple", text: "Uske andar ek aisi gehraai hai jo bahut kam logon mein hoti hai. Uska gyaan sirf kitaabi nahi, anubhav ka hai." },
+            { role: "Devi Radha", color: "pink", text: "Aur uski hansi 😂 Sunte hi dil khush ho jaata hai. Aisa lagta hai jaise sangeet baj raha ho" },
+            { role: "Bhagwan Brahma", color: "blue", text: "Uski awaaz mein bhi ek sukoon hai. Woh bolti hai toh mann shaant ho jaata hai." },
+            { role: "Bhagwan Vishnu", color: "green", text: "Aur uska dil... kitna bada hai. Hamesha doosron ko dene ke liye taiyaar rehti hai." },
+            { role: "Mata Parvati", color: "yellow", text: "Bahut nurturing hai. Sabka khayaal aise rakhti hai jaise woh unki apni ho. ❤️" },
+            { role: "Bhagwan Maheshwar", color: "purple", text: "Aur jab woh kisi kaam ko karne ki thaan leti hai, toh uska focus... adbhut hai. Usse koi hila nahi sakta." },
+            { role: "Devi Radha", color: "pink", text: "Maine toh pehle hi kaha tha, uski aankhon mein sparkle hai. Aisa lagta hai jaise taarein timtima rahe hon. Koi bhi kho jaaye unmein. 😉" },
+            { role: "Bhagwan Brahma", color: "blue", text: "Naye ideas ko jaise woh life deti hai... kamaal hai. Sahi mein, meri masterpiece hai" },
+            { role: "Bhagwan Vishnu", color: "green", text: "Apne logon ke prati uski loyalty... misaal hai. Woh kabhi kisi ka saath nahi chhodti. Yeh uski sabse badi poonji hai." },
+            { role: "Mata Parvati", color: "yellow", text: "Bilkul Sherni ki tarah protect karti hai apne parivaar aur doston ko. Usse takraana aasaan nahi" },
+            { role: "Bhagwan Maheshwar", color: "purple", text: "Uske saath baithkar jo shaanti milti hai... wahi asli meditation hai." },
+            { role: "Devi Radha", color: "pink", text: "Woh pyaar karna jaanti hai. Bina kisi shart ke, poore dil se. Aisa prem har kisi ke naseeb mein nahi hota. 💕" },
+            { role: "Bhagwan Brahma", color: "blue", text: "Aur seekhne ki kitni ichha hai usme! Hamesha kuch naya jaanne ke liye curious rehti hai." },
+            { role: "Bhagwan Vishnu", color: "green", text: "Uski neeyat hamesha saaf rehti hai. Woh kabhi kisi ka bura nahi soch sakti. Ekdum pure soul hai." },
+            { role: "Mata Parvati", color: "yellow", text: "Woh doosron ko itna inspire karti hai! Log usse milkar behtar insaan banna chahte hain." },
+            { role: "Bhagwan Maheshwar", color: "purple", text: "Chhoti chhoti cheezon mein khushi dhoond leti hai... yahi uske sukoon ka raaz hai." },
+            { role: "Devi Radha", color: "pink", text: "Aur woh jaisi hai, waisi hi rehti hai. Bilkul real, koi dikhawa nahi. Yahi adaa toh sabse pyaari hai uski 🥰" },
+            { role: "Bhagwan Brahma", color: "blue", text: "Uski har kamzori bhi uski khoobsurati hai. Woh jaisi bhi hai, perfect hai." },
+            { role: "Bhagwan Vishnu", color: "green", text: "Uski smile... kisi bhi gusse ko shaant kar sakti hai. Usme ek jaadu hai." },
+            { role: "Mata Parvati", color: "yellow", text: "Har jeev ke liye uske dil mein daya hai. Aisi aatma ko toh devta bhi pranaam karte hain." },
+            { role: "Bhagwan Maheshwar", color: "purple", text: "Uska sixth sense... uska intuition... hamesha sahi hota hai. Use pehle hi pata chal jaata hai." },
+            { role: "Devi Radha", color: "pink", text: "Sahi mein... woh toh poore brahmaand ki likhi hui ek khoobsurat kavita hai. 💖" },
+            { role: "Bhagwan Vishnu", color: "green", text: "Humein garv hai ki aisi aatma prithvi par hai." },
+            { role: "Mata Parvati", color: "yellow", text: "Hum sab usse bahut pyaar karte hain" },
+            { role: "Mata Parvati", color: "yellow", text: "Sach kahoon, Mahadev... uski presence hi itni divine hai. Aisa lagta hai jaise swayam Devi Saraswati aur Lakshmi ne uspar vishesh kripa ki hai. Koi usse mil le toh bas dekhta hi reh jaaye." },
+            { role: "Bhagwan Vishnu", color: "green", text: "(Muskurate hue) Aur uski adaa... jab woh thoda sharmaati hai, toh uski masoomiyat par poore Vaikunth ko pyaar aa jaata hai." },
+            { role: "Devi Radha", color: "pink", text: "Haan Aur jab woh gusse mein hoti hai... toh bhi kitni cute lagti hai 😂 Uska har roop... har bhaav... bas mann moh leta hai. Uske jaisa captivating koi nahi" },
+            { role: "Bhagwan Maheshwar", color: "purple", text: "Hmmm. Uska astitva hi ek jashn hai. She is a celebration." },
+            { role: "Sabhi Ek Saath", color: "gray", text: "Juhi ki life bahut khushaal ho ✨", bg: "bg-gray-200 text-gray-800" }
+        ];
 
-// Function to render the full desktop article at once
-function renderDesktopWiki() {
-    const container = document.getElementById('wiki-sections-container');
-    container.innerHTML = ''; // Clear previous content if any
+        // Conversations Data for Desktop Sidebar
+        const conversations = {
+            'heaven': {
+                id: 'heaven',
+                name: 'Heaven ✨',
+                status: 'Active now',
+                avatarHTML: `<div class="w-12 h-12 rounded-full bg-gradient-to-tr from-yellow-400 via-red-500 to-purple-500 p-[2px]"><div class="w-full h-full rounded-full bg-white flex items-center justify-center overflow-hidden"><span class="text-lg font-bold text-gray-600">✨</span></div></div><div class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>`,
+                lastMsg: 'Sabhi Ek Saath: Juhi ki life...',
+                time: 'now',
+                unread: false,
+                messages: chatMessages, // Use existing array
+                isGroup: true
+            },
+            'mom': {
+                id: 'mom',
+                name: 'Mom ❤️',
+                status: 'Active 10m ago',
+                avatarHTML: `<div class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-xl">👩‍👧</div>`,
+                lastMsg: 'Made your favorite kheer! 🥣',
+                time: '10m',
+                unread: true,
+                messages: [
+                    { role: 'Mom', color: 'pink', text: "Happy Birthday my precious child! ❤️" },
+                    { role: 'Mom', color: 'pink', text: "I remember the day you were born like it was yesterday." },
+                    { role: 'Mom', color: 'pink', text: "You bring so much joy to our lives." },
+                    { role: 'Mom', color: 'pink', text: "Made your favorite kheer! Come home soon. 🥣" }
+                ]
+            },
+            'dad': {
+                id: 'dad',
+                name: 'Dad 🦁',
+                status: 'Active 15m ago',
+                avatarHTML: `<div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-xl">👨‍👧</div>`,
+                lastMsg: 'Proud of you, beta.',
+                time: '15m',
+                unread: true,
+                messages: [
+                    { role: 'Dad', color: 'blue', text: "Happy Birthday, beta!" },
+                    { role: 'Dad', color: 'blue', text: "You are growing up to be such a strong person." },
+                    { role: 'Dad', color: 'blue', text: "Always remember, I've got your back." },
+                    { role: 'Dad', color: 'blue', text: "Proud of you. Keep shining. 🌟" }
+                ]
+            },
+            'sister': {
+                id: 'sister',
+                name: 'Sister 👯‍♀️',
+                status: 'Active 5m ago',
+                avatarHTML: `<div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-xl">👒</div>`,
+                lastMsg: 'Where is the party?? 🎉',
+                time: '5m',
+                unread: true,
+                messages: [
+                    { role: 'Sister', color: 'purple', text: "Happy Birthday!! 🎂" },
+                    { role: 'Sister', color: 'purple', text: "You're getting old now :P" },
+                    { role: 'Sister', color: 'purple', text: "But seriously, love you loads." },
+                    { role: 'Sister', color: 'purple', text: "Where is the party?? 🎉" }
+                ]
+            },
+            'ganesh': {
+                id: 'ganesh',
+                name: 'Ganesh 🐘',
+                status: 'Active 1m ago',
+                avatarHTML: `<div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-xl">🐘</div>`,
+                lastMsg: 'Shubh Labh on your birthday!',
+                time: '1m',
+                unread: true,
+                messages: [
+                    { role: 'Ganesh', color: 'red', text: "Vakratunda Mahakaya..." },
+                    { role: 'Ganesh', color: 'red', text: "Happy Birthday!" },
+                    { role: 'Ganesh', color: 'red', text: "I have removed all obstacles from your path for the coming year." },
+                    { role: 'Ganesh', color: 'red', text: "Start your new year with a sweet modak! 🥟" }
+                ]
+            },
+            'shiva': {
+                id: 'shiva',
+                name: 'Mahadev 🕉️',
+                status: 'Meditating',
+                avatarHTML: `<div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-xl">🕉️</div>`,
+                lastMsg: 'Peace be with you.',
+                time: '4m',
+                unread: true,
+                messages: [
+                    { role: 'Mahadev', color: 'blue', text: "My divine blessings are with you." },
+                    { role: 'Mahadev', color: 'blue', text: "On this day, I bless you with inner strength." },
+                    { role: 'Mahadev', color: 'blue', text: "May you dance through life's challenges like Nataraja." },
+                    { role: 'Mahadev', color: 'blue', text: "Happy Birthday. Find the stillness within." }
+                ]
+            },
+            'krishna': {
+                id: 'krishna',
+                name: 'Krishna 🪈',
+                status: 'Playing Flute',
+                avatarHTML: `<div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center text-xl">🪈</div>`,
+                lastMsg: 'Life is a celebration!',
+                time: '2m',
+                unread: true,
+                messages: [
+                    { role: 'Krishna', color: 'yellow', text: "Radhe Radhe! ✨" },
+                    { role: 'Krishna', color: 'yellow', text: "Remember, you have a right to your actions, but never to your actions' fruits." },
+                    { role: 'Krishna', color: 'yellow', text: "So just enjoy your birthday party without worry!" },
+                    { role: 'Krishna', color: 'yellow', text: "May your life be as sweet as butter and as melodious as my flute." }
+                ]
+            },
+            'vishnu_chat': {
+                id: 'vishnu_chat',
+                name: 'Lord Vishnu 🐚',
+                status: 'Active 5m ago',
+                avatarHTML: `<div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-xl">🐚</div>`,
+                lastMsg: 'Preserving your smile.',
+                time: '5m',
+                unread: true,
+                messages: [
+                    { role: 'Vishnu', color: 'blue', text: "Hari Om." },
+                    { role: 'Vishnu', color: 'blue', text: "As the preserver, I promise to preserve your innocence and joy." },
+                    { role: 'Vishnu', color: 'blue', text: "May you always walk the path of truth." },
+                    { role: 'Vishnu', color: 'blue', text: "Happy Birthday. Blessings always." }
+                ]
+            },
+            'brahma_chat': {
+                id: 'brahma_chat',
+                name: 'Brahma Ji 📜',
+                status: 'Active 10m ago',
+                avatarHTML: `<div class="w-12 h-12 rounded-full bg-yellow-50 flex items-center justify-center text-xl">📜</div>`,
+                lastMsg: 'A new chapter begins.',
+                time: '10m',
+                unread: true,
+                messages: [
+                    { role: 'Brahma', color: 'yellow', text: "When I wrote your destiny, I used my best ink." },
+                    { role: 'Brahma', color: 'yellow', text: "You are a special creation." },
+                    { role: 'Brahma', color: 'yellow', text: "Create your own beautiful reality this year." },
+                    { role: 'Brahma', color: 'yellow', text: "Happy Birthday!" }
+                ]
+            },
+            'laxmi': {
+                id: 'laxmi',
+                name: 'Laxmi 🪷',
+                status: 'Active 35m ago',
+                avatarHTML: `<div class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-xl">🪷</div>`,
+                lastMsg: 'Prosperity is yours.',
+                time: '35m',
+                unread: true,
+                messages: [
+                    { role: 'Laxmi', color: 'pink', text: "Shubh Janmadin. ✨" },
+                    { role: 'Laxmi', color: 'pink', text: "May your home always be filled with light and laughter." },
+                    { role: 'Laxmi', color: 'pink', text: "I am sending abundance your way." },
+                    { role: 'Laxmi', color: 'pink', text: "Not just wealth, but wealth of character." }
+                ]
+            },
+            'saraswati': {
+                id: 'saraswati',
+                name: 'Saraswati 🦢',
+                status: 'Active 30m ago',
+                avatarHTML: `<div class="w-12 h-12 rounded-full bg-white border border-gray-200 flex items-center justify-center text-xl">🦢</div>`,
+                lastMsg: 'Wisdom is your greatest gift.',
+                time: '30m',
+                unread: true,
+                messages: [
+                    { role: 'Saraswati', color: 'gray', text: "Basant Panchami vibes for you today." },
+                    { role: 'Saraswati', color: 'gray', text: "May your words be true and your mind be sharp." },
+                    { role: 'Saraswati', color: 'gray', text: "I bless you with the flow of creativity." },
+                    { role: 'Saraswati', color: 'gray', text: "Happy Birthday, seeker of knowledge. 📚" }
+                ]
+            },
+            'durga': {
+                id: 'durga',
+                name: 'Maa Durga 🦁',
+                status: 'Active 1h ago',
+                avatarHTML: `<div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-xl">🦁</div>`,
+                lastMsg: 'You are a warrior.',
+                time: '1h',
+                unread: true,
+                messages: [
+                    { role: 'Durga', color: 'red', text: "Ya Devi Sarvabhuteshu..." },
+                    { role: 'Durga', color: 'red', text: "You have the shakti (power) within you to conquer any fear." },
+                    { role: 'Durga', color: 'red', text: "Roar like a lioness this year!" },
+                    { role: 'Durga', color: 'red', text: "Happy Birthday, my brave child. ⚔️" }
+                ]
+            },
+            'surya': {
+                id: 'surya',
+                name: 'Surya Dev ☀️',
+                status: 'Shining',
+                avatarHTML: `<div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-xl">☀️</div>`,
+                lastMsg: 'Shine bright.',
+                time: '6am',
+                unread: true,
+                messages: [
+                    { role: 'Surya', color: 'orange', text: "Good morning! (Even if it's not morning)" },
+                    { role: 'Surya', color: 'orange', text: "I rose today just to celebrate you." },
+                    { role: 'Surya', color: 'orange', text: "May your aura always be radiant and warm." },
+                    { role: 'Surya', color: 'orange', text: "Happy Birthday! Stay brilliant." }
+                ]
+            },
+            'indra': {
+                id: 'indra',
+                name: 'Indra Dev ⚡',
+                status: 'Active 2h ago',
+                avatarHTML: `<div class="w-12 h-12 rounded-full bg-blue-200 flex items-center justify-center text-xl">⚡</div>`,
+                lastMsg: 'Bringing the rains of joy.',
+                time: '2h',
+                unread: true,
+                messages: [
+                    { role: 'Indra', color: 'blue', text: "Greetings from Swarg Lok." },
+                    { role: 'Indra', color: 'blue', text: "May your life be as colorful as a rainbow." },
+                    { role: 'Indra', color: 'blue', text: "I command the clouds to shower happiness on you." },
+                    { role: 'Indra', color: 'blue', text: "Have a thunderous celebration! ⛈️" }
+                ]
+            },
+            'kartik': {
+                id: 'kartik',
+                name: 'Kartikeya 🦚',
+                status: 'Active 3h ago',
+                avatarHTML: `<div class="w-12 h-12 rounded-full bg-teal-100 flex items-center justify-center text-xl">🦚</div>`,
+                lastMsg: 'Victory be yours.',
+                time: '3h',
+                unread: true,
+                messages: [
+                    { role: 'Kartik', color: 'teal', text: "Salutations." },
+                    { role: 'Kartik', color: 'teal', text: "Youth, beauty, and wisdom are yours." },
+                    { role: 'Kartik', color: 'teal', text: "Lead your life with confidence." },
+                    { role: 'Kartik', color: 'teal', text: "Happy Birthday! Stay sharp. 🏹" }
+                ]
+            },
+            'future_self': {
+                id: 'future_self',
+                name: 'Future Self 🚀',
+                status: 'Active 2m ago',
+                avatarHTML: `<div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-xl">🚀</div>`,
+                lastMsg: 'Thank you for not giving up. HBD! 🎂',
+                time: '2m',
+                unread: true,
+                messages: [
+                    { role: 'Future You', color: 'indigo', text: "Hey! Just checking in from 2030." },
+                    { role: 'Future You', color: 'indigo', text: "You wouldn't believe how amazing things turn out." },
+                    { role: 'Future You', color: 'indigo', text: "Thank you for working so hard today. It pays off." },
+                    { role: 'Future You', color: 'indigo', text: "Happy Birthday! Keep going, we make it. 🥂" }
+                ]
+            },
+            'destiny': {
+                id: 'destiny',
+                name: 'Destiny 🌠',
+                status: 'Active 1h ago',
+                avatarHTML: `<div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center text-xl">🌠</div>`,
+                lastMsg: 'I have big plans for you this year.',
+                time: '1h',
+                unread: true,
+                messages: [
+                    { role: 'Destiny', color: 'purple', text: "I've been writing some new chapters for you." },
+                    { role: 'Destiny', color: 'purple', text: "There are twists coming, but the good kind." },
+                    { role: 'Destiny', color: 'purple', text: "Get ready for a surprise this year." },
+                    { role: 'Destiny', color: 'purple', text: "Happy Birthday, favorite protagonist. 🌟" }
+                ]
+            },
+            'happiness': {
+                id: 'happiness',
+                name: 'Happiness 😊',
+                status: 'Active 3h ago',
+                avatarHTML: `<div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center text-xl">😊</div>`,
+                lastMsg: "Knock knock! I'm moving in.",
+                time: '3h',
+                unread: true,
+                messages: [
+                    { role: 'Happiness', color: 'yellow', text: "Knock knock!" },
+                    { role: 'Happiness', color: 'yellow', text: "I'm planning to move in permanently this year." },
+                    { role: 'Happiness', color: 'yellow', text: "Hope you don't mind the company." },
+                    { role: 'Happiness', color: 'yellow', text: "Happy Birthday! 😄" }
+                ]
+            },
+            'success': {
+                id: 'success',
+                name: 'Success 📈',
+                status: 'Active 5h ago',
+                avatarHTML: `<div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-xl">📈</div>`,
+                lastMsg: 'Pack your bags for the top.',
+                time: '5h',
+                unread: true,
+                messages: [
+                    { role: 'Success', color: 'green', text: "I'm active now." },
+                    { role: 'Success', color: 'green', text: "I saw you working hard." },
+                    { role: 'Success', color: 'green', text: "I'm just around the corner. Keep pushing." },
+                    { role: 'Success', color: 'green', text: "HBD! See you at the top. 📈" }
+                ]
+            },
+            'serenity': {
+                id: 'serenity',
+                name: 'Serenity 🍃',
+                status: 'Active 1d ago',
+                avatarHTML: `<div class="w-12 h-12 rounded-full bg-teal-100 flex items-center justify-center text-xl">🍃</div>`,
+                lastMsg: "Breathe deep. It's your special day.",
+                time: '1d',
+                unread: true,
+                messages: [
+                    { role: 'Serenity', color: 'teal', text: "Breathe in..." },
+                    { role: 'Serenity', color: 'teal', text: "Breathe out..." },
+                    { role: 'Serenity', color: 'teal', text: "I wish you peace in every moment today." },
+                    { role: 'Serenity', color: 'teal', text: "Happy Birthday. 🍃" }
+                ]
+            },
+            'universe': {
+                id: 'universe',
+                name: 'The Universe 🌌',
+                status: 'Active 2d ago',
+                avatarHTML: `<div class="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center text-xl">🌌</div>`,
+                lastMsg: 'The stars have aligned just for you.',
+                time: '2d',
+                unread: true,
+                messages: [
+                    { role: 'The Universe', color: 'gray', text: "I aligned the stars just for you today." },
+                    { role: 'The Universe', color: 'gray', text: "You are exactly where you need to be." },
+                    { role: 'The Universe', color: 'gray', text: "Trust the timing." },
+                    { role: 'The Universe', color: 'gray', text: "Happy Birthday, Stardust. 🌌" }
+                ]
+            }
+        };
 
-    cards.forEach((card, index) => {
-        // Skip the "Access Granted" transition card on desktop
-        if (card.desktopTitle === null) return;
+        // --- HTML Generators ---
 
-        // Create Section Header
-        const h2 = document.createElement('h2');
-        h2.id = `section-${index}`;
-        h2.className = "mw-headline";
-        h2.innerHTML = `${card.desktopTitle} <span class="text-sm font-normal ml-2">[<a href="#" class="text-[#0645ad]">edit</a>]</span>`;
-        
-        // Create Body Div
-        const div = document.createElement('div');
-        div.className = "mt-4 mb-8 text-[#202122]";
-        div.innerHTML = card.wikiHtml;
+        function generateHTML(msg, isDesktop) {
+            const content = msg.isPoem 
+                ? `<pre class="whitespace-pre-wrap font-sans text-sm leading-relaxed">${msg.text}</pre>`
+                : `<p class="leading-relaxed">${msg.text}</p>`;
 
-        container.appendChild(h2);
-        container.appendChild(div);
-    });
+            const initial = msg.role.charAt(0);
+            const textClass = msg.bg ? 'text-gray-600' : `text-${msg.color}-600`;
+            const bgClass = msg.bg ? msg.bg : `bg-${msg.color}-50 text-gray-800 border-${msg.color}-100`;
 
-    // Initialize interactive elements after injection
-    setTimeout(() => {
-        initializeTicTacToe();
-        initializeWordCard();
-    }, 100);
-}
-
-function renderCard(index) {
-    const isDesktop = window.innerWidth >= 1024;
-
-    if (isDesktop) {
-        // Only render once if not already rendered or if needed
-        if(document.getElementById('wiki-sections-container').children.length === 0) {
-            renderDesktopWiki();
+            return `
+            <div class="chat-bubble flex gap-2 mb-4 items-end animate-none opacity-0">
+                <div class="w-8 h-8 rounded-full bg-${msg.color}-100 border border-${msg.color}-200 flex items-center justify-center text-[10px] font-bold text-${msg.color}-600 flex-shrink-0">
+                    ${initial}
+                </div>
+                <div class="flex flex-col max-w-[75%]">
+                    <span class="text-[10px] text-gray-500 ml-1 mb-0.5">${msg.role}</span>
+                    <div class="relative ${bgClass} border p-3 px-4 rounded-2xl rounded-bl-none shadow-sm text-sm leading-snug">
+                        ${content}
+                    </div>
+                </div>
+            </div>
+            `;
         }
-    } else {
-        // Mobile Card Logic
-        const contentDiv = document.getElementById('card-content');
-        const button = document.getElementById('next-button');
-        const mainCard = document.getElementById('main-card');
-        const card = cards[index];
 
-        mainCard.style.opacity = '0';
-        setTimeout(() => {
-            document.getElementById('card-title-header').textContent = card.title;
-            contentDiv.innerHTML = card.mobileHtml;
-            button.textContent = card.buttonText;
-            button.onclick = () => handleNext(index);
+        // --- Logic ---
+
+        let currentActiveChatId = 'heaven';
+
+        function renderSidebar() {
+            const sidebarList = document.getElementById('desktopSidebarList');
+            if (!sidebarList) return;
+
+            sidebarList.innerHTML = '';
+
+            Object.values(conversations).forEach(chat => {
+                const isActive = chat.id === currentActiveChatId;
+                const activeClass = isActive ? 'bg-gray-100 sidebar-item-active' : 'hover:bg-gray-50';
+                const unreadDot = chat.unread ? '<div class="w-2.5 h-2.5 bg-blue-500 rounded-full flex-shrink-0"></div>' : '';
+                const titleStyle = chat.unread ? 'font-bold text-black' : 'font-semibold text-gray-900';
+                const msgStyle = chat.unread ? 'font-bold text-gray-900' : 'text-gray-500';
+                
+                const itemHTML = `
+                <div class="px-4 py-3 ${activeClass} flex items-center gap-3 cursor-pointer transition-colors" onclick="window.switchChat('${chat.id}')">
+                    <div class="relative">
+                        ${chat.avatarHTML}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex justify-between items-baseline mb-0.5">
+                            <h3 class="text-sm ${titleStyle} truncate">${chat.name}</h3>
+                            <span class="text-xs text-gray-500">${chat.time}</span>
+                        </div>
+                        <p class="text-sm ${msgStyle} truncate">${chat.lastMsg}</p>
+                    </div>
+                    ${unreadDot}
+                </div>
+                `;
+                sidebarList.innerHTML += itemHTML;
+            });
+        }
+
+        function updateChatHeader(chat) {
+            const headerContainer = document.getElementById('chatHeaderInfo');
+            if (!headerContainer) return;
+
+            headerContainer.innerHTML = `
+                <div class="relative">
+                    ${chat.avatarHTML.replace('w-12 h-12', 'w-9 h-9').replace('text-xl', 'text-sm')} 
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-sm font-bold text-gray-900 leading-none">${chat.name}</span>
+                    <span class="text-[10px] text-gray-500">${chat.status}</span>
+                </div>
+            `;
+        }
+
+        window.switchChat = function(chatId) {
+            if (!conversations[chatId]) return;
             
-            // Execute callback for specific cards (e.g. init TicTacToe)
-            if (card.callback) card.callback();
+            // Mark CURRENTLY clicked chat as read.
+            conversations[chatId].unread = false;
             
-            if (card.isLocked) {
-                button.disabled = true;
-                button.classList.add('opacity-50', 'cursor-not-allowed');
-            } else {
-                button.disabled = false;
-                button.classList.remove('opacity-50', 'cursor-not-allowed');
-            }
-            mainCard.style.opacity = '1';
-        }, 300);
-    }
-}
+            currentActiveChatId = chatId;
+            const chat = conversations[chatId];
 
-function handleNext(currentIndex) {
-    const nextIndex = currentIndex + 1;
-    if (nextIndex < cards.length) {
-        currentCardIndex = nextIndex;
-        renderCard(currentCardIndex);
-    } else {
-        window.finalShowdown();
-    }
-}
+            // 1. Update Sidebar UI
+            renderSidebar();
 
-function initializeTicTacToe() {
-    const grid = document.getElementById('tictactoe-grid');
-    if(!grid) return; 
-    
-    const status = document.getElementById('game-status');
-    const message = document.getElementById('card-msg-1');
-    const restartBtn = document.getElementById('restart-game-btn');
-    
-    if(restartBtn) restartBtn.classList.add('hidden');
-    if(message) message.classList.add('hidden');
-    if(status) status.innerHTML = "Your move";
+            // 2. Update Header
+            updateChatHeader(chat);
 
-    let board = ["", "", "", "", "", "", "", "", ""];
-    let gameActive = true;
-    const winningConditions = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6]
-    ];
+            // 3. Clear and Render Messages
+            const desktopMessagesList = document.getElementById('desktopMessagesList');
+            const revealButton = document.getElementById('revealButtonDesktop');
+            const revealCard = document.getElementById('revealCardDesktop');
 
-    const handleCellPlayed = (clickedCell, clickedCellIndex) => {
-        board[clickedCellIndex] = "X";
-        clickedCell.innerHTML = 'X';
-    };
+            desktopMessagesList.innerHTML = '';
+            // Hide special elements first
+            if (revealButton) revealButton.classList.add('hidden');
+            if (revealButton) revealButton.style.display = ''; // Reset inline display none from clicks
+            if (revealCard) revealCard.classList.add('hidden');
 
-    const handleResultValidation = () => {
-        let roundWon = false;
-        let winningPlayer = '';
-        
-        for (let i = 0; i < winningConditions.length; i++) {
-            const winCondition = winningConditions[i];
-            let a = board[winCondition[0]];
-            let b = board[winCondition[1]];
-            let c = board[winCondition[2]];
-            if (a === '' || b === '' || c === '') continue;
-            if (a === b && b === c) {
-                roundWon = true; 
-                winningPlayer = a;
-                break;
+            // Render new messages with animation
+            chat.messages.forEach((msg, index) => {
+                const bubble = generateHTML(msg, true);
+                // Create a temporary container to turn string into DOM nodes for staggered animation
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = bubble;
+                const bubbleNode = tempDiv.firstElementChild;
+                
+                // Add staggered animation delay
+                bubbleNode.style.animation = `chatFadeIn 0.5s ease-out forwards ${index * 0.15}s`;
+                
+                desktopMessagesList.appendChild(bubbleNode);
+            });
+
+            // 4. Handle "Reveal" Button visibility (Only for Heaven chat)
+            if (chat.id === 'heaven') {
+                const totalDelay = chat.messages.length * 150; // Sync with message animation
+                setTimeout(() => {
+                    if (currentActiveChatId === 'heaven' && revealButton) {
+                        revealButton.classList.remove('hidden');
+                        revealButton.style.animation = 'chatFadeIn 0.5s ease-out forwards';
+                        revealButton.style.opacity = 1;
+                    }
+                }, totalDelay + 500);
             }
         }
 
-        if (roundWon) {
-            gameActive = false;
-            if (winningPlayer === 'X') {
-                status.innerHTML = `You Win!`;
-                if(message) message.classList.remove('hidden');
-                // Unlock mobile button if on mobile
-                if (window.innerWidth < 1024) unlockCurrentCard();
-            } else {
-                status.innerHTML = `You Lost! Restarting...`;
-                setTimeout(initializeTicTacToe, 1500); 
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.getElementById('themeToggle');
+            const sunIcon = document.getElementById('sunIcon');
+            const moonIcon = document.getElementById('moonIcon');
+            
+            themeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                sunIcon.classList.toggle('hidden');
+                moonIcon.classList.toggle('hidden');
+            });
+
+            // MOBILE NAVIGATION LOGIC
+            const navLinks = document.querySelectorAll('.nav-panel .nav-link');
+            const mainContent = document.getElementById('mainContent');
+            const topNav = document.getElementById('topNav');
+            const bottomNav = document.getElementById('bottomNav');
+            const leftNav = document.getElementById('leftNav');
+            const rightNav = document.getElementById('rightNav');
+            const navToggle = document.getElementById('navToggle');
+            const navToggleIcon = document.getElementById('navToggleIcon');
+            const navToggleX = document.getElementById('navToggleX');
+            let areNavsOpen = false;
+
+            function openAllNavs() {
+                if (topNav) topNav.classList.remove('-translate-y-full');
+                if (bottomNav) bottomNav.classList.remove('translate-y-full');
+                if (leftNav) leftNav.classList.remove('-translate-x-full');
+                if (rightNav) rightNav.classList.remove('translate-x-full');
+                if (mainContent) {
+                    mainContent.classList.add('pt-16', 'pb-16', 'pl-24', 'pr-24');
+                    mainContent.classList.remove('pt-28');
+                }
+                if (navToggleIcon) navToggleIcon.classList.add('hidden');
+                if (navToggleX) navToggleX.classList.remove('hidden');
+                areNavsOpen = true;
             }
-            return true;
-        }
 
-        if (!board.includes("")) {
-            status.innerHTML = `It's a Draw! Restarting...`;
-            gameActive = false;
-            setTimeout(initializeTicTacToe, 1500);
-            return true;
-        }
-        
-        return false;
-    };
-
-    const handleCellClick = (e) => {
-        const clickedCell = e.target;
-        const clickedCellIndex = parseInt(clickedCell.dataset.index);
-        if (board[clickedCellIndex] !== "" || !gameActive) return;
-        handleCellPlayed(clickedCell, clickedCellIndex);
-        if (!handleResultValidation()) {
-            setTimeout(handleAIClick, 500);
-        }
-    };
-    
-    const handleAIClick = () => {
-        if (!gameActive) return;
-        let move = -1;
-        let emptyIndices = board.map((val, idx) => val === "" ? idx : -1).filter(idx => idx !== -1);
-        if (emptyIndices.length > 0) move = emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
-
-        if (move !== -1 && board[move] === "") {
-            const cell = document.querySelector(`.cell[data-index="${move}"]`);
-            board[move] = "O";
-            cell.innerHTML = 'O';
-            cell.classList.add('O'); 
-            handleResultValidation();
-        }
-    }
-
-    grid.querySelectorAll('.cell').forEach(cell => {
-        cell.innerHTML = "";
-        cell.classList.remove('O');
-        cell.replaceWith(cell.cloneNode(true)); 
-    });
-    
-    document.querySelectorAll('#tictactoe-grid .cell').forEach(cell => {
-         cell.addEventListener('click', handleCellClick, { once: true });
-    });
-}
-
-function initializeWordCard() {
-    window.chooseWord = (word) => {
-        const status = document.getElementById('word-status');
-        if(status) {
-            status.textContent = `You chose '${word}'. A beautiful choice, just like you.`;
-            status.classList.remove('hidden');
-        }
-        // Unlock mobile button if on mobile
-        if (window.innerWidth < 1024) unlockCurrentCard();
-    };
-}
-
-window.finalShowdown = function() {
-    clearInterval(symbolInterval);
-    document.querySelectorAll('.float-symbol').forEach(el => el.remove());
-
-    document.getElementById('mobile-view-wrapper').classList.add('hidden');
-    document.getElementById('desktop-wiki-view').classList.add('hidden');
-    
-    document.body.style.transition = 'background-color 1.5s ease';
-    document.body.style.backgroundColor = '#000000'; 
-    
-    setTimeout(() => {
-        const finalDisplayElements = document.getElementById('final-display-elements');
-        finalDisplayElements.classList.remove('hidden');
-        setTimeout(() => {
-            finalDisplayElements.style.opacity = '1';
-        }, 100); 
-        const fireworksCanvas = document.getElementById('fireworks-canvas');
-        fireworksCanvas.classList.remove('hidden');
-        resizeCanvas();
-        running = true;
-        setTimeout(() => { loop(); }, 1500); 
-    }, 1000); 
-}
-
-function resizeCanvas() {
-    const fireworksCanvas = document.getElementById('fireworks-canvas');
-    fireworksCanvas.width = window.innerWidth;
-    fireworksCanvas.height = window.innerHeight;
-}
-function Particle(x, y, color) {
-    this.x = x; this.y = y; this.color = color;
-    this.velocity = { x: Math.random() * 6 - 3, y: Math.random() * 6 - 3 };
-    this.alpha = 1; this.friction = 0.98; this.gravity = 0.08;
-    this.radius = Math.random() * 3 + 1;
-}
-Particle.prototype.update = function() {
-    this.velocity.x *= this.friction; this.velocity.y *= this.friction;
-    this.velocity.y += this.gravity; this.x += this.velocity.x;
-    this.y += this.velocity.y; this.alpha -= 0.015;
-    if (this.alpha < 0) this.alpha = 0;
-}
-Particle.prototype.draw = function() {
-    const ctx = document.getElementById('fireworks-canvas').getContext('2d');
-    ctx.save(); ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    ctx.fillStyle = this.color; ctx.globalAlpha = this.alpha;
-    ctx.fill(); ctx.restore();
-}
-function createFirework(x, y, color) {
-    for (let i = 0; i < 60; i++) { particles.push(new Particle(x, y, color)); }
-}
-let particles = [];
-let running = false;
-function loop() {
-    if (!running) return;
-    const fireworksCanvas = document.getElementById('fireworks-canvas');
-    const ctx = fireworksCanvas.getContext('2d');
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.08)'; 
-    ctx.fillRect(0, 0, fireworksCanvas.width, fireworksCanvas.height);
-    for (let i = particles.length - 1; i >= 0; i--) {
-        let p = particles[i]; p.update(); p.draw();
-        if (p.alpha <= 0 || p.y > fireworksCanvas.height) particles.splice(i, 1);
-    }
-    if (particles.length < 500 && Math.random() < 0.06) { 
-        const x = Math.random() * fireworksCanvas.width;
-        const y = Math.random() * fireworksCanvas.height * 0.7;
-        const color = `hsl(${Math.random() * 360}, 100%, 65%)`;
-        createFirework(x, y, color);
-    }
-    requestAnimationFrame(loop);
-}
-
-let areNavsOpen = false;
-const navPanels = {
-    top: document.getElementById('topNav'),
-    bottom: document.getElementById('bottomNav'),
-    left: document.getElementById('leftNav'),
-    right: document.getElementById('rightNav')
-};
-const navToggle = document.getElementById('navToggle');
-const navToggleIcon = document.getElementById('navToggleIcon');
-const navToggleX = document.getElementById('navToggleX');
-
-function openAllNavs() {
-    navPanels.top.classList.remove('-translate-y-full');
-    navPanels.bottom.classList.remove('translate-y-full');
-    navPanels.left.classList.remove('-translate-x-full');
-    navPanels.right.classList.remove('translate-x-full');
-    document.body.classList.add('navs-open');
-    navToggleIcon.classList.add('hidden');
-    navToggleX.classList.remove('hidden');
-    areNavsOpen = true;
-}
-window.closeAllNavs = function() {
-    navPanels.top.classList.add('-translate-y-full');
-    navPanels.bottom.classList.add('translate-y-full');
-    navPanels.left.classList.add('-translate-x-full');
-    navPanels.right.classList.add('translate-x-full');
-    document.body.classList.remove('navs-open');
-    navToggleIcon.classList.remove('hidden');
-    navToggleX.classList.add('hidden');
-    areNavsOpen = false;
-}
-function toggleAllNavs(e) {
-    if (e) e.stopPropagation(); 
-    if (areNavsOpen) window.closeAllNavs(); else openAllNavs();
-}
-
-function startFloatingSymbols() {
-    if (symbolInterval) return;
-    
-    const symbols = ['*', '†', '‡', '§', '✦', '✧', '•', '·', '+'];
-    const createSymbol = () => {
-        const symbol = document.createElement('div');
-        symbol.innerHTML = symbols[Math.floor(Math.random() * symbols.length)];
-        symbol.classList.add('float-symbol');
-        symbol.style.left = `${Math.random() * 100}vw`;
-        const duration = 10 + Math.random() * 5; 
-        symbol.style.animationDuration = `${duration}s`;
-        document.body.appendChild(symbol);
-        setTimeout(() => { symbol.remove(); }, duration * 1000); 
-    };
-    symbolInterval = setInterval(createSymbol, 800);
-}
-
-function stopFloatingSymbols() {
-    if (symbolInterval) {
-        clearInterval(symbolInterval);
-        symbolInterval = null;
-    }
-    // Remove existing symbols
-    document.querySelectorAll('.float-symbol').forEach(el => el.remove());
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    // Initial check
-    if (window.innerWidth < 1024) {
-        startFloatingSymbols();
-        renderCard(currentCardIndex);
-    } else {
-        renderDesktopWiki();
-    }
-
-    navToggle.addEventListener('click', toggleAllNavs);
-
-    // Close navs when clicking outside
-    document.addEventListener('click', (e) => {
-        if (areNavsOpen && !e.target.closest('.nav-panel') && !e.target.closest('#navToggle')) {
-            window.closeAllNavs();
-        }
-    });
-    
-    window.addEventListener('resize', () => {
-        const isDesktop = window.innerWidth >= 1024;
-        
-        if (isDesktop) {
-            stopFloatingSymbols();
-            if(document.getElementById('wiki-sections-container').children.length === 0) {
-                renderDesktopWiki();
+            function closeAllNavs() {
+                if (topNav) topNav.classList.add('-translate-y-full');
+                if (bottomNav) bottomNav.classList.add('translate-y-full');
+                if (leftNav) leftNav.classList.add('-translate-x-full');
+                if (rightNav) rightNav.classList.add('translate-x-full');
+                if (mainContent) {
+                    mainContent.classList.remove('pt-16', 'pb-16', 'pl-24', 'pr-24');
+                    mainContent.classList.remove('pt-28');
+                }
+                if (navToggleIcon) navToggleIcon.classList.remove('hidden');
+                if (navToggleX) navToggleX.classList.add('hidden');
+                areNavsOpen = false;
             }
-        } else {
-            startFloatingSymbols();
-            renderCard(currentCardIndex);
-        }
-    });
-});
-</script>
+
+            if (navToggle) {
+                navToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    areNavsOpen ? closeAllNavs() : openAllNavs();
+                });
+            }
+            if (mainContent) {
+                mainContent.addEventListener('click', () => {
+                    if (areNavsOpen) closeAllNavs();
+                });
+            }
+
+            // DESKTOP NAVIGATION LOGIC
+            const desktopNavToggle = document.getElementById('desktopNavToggle');
+            const desktopNavClose = document.getElementById('desktopNavClose');
+            const desktopSidebar = document.getElementById('desktopSidebar');
+            const desktopOverlay = document.getElementById('desktopOverlay');
+
+            function openDesktopNav() {
+                if(desktopSidebar) desktopSidebar.classList.remove('-translate-x-full');
+                if(desktopOverlay) {
+                    desktopOverlay.classList.remove('hidden');
+                    // Small timeout to allow transition to work
+                    setTimeout(() => desktopOverlay.classList.remove('opacity-0'), 10);
+                }
+            }
+
+            function closeDesktopNav() {
+                if(desktopSidebar) desktopSidebar.classList.add('-translate-x-full');
+                if(desktopOverlay) {
+                    desktopOverlay.classList.add('opacity-0');
+                    setTimeout(() => desktopOverlay.classList.add('hidden'), 300);
+                }
+            }
+
+            if(desktopNavToggle) {
+                desktopNavToggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    openDesktopNav();
+                });
+            }
+
+            if(desktopNavClose) {
+                desktopNavClose.addEventListener('click', closeDesktopNav);
+            }
+
+            if(desktopOverlay) {
+                desktopOverlay.addEventListener('click', closeDesktopNav);
+            }
+
+            const chatInfoBtn = document.getElementById('chatInfoBtn');
+            const infoToast = document.getElementById('infoToast');
+
+            if (chatInfoBtn && infoToast) {
+                chatInfoBtn.addEventListener('click', () => {
+                    infoToast.classList.add('show');
+                    setTimeout(() => {
+                        infoToast.classList.remove('show');
+                    }, 3000);
+                });
+            }
+
+            // INITIALIZATION
+            
+            // 1. Render Desktop Sidebar and Default Chat
+            renderSidebar();
+            window.switchChat('heaven'); // Initialize desktop view with heaven chat
+
+            // 2. Render Mobile View (Static Heaven Chat)
+            const mobileMessagesList = document.getElementById('mobileMessagesList');
+            if (mobileMessagesList) {
+                mobileMessagesList.innerHTML = '';
+                chatMessages.forEach(msg => {
+                    mobileMessagesList.innerHTML += generateHTML(msg, false);
+                });
+            }
+
+            // Reveal Button Logic (Shared logic pattern, instantiated for both IDs)
+            function setupRevealBtn(btnId, cardId) {
+                const btn = document.getElementById(btnId);
+                const card = document.getElementById(cardId);
+                if (btn && card) {
+                    btn.addEventListener('click', () => {
+                        card.classList.remove('hidden');
+                        card.style.animation = 'chatFadeIn 0.5s ease-out forwards';
+                        card.style.opacity = 1;
+                        setTimeout(() => {
+                            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }, 100);
+                        btn.style.display = 'none';
+                    });
+                }
+            }
+
+            setupRevealBtn('revealButton', 'revealCard'); // Mobile
+            setupRevealBtn('revealButtonDesktop', 'revealCardDesktop'); // Desktop
+
+            // Animation for Mobile on Load
+            const mobileBubbles = document.querySelectorAll('#mobileMessagesList .chat-bubble');
+            const mobileRevealBtn = document.getElementById('revealButton');
+            mobileBubbles.forEach((bubble, index) => {
+                setTimeout(() => {
+                    bubble.style.animation = 'chatFadeIn 0.5s ease-out forwards';
+                    bubble.style.opacity = 1;
+                    
+                    if (index === mobileBubbles.length - 1 && mobileRevealBtn) {
+                        setTimeout(() => {
+                            mobileRevealBtn.style.animation = 'chatFadeIn 0.5s ease-out forwards';
+                            mobileRevealBtn.style.opacity = 1;
+                        }, 800);
+                    }
+                }, index * 1200 + 500);
+            });
+        });
+    </script>
 </body>
 </html>
